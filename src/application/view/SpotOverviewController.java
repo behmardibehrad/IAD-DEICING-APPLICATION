@@ -3,10 +3,12 @@ package application.view;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import javax.swing.event.ChangeListener;
 import org.controlsfx.control.textfield.TextFields;
 import application.MainApp;
 import application.model.Flight;
 import application.model.Spot;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -172,9 +174,9 @@ public class SpotOverviewController {
 		// flightComboBox.getItems().addAll(DeicersInfo.getApiFlightsFlightNumber());
 
 		// flightComboBox.setEditable(true);
-		
-		
-		//behrad flightComboBox.getItems().addAll(DeicersInfo.getApiFlightsFlightNumber());
+
+		// behrad
+		// flightComboBox.getItems().addAll(DeicersInfo.getApiFlightsFlightNumber());
 		TextFields.bindAutoCompletion(flightComboBox.getEditor(), flightComboBox.getItems());
 
 		// TextFields.bindAutoCompletion(flightComboBox,
@@ -185,6 +187,7 @@ public class SpotOverviewController {
 		// flightComboBox.setItems(selectedFlightTableData);
 
 		fluidTypeComboBox.getItems().addAll("TYPE I", "TYPE IV");
+
 		// spotData.addAll(mainApp.getSpotData());
 
 	}
@@ -229,6 +232,18 @@ public class SpotOverviewController {
 			tailNumberLabel.setText(spot.getFlight().getTailNumber());
 			aircraftTypeLabel.setText(spot.getFlight().getAircraftType());
 			carrierLabel.setText(spot.getFlight().getCarrier());
+			
+			  if (spot.getDeicing().getFluidType().equals("TYPE I") )
+				  spot.setSpotImage(imageType1); else if
+				  (spot.getDeicing().getFluidType().equals("TYPE IV") )
+					  spot.setSpotImage(imageType4); else
+						  spot.setSpotImage(imageBlack);
+			
+			
+			
+			
+			
+			
 			imageView.setImage(spot.getSpotImage());
 			fluidTypeComboBox.setValue(spot.getDeicing().getFluidType());
 
@@ -375,15 +390,44 @@ public class SpotOverviewController {
 
 		}
 
-		else
+		else {
 			selectedSpot.getDeicing().setFluidType(fluidTypeComboBox.getValue());
-		if (fluidTypeComboBox.getValue().equals("TYPE I") && selectedSpot.getDeicing().getStartTime() == "") {
-			selectedSpot.setSpotImage(imageType1);
-		} else if (fluidTypeComboBox.getValue().equals("TYPE IV") && selectedSpot.getDeicing().getStartTime() == "") {
-			selectedSpot.setSpotImage(imageType4);
+			fluidTypeComboBox.valueProperty().addListener((obs, oldItem, newItem) -> {
+				if (oldItem.equals("TYPE IV") && newItem.equals("TYPE I")) 
+				{
+					selectedSpot.setSpotImage(imageType1);
+				} 
+				
+				else if (oldItem.equals("TYPE I") && newItem.equals("TYPE IV"))
+
+				{
+					selectedSpot.setSpotImage(imageType4);
+				} 
+				
+				else if (oldItem.equals("TYPE I") && newItem.equals("TYPE I"))
+				{
+					selectedSpot.setSpotImage(imageType1);
+				}
+				
+				else if (oldItem.equals("TYPE IV") && newItem.equals("TYPE IV"))
+				{
+					selectedSpot.setSpotImage(imageType4);
+				}
+
+				else 
+				{
+					selectedSpot.setSpotImage(imageBlack);
+				}
+			});
 
 		}
-
+		/*
+		 * if (fluidTypeComboBox.getValue().equals("TYPE I") )
+		 * selectedSpot.setSpotImage(imageType1); else if
+		 * (fluidTypeComboBox.getValue().equals("TYPE IV") )
+		 * selectedSpot.setSpotImage(imageType4); else
+		 * selectedSpot.setSpotImage(imageBlack);
+		 */
 	}
 
 	@FXML
@@ -411,6 +455,7 @@ public class SpotOverviewController {
 			selectedSpot.setSpotImage(imageBlack);
 
 		}
+
 	}
 
 	@FXML
@@ -418,7 +463,7 @@ public class SpotOverviewController {
 		Alert alert = new Alert(AlertType.WARNING);
 		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
 
-		if (spotsTable.getSelectionModel().isEmpty()) {
+		if (spotsTable.getSelectionModel().isEmpty() || spotsTable.getSelectionModel().equals(null) ) {
 			alert.initOwner(mainApp.getPrimaryStage());
 			alert.setTitle("No Selection");
 			alert.setHeaderText("No Flight Selected");

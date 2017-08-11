@@ -52,6 +52,7 @@ public class MainApp extends Application {
 
 		initRootLayout();
 		showSpotOverview();
+		
 
 	}
 
