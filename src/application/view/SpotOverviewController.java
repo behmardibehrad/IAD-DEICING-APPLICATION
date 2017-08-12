@@ -231,15 +231,11 @@ public class SpotOverviewController {
 			tailNumberLabel.setText(spot.getFlight().getTailNumber());
 			aircraftTypeLabel.setText(spot.getFlight().getAircraftType());
 			carrierLabel.setText(spot.getFlight().getCarrier());
-			if (spot.getDeicing().getFluidType().equalsIgnoreCase(""))
-			{
+			if (spot.getDeicing().getFluidType().equalsIgnoreCase("")) {
 				fluidTypeComboBox.getSelectionModel().selectFirst();
+			} else {
+				fluidTypeComboBox.setValue(spot.getDeicing().getFluidType());
 			}
-			else
-			{
-			fluidTypeComboBox.setValue(spot.getDeicing().getFluidType());
-			}
-
 
 			if (spot.getDeicing().getFluidType().equalsIgnoreCase("TYPE I") && !spot.getActive()) {
 				spot.setSpotImage(imageType1);
@@ -285,8 +281,6 @@ public class SpotOverviewController {
 
 	}
 
-	
-	
 	private void clearSpot(Spot spot) {
 		spot.getFlight().setAircraftType("");
 		spot.getFlight().setCarrier("");
@@ -381,7 +375,7 @@ public class SpotOverviewController {
 		releaseTable.setItems(releaseTableData);
 		clearSpot(selectedSpot);
 
-		spotsTable.getSelectionModel().clearSelection();
+		//spotsTable.getSelectionModel().clearSelection();
 		// fluidTypeComboBox.setValue("Fluid Type");
 	}
 
@@ -529,18 +523,29 @@ public class SpotOverviewController {
 			alert.showAndWait();
 		} else {
 			selectedSpot.getDeicing().setEndTime(setTime());
-			//selectedSpot.setSpotImage(null);
-			selectedSpot.setSpotImage(imageBlack);
+			if (selectedSpot.getDeicing().getFluidType().equalsIgnoreCase("TYPE I")) {
+				selectedSpot.setSpotImage(imageType1);
+				imageView.setImage(selectedSpot.getSpotImage());
+			} else if (selectedSpot.getDeicing().getFluidType().equalsIgnoreCase("TYPE IV")) {
+				selectedSpot.setSpotImage(imageType4);
+				imageView.setImage(selectedSpot.getSpotImage());
+			} else if (selectedSpot.getDeicing().getFluidType().equalsIgnoreCase("Clear")
+					|| selectedSpot.getDeicing().getFluidType().equalsIgnoreCase(null)) {
+				selectedSpot.setSpotImage(imageBlack);
+				imageView.setImage(selectedSpot.getSpotImage());
+			};
+
 
 		}
 
 	}
 
 	@FXML
-	private void handleDashboard() {
+	private void handleResetWeb() {
 		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
+
 		try {
-			// selectedSpot.getDashboardApi().sendPost();
+			selectedSpot.getDashboardApi().ResetDashboard();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

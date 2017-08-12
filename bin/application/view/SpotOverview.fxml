@@ -82,7 +82,7 @@
                         <Button fx:id="start" mnemonicParsing="false" onAction="#handleStart" prefHeight="31.0" prefWidth="122.0" text="Start" GridPane.rowIndex="1" />
                         <Button mnemonicParsing="false" onMousePressed="#handleReleaseFlight" prefWidth="122.0" text="Release" GridPane.rowIndex="3" />
                         <ComboBox fx:id="fluidTypeComboBox" onAction="#setFluidType" prefHeight="31.0" prefWidth="122.0" promptText="Fluid Type" />
-                        <Button mnemonicParsing="false" onMouseClicked="#handleDashboard" prefHeight="25.0" prefWidth="123.0" text="Dashboard" GridPane.rowIndex="4" />
+                        <Button mnemonicParsing="false" onMouseClicked="#handleResetWeb" prefHeight="25.0" prefWidth="123.0" text="Reset Web" GridPane.rowIndex="4" />
                      </children>
                   </GridPane>
                </children>
