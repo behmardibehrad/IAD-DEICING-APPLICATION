@@ -5,7 +5,11 @@ import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
 
 public class Spot {
+   
+	private int spotIntType;
 
+
+	private Boolean active;
 	private StringProperty spotNumber;
 	private StringProperty truck1;
 	private StringProperty truck2;
@@ -19,6 +23,7 @@ public class Spot {
 
 	Flight flight;
 	Deicing deicing;
+	DashboardApi spotApi;
 
 	public Spot() {
 		this(null);
@@ -26,6 +31,8 @@ public class Spot {
 
 	public Spot(String spotNumber) {
 
+		this.spotIntType = 0;
+		this.active = false;
 		this.spotNumber = new SimpleStringProperty(spotNumber);
 		this.truck1 = new SimpleStringProperty("");
 		this.freezepoint1 = new SimpleStringProperty("");
@@ -37,8 +44,28 @@ public class Spot {
 		this.sprayer2 = new SimpleStringProperty("");
 		this.flight = new Flight();
 		this.deicing = new Deicing();
+		this.spotApi = new DashboardApi(flight, deicing);
+	}
+	
+	
+	public int getSpotIntType() {
+		return spotIntType;
 	}
 
+	public void setSpotIntType(int spotIntType) {
+		this.spotIntType = spotIntType;
+	}
+	
+	
+	
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+	
 	public String getSpotNumber() {
 		return spotNumber.get();
 	}
@@ -158,6 +185,14 @@ public class Spot {
 	public Deicing getDeicing() {
 		return deicing;
 	}
+	
+	public void setDeicing(Deicing deicing) {
+		this.deicing.setFluidType(deicing.getFluidType());
+		this.deicing.setStartTime(deicing.getStartTime());
+		this.deicing.setAircraftCheck(deicing.getAircraftCheck());
+		this.deicing.setEndTime(deicing.getEndTime());
+	}
+	
 
 	public Flight getFlight() {
 		return flight;
@@ -170,19 +205,43 @@ public class Spot {
 		this.flight.setTailNumber(flight.getTailNumber());
 	}
 
-	public void setDeicing(Deicing deicing) {
-		this.deicing.setFluidType(deicing.getFluidType());
-		this.deicing.setStartTime(deicing.getStartTime());
-		this.deicing.setAircraftCheck(deicing.getAircraftCheck());
-		this.deicing.setEndTime(deicing.getEndTime());
-	}
+public DashboardApi getDashboardApi() {
+	return spotApi;
+}
 
+
+
+	
+	
 	public String toString() {
-		return getSpotNumber();
+		return "SPOT: " + getSpotNumber() + "\nactive: " + getActive() + "\nspotIntType: " + getSpotIntType()
+				+ "\n\n\n " + flight.toString() + "\n\n"+ deicing.toString();
 	}
+	
+	
+	
+	
 
-	public String toStringFullData() {
-		return "\nSpot: " + getSpotNumber();
-	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

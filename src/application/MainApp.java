@@ -62,12 +62,6 @@ public class MainApp extends Application {
 	public void initRootLayout() {
 		try {
 
-			/*
-			 * ///// ADDED TO DEBUG CLASSPATH ClassLoader cl =
-			 * ClassLoader.getSystemClassLoader(); URL[] urls =
-			 * ((URLClassLoader)cl).getURLs(); for (URL url: urls) {
-			 * System.out.println(url.getFile()); }
-			 */
 
 			// Load root layout from fxml file.
 			FXMLLoader loader = new FXMLLoader();
