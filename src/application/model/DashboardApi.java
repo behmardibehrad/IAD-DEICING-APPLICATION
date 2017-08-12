@@ -29,7 +29,7 @@ public class DashboardApi {
 	// HTTP POST request
 	public void PostData() throws Exception {
 
-		String url1 = "http://54.213.22.248:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/push";
+		String url1 = "http://52.35.148.5:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/push";
 		HttpClient client1 = new DefaultHttpClient();
 		HttpPost post1 = new HttpPost(url1);
 		post1.setHeader("User-Agent", USER_AGENT);
@@ -58,7 +58,7 @@ public class DashboardApi {
 
 	public void PostConf() throws Exception {
 
-		String urlConf = "http://54.213.22.248:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/tileconfig/"
+		String urlConf = "http://52.35.148.5:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/tileconfig/"
 				+ flight.getApiTileID();
 		HttpClient clientConf = new DefaultHttpClient();
 		HttpPost postConf = new HttpPost(urlConf);
@@ -83,7 +83,7 @@ public class DashboardApi {
 
 	public void ClearData() throws Exception {
 
-		String url = "http://54.213.22.248:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/push";
+		String url = "http://52.35.148.5:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/push";
 		HttpClient client = new DefaultHttpClient();
 		HttpPost post = new HttpPost(url);
 		post.setHeader("User-Agent", USER_AGENT);
@@ -112,7 +112,7 @@ public class DashboardApi {
 
 	public void ClearConf() throws Exception {
 
-		String urlConf = "http://54.213.22.248:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/tileconfig/"
+		String urlConf = "http://52.35.148.5:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/tileconfig/"
 				+ flight.getApiTileID();
 		HttpClient clientConf = new DefaultHttpClient();
 		HttpPost postConf = new HttpPost(urlConf);
@@ -131,7 +131,7 @@ public class DashboardApi {
 
 	private void ResetAllConf(String i) throws Exception {
 
-		String urlConf = "http://54.213.22.248:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/tileconfig/" + i;
+		String urlConf = "http://52.35.148.5:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/tileconfig/" + i;
 		HttpClient clientConf = new DefaultHttpClient();
 		HttpPost postConf = new HttpPost(urlConf);
 		postConf.setHeader("User-Agent", USER_AGENT);
@@ -149,7 +149,7 @@ public class DashboardApi {
 
 	private void ResetAllData(String i) throws Exception {
 
-		String url = "http://54.213.22.248:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/push";
+		String url = "http://52.35.148.5:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/push";
 		HttpClient client = new DefaultHttpClient();
 		HttpPost post = new HttpPost(url);
 		post.setHeader("User-Agent", USER_AGENT);
