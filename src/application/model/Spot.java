@@ -223,8 +223,7 @@ public DashboardApi getDashboardApi() {
 	
 	
 	public String toString() {
-		return "SPOT: " + getSpotNumber() + "\nactive: " + getActive() + "\nspotIntType: " + getSpotIntType()
-				+ "\n\n\n " + flight.toString() + "\n\n"+ deicing.toString();
+		return "SPOT: " + getSpotNumber();
 	}
 	
 	

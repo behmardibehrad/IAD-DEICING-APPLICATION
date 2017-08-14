@@ -326,7 +326,6 @@ public class SpotOverviewController {
 		flightNumberLabel1.setVisible(false);
 		tailNumberLabel1.setVisible(false);
 		aircraftTypeLabel1.setVisible(false);
-		;
 		carrierLabel1.setVisible(false);
 
 	}
