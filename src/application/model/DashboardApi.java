@@ -1,11 +1,10 @@
 package application.model;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
-
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -13,6 +12,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
+
+import javafx.scene.input.DataFormat;
 
 public class DashboardApi {
 
@@ -38,17 +39,21 @@ public class DashboardApi {
 		urlParameters1.add(new BasicNameValuePair("key", flight.getApiTileID()));
 		String tileDataString;
 		JSONObject tileData = new JSONObject();
-		tileData.put("title", "aaaaa");
-		tileData.put("description", "");
-		tileData.put("big-value", deicing.getFluidType());
-		tileData.put("upper-left-label", "A/C type:  ");
-		tileData.put("upper-left-value", flight.getAircraftType());
-		tileData.put("lower-left-label", "Tail #:  ");
-		tileData.put("lower-left-value", flight.getTailNumber());
+		tileData.put("title", flight.getCarrier().toUpperCase()+ "  "+flight.getFlightNumber() );
+		tileData.put("description", "Arrived at pad on : " + setTime1());
+		tileData.put("big-value", flight.getCarrier().toUpperCase()+flight.getFlightNumber());
+		tileData.put("upper-left-label", "carrier:  ");
+		tileData.put("upper-left-value", flight.getCarrier().toUpperCase());
+		tileData.put("second-upper-left-label", "A/C :  ");
+		tileData.put("second-upper-left-value", flight.getAircraftType().toUpperCase());
+		tileData.put("lower-left-label", "Flight#:  ");
+		tileData.put("lower-left-value", flight.getFlightNumber());
+		tileData.put("second-lower-left-label", "Tail #:  ");
+		tileData.put("second-lower-left-value", flight.getTailNumber().toUpperCase());
 		tileData.put("upper-right-label", "start time:  ");
 		tileData.put("upper-right-value", deicing.getStartTime());
-		tileData.put("lower-right-label", "22");
-		tileData.put("lower-right-value", "22");
+		tileData.put("lower-right-label", "Fluid:  ");
+		tileData.put("lower-right-value", deicing.getFluidType());
 		tileDataString = tileData.toString();
 		urlParameters1.add(new BasicNameValuePair("data", tileDataString));
 		post1.setEntity(new UrlEncodedFormEntity(urlParameters1));
@@ -95,14 +100,18 @@ public class DashboardApi {
 		tileData.put("title", "available");
 		tileData.put("description", "");
 		tileData.put("big-value", "");
-		tileData.put("upper-left-label", "A/C type:  ");
-		tileData.put("upper-left-value", "available");
-		tileData.put("lower-left-label", "Tail #:  ");
-		tileData.put("lower-left-value", "available");
+		tileData.put("upper-left-label", "carrier:  ");
+		tileData.put("upper-left-value", "");
+		tileData.put("second-upper-left-label", "A/C :  ");
+		tileData.put("second-upper-left-value", "");
+		tileData.put("lower-left-label", "Flight#:  ");
+		tileData.put("lower-left-value", "");
+		tileData.put("second-lower-left-label", "Tail #:  ");
+		tileData.put("second-lower-left-value", "");
 		tileData.put("upper-right-label", "start time:  ");
-		tileData.put("upper-right-value", "available");
-		tileData.put("lower-right-label", "22");
-		tileData.put("lower-right-value", "available");
+		tileData.put("upper-right-value", "");
+		tileData.put("lower-right-label", "Fluid:  ");
+		tileData.put("lower-right-value", "");
 		tileDataString = tileData.toString();
 		urlParameters.add(new BasicNameValuePair("data", tileDataString));
 		post.setEntity(new UrlEncodedFormEntity(urlParameters));
@@ -161,24 +170,37 @@ public class DashboardApi {
 		tileData.put("title", "available");
 		tileData.put("description", "");
 		tileData.put("big-value", "");
-		tileData.put("upper-left-label", "A/C type:  ");
-		tileData.put("upper-left-value", "available");
-		tileData.put("lower-left-label", "Tail #:  ");
-		tileData.put("lower-left-value", "available");
+		tileData.put("upper-left-label", "carrier:  ");
+		tileData.put("upper-left-value", "");
+		tileData.put("second-upper-left-label", "A/C :  ");
+		tileData.put("second-upper-left-value", "");
+		tileData.put("lower-left-label", "Flight#:  ");
+		tileData.put("lower-left-value", "");
+		tileData.put("second-lower-left-label", "Tail #:  ");
+		tileData.put("second-lower-left-value", "");
 		tileData.put("upper-right-label", "start time:  ");
-		tileData.put("upper-right-value", "available");
-		tileData.put("lower-right-label", "22");
-		tileData.put("lower-right-value", "available");
+		tileData.put("upper-right-value", "");
+		tileData.put("lower-right-label", "Fluid:  ");
+		tileData.put("lower-right-value", "");
 		tileDataString = tileData.toString();
 		urlParameters.add(new BasicNameValuePair("data", tileDataString));
 		post.setEntity(new UrlEncodedFormEntity(urlParameters));
 		client.execute(post);
 
 	}
+	
+	public String setTime1() {
+		String time = "";
+		DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+		Calendar cal = Calendar.getInstance();
+		time = dateFormat.format(cal.getTime());
+		return time;
+
+	}
 
 	public void ResetDashboard() throws Exception {
 
-		for (int i = 0; i < 4; i++) {
+		for (int i = 1; i < 6; i++) {
 			try {
 				ResetAllData(String.valueOf(i));
 			} catch (Exception e) {

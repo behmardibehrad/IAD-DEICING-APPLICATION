@@ -32,9 +32,10 @@
                         <Image url="@../../pictures/Type1.gif" />
                      </image>
                   </ImageView>
-                  <GridPane layoutX="542.0" layoutY="21.0" prefHeight="142.0" prefWidth="150.0">
+                  <GridPane layoutX="225.0" layoutY="19.0" prefHeight="194.0" prefWidth="322.0">
                     <columnConstraints>
-                      <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -43,24 +44,44 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label fx:id="carrierLabel">
+                        <Label fx:id="carrierLabel" GridPane.columnIndex="1">
                            <font>
                               <Font name="System Bold Italic" size="30.0" />
                            </font>
                         </Label>
-                        <Label fx:id="flightNumberLabel" GridPane.rowIndex="2">
+                        <Label fx:id="flightNumberLabel" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <font>
                               <Font name="System Bold Italic" size="30.0" />
                            </font>
                         </Label>
-                        <Label fx:id="aircraftTypeLabel" GridPane.rowIndex="1">
+                        <Label fx:id="aircraftTypeLabel" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <font>
                               <Font name="System Bold Italic" size="30.0" />
                            </font>
                         </Label>
-                        <Label fx:id="tailNumberLabel" GridPane.rowIndex="3">
+                        <Label fx:id="tailNumberLabel" GridPane.columnIndex="1" GridPane.rowIndex="3">
                            <font>
                               <Font name="System Bold Italic" size="30.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="carrierLabel1">
+                           <font>
+                              <Font name="System Bold" size="30.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="tailNumberLabel1" GridPane.rowIndex="1">
+                           <font>
+                              <Font name="System Bold" size="30.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="aircraftTypeLabel1" GridPane.rowIndex="2">
+                           <font>
+                              <Font name="System Bold" size="30.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="flightNumberLabel1" GridPane.rowIndex="3">
+                           <font>
+                              <Font name="System Bold" size="30.0" />
                            </font>
                         </Label>
                      </children>

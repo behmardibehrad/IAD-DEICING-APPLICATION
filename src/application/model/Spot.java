@@ -8,7 +8,7 @@ public class Spot {
    
 	private int spotIntType;
 
-
+    private Boolean spotHasFlightData;
 	private Boolean active;
 	private StringProperty spotNumber;
 	private StringProperty truck1;
@@ -33,6 +33,7 @@ public class Spot {
 
 		this.spotIntType = 0;
 		this.active = false;
+		this.spotHasFlightData =false;
 		this.spotNumber = new SimpleStringProperty(spotNumber);
 		this.truck1 = new SimpleStringProperty("");
 		this.freezepoint1 = new SimpleStringProperty("");
@@ -47,6 +48,13 @@ public class Spot {
 		this.spotApi = new DashboardApi(flight, deicing);
 	}
 	
+	public Boolean getSpotHasFlightData() {
+		return spotHasFlightData;
+	}
+
+	public void setSpotHasFlightData(Boolean spotHasFlightData) {
+		this.spotHasFlightData = spotHasFlightData;
+	}
 	
 	public int getSpotIntType() {
 		return spotIntType;
@@ -56,6 +64,7 @@ public class Spot {
 		this.spotIntType = spotIntType;
 	}
 	
+
 	
 	
 	public Boolean getActive() {

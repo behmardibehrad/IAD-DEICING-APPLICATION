@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import org.controlsfx.control.textfield.TextFields;
 import application.MainApp;
+import application.model.DashboardApi;
 import application.model.Flight;
 import application.model.Spot;
 import javafx.collections.FXCollections;
@@ -57,7 +58,14 @@ public class SpotOverviewController {
 	private Label aircraftTypeLabel;
 	@FXML
 	private Label carrierLabel;
-
+	@FXML
+	private Label flightNumberLabel1;
+	@FXML
+	private Label tailNumberLabel1;
+	@FXML
+	private Label aircraftTypeLabel1;
+	@FXML
+	private Label carrierLabel1;
 	// Released Flights Table With 9 Columns.
 	@FXML
 	private TableView<Spot> releaseTable;
@@ -79,7 +87,6 @@ public class SpotOverviewController {
 	private TableColumn<Spot, String> endColumn;
 	@FXML
 	private TableColumn<Spot, String> employeeInit;
-
 	// Selected Flight Table with 3 Columns
 	@FXML
 	private TableView<Flight> selectedFlightTable;
@@ -100,23 +107,18 @@ public class SpotOverviewController {
 
 	@FXML
 	private ComboBox<String> fluidTypeComboBox;
-
 	@FXML
 	private ComboBox<Flight> flightComboBox1;
-
 	@FXML
 	private ComboBox<Flight> flightComboBox;
-
 	@FXML
 	private ComboBox<Spot> sendToComboBox = new ComboBox<Spot>();
-
 	@FXML
 	private Button start;
 	@FXML
 	private Button stop;
 	@FXML
 	private Button setting;
-
 	// Reference to the main application.
 	private MainApp mainApp;
 	private ObservableList<Spot> releaseTableData = FXCollections.observableArrayList();
@@ -165,7 +167,9 @@ public class SpotOverviewController {
 		spotsTable.getSelectionModel().selectedItemProperty()
 				.addListener((observable, oldValue, newValue) -> showSpotDetails(newValue));
 
-		showSpotDetails(null);
+		imageView.setImage(imageBlack);
+
+		// showSpotDetails(null);
 
 		// flightComboBox.getItems().addAll(DeicersInfo.getApiFlightsFlightNumber());
 		// flightComboBox.setItems(DeicersInfo.getApiFlightsFlightNumber());
@@ -184,8 +188,9 @@ public class SpotOverviewController {
 
 		// flightComboBox.setItems(selectedFlightTableData);
 
-		fluidTypeComboBox.getItems().addAll("Clear", "TYPE I", "TYPE IV");
-		fluidTypeComboBox.getSelectionModel().selectFirst();
+		fluidTypeComboBox.getItems().addAll("TYPE I", "TYPE IV");
+		// fluidTypeComboBox.getSelectionModel().selectFirst();
+		// fluidTypeComboBox.setValue("Clear");
 
 		// spotData.addAll(mainApp.getSpotData());
 
@@ -215,47 +220,62 @@ public class SpotOverviewController {
 	 * @param spot
 	 *            the spot or null
 	 */
-	private void showSpotDetails(Spot spot) {
-		if (spot != null) {
+	@SuppressWarnings("null")
+	private void showSpotDetails(Spot selectedSpot) {
+		if (selectedSpot == null)
+			selectedSpot.setSpotImage(imageBlack);
+
+		if (selectedSpot.getSpotHasFlightData()) {
 			// Fill the labels with info from the spot object
-			spotLabel.setText(spot.getSpotNumber());
-			truck1Label.setText(spot.getTruck1());
-			freezepoint1Label.setText(spot.getFreezepoint1());
-			dirver1Label.setText(spot.getDriver1());
-			sprayer1Label.setText(spot.getSprayer1());
-			truck2Label.setText(spot.getTruck2());
-			freezepoint2Label.setText(spot.getFreezepoint2());
-			dirver2Label.setText(spot.getDriver2());
-			sprayer2Label.setText(spot.getSprayer2());
-			flightNumberLabel.setText(spot.getFlight().getFlightNumber());
-			tailNumberLabel.setText(spot.getFlight().getTailNumber());
-			aircraftTypeLabel.setText(spot.getFlight().getAircraftType());
-			carrierLabel.setText(spot.getFlight().getCarrier());
-			if (spot.getDeicing().getFluidType().equalsIgnoreCase("")) {
-				fluidTypeComboBox.getSelectionModel().selectFirst();
+
+			spotLabel.setText(selectedSpot.getSpotNumber());
+			truck1Label.setText(selectedSpot.getTruck1());
+			freezepoint1Label.setText(selectedSpot.getFreezepoint1());
+			dirver1Label.setText(selectedSpot.getDriver1());
+			sprayer1Label.setText(selectedSpot.getSprayer1());
+			truck2Label.setText(selectedSpot.getTruck2());
+			freezepoint2Label.setText(selectedSpot.getFreezepoint2());
+			dirver2Label.setText(selectedSpot.getDriver2());
+			sprayer2Label.setText(selectedSpot.getSprayer2());
+			flightNumberLabel.setText(selectedSpot.getFlight().getFlightNumber());
+			tailNumberLabel.setText(selectedSpot.getFlight().getTailNumber());
+			aircraftTypeLabel.setText(selectedSpot.getFlight().getAircraftType());
+			carrierLabel.setText(selectedSpot.getFlight().getCarrier());
+			flightNumberLabel1.setVisible(true);
+			tailNumberLabel1.setVisible(true);
+			aircraftTypeLabel1.setVisible(true);
+			;
+			carrierLabel1.setVisible(true);
+			flightNumberLabel1.setText("Flight#: ");
+			tailNumberLabel1.setText("Tail#: ");
+			aircraftTypeLabel1.setText("A/C: ");
+			carrierLabel1.setText("Carrier: ");
+			if (selectedSpot.getDeicing().getFluidType().equalsIgnoreCase("")) {
+				selectedSpot.getDeicing().setFluidType("Fluid Type");
+				imageView.setImage(imageBlack);
 			} else {
-				fluidTypeComboBox.setValue(spot.getDeicing().getFluidType());
+				fluidTypeComboBox.setValue(selectedSpot.getDeicing().getFluidType());
+
+				if (selectedSpot.getDeicing().getFluidType().equals("TYPE I")
+						&& selectedSpot.getActive().equals(false)) {
+					selectedSpot.setSpotImage(imageType1);
+					imageView.setImage(selectedSpot.getSpotImage());
+				} else if (selectedSpot.getDeicing().getFluidType().equals("TYPE I")
+						&& selectedSpot.getActive().equals(true)) {
+					selectedSpot.setSpotImage(imageType1Blink);
+					imageView.setImage(selectedSpot.getSpotImage());
+				} else if (selectedSpot.getDeicing().getFluidType().equals("TYPE IV")
+						&& selectedSpot.getActive().equals(false)) {
+					selectedSpot.setSpotImage(imageType4);
+					imageView.setImage(selectedSpot.getSpotImage());
+				} else if (selectedSpot.getDeicing().getFluidType().equals("TYPE IV")
+						&& selectedSpot.getActive().equals(true)) {
+					selectedSpot.setSpotImage(imageType4Blink);
+					imageView.setImage(selectedSpot.getSpotImage());
+				}
+
 			}
-
-			if (spot.getDeicing().getFluidType().equalsIgnoreCase("TYPE I") && !spot.getActive()) {
-				spot.setSpotImage(imageType1);
-				imageView.setImage(spot.getSpotImage());
-			} else if (spot.getDeicing().getFluidType().equalsIgnoreCase("TYPE IV") && !spot.getActive()) {
-
-				spot.setSpotImage(imageType4);
-				imageView.setImage(spot.getSpotImage());
-			} else if (spot.getDeicing().getFluidType().equalsIgnoreCase("TYPE I") && spot.getActive()) {
-				spot.setSpotImage(imageType1Blink);
-				imageView.setImage(spot.getSpotImage());
-
-			} else if (spot.getDeicing().getFluidType().equalsIgnoreCase("TYPE IV") && spot.getActive()) {
-				spot.setSpotImage(imageType4Blink);
-				imageView.setImage(spot.getSpotImage());
-
-			} else {
-				spot.setSpotImage(imageBlack);
-				imageView.setImage(spot.getSpotImage());
-			}
+			// imageView.setImage(selectedSpot.getSpotImage());
 
 		} else {
 			// spot is null, remove all the text.
@@ -276,7 +296,12 @@ public class SpotOverviewController {
 			aircraftTypeLabel.setText("");
 			carrierLabel.setText("");
 			imageView.setImage(imageBlack);
-			fluidTypeComboBox.getSelectionModel().selectFirst();
+			fluidTypeComboBox.setValue("Fluid Type");
+			flightNumberLabel1.setVisible(false);
+			tailNumberLabel1.setVisible(false);
+			aircraftTypeLabel1.setVisible(false);
+			;
+			carrierLabel1.setVisible(false);
 		}
 
 	}
@@ -289,9 +314,20 @@ public class SpotOverviewController {
 		spot.getDeicing().setAircraftCheck("");
 		spot.getDeicing().setEndTime("");
 		spot.getDeicing().setStartTime("");
-		spot.getDeicing().setFluidType("Clear");
-		spot.setActive(false);
+		spot.getDeicing().setFluidType("");
+		flightNumberLabel.setText("");
+		tailNumberLabel.setText("");
+		aircraftTypeLabel.setText("");
+		carrierLabel.setText("");
 		spot.setSpotImage(imageBlack);
+		imageView.setImage(imageBlack);
+		spot.setActive(false);
+		spot.setSpotHasFlightData(false);
+		flightNumberLabel1.setVisible(false);
+		tailNumberLabel1.setVisible(false);
+		aircraftTypeLabel1.setVisible(false);
+		;
+		carrierLabel1.setVisible(false);
 
 	}
 
@@ -327,6 +363,13 @@ public class SpotOverviewController {
 			boolean okClicked = mainApp.showFlightEditDialog(selectedSpot);
 			if (okClicked) {
 				showSpotDetails(selectedSpot);
+				selectedSpot.setSpotImage(imageBlack);
+				selectedSpot.setSpotHasFlightData(true);
+				flightNumberLabel1.setVisible(true);
+				tailNumberLabel1.setVisible(true);
+				aircraftTypeLabel1.setVisible(true);
+				;
+				carrierLabel1.setVisible(true);
 			}
 
 		} else {
@@ -348,35 +391,73 @@ public class SpotOverviewController {
 
 	@FXML
 	private void handleReleaseFlight() {
-
+		Alert alert = new Alert(AlertType.WARNING);
 		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
 		spotsTable.getSelectionModel().getSelectedItem().getFlight()
 				.setApiTileID(spotsTable.getSelectionModel().getSelectedItem().getSpotNumber()
 						.substring(spotsTable.getSelectionModel().getSelectedItem().getSpotNumber().length() - 1));
-		try {
-			selectedSpot.getDashboardApi().ClearData();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		try {
-			selectedSpot.getDashboardApi().ClearConf();
-		} catch (Exception e) {
-			e.printStackTrace();
+
+		if (!selectedSpot.getSpotHasFlightData()) {
+			alert.initOwner(mainApp.getPrimaryStage());
+			alert.setTitle("No Selection");
+			alert.setHeaderText("Selected Spot is empty");
+			alert.setContentText("Please select a Flight in the table");
+			alert.showAndWait();
 		}
 
-		String ac = selectedSpot.getFlight().getAircraftType();
-		if (ac.equals("XMJ") || ac.equals("XR4")) {
-			selectedSpot.getDeicing().setAircraftCheck("Tactile");
+		else if (fluidTypeComboBox.getValue().equalsIgnoreCase("Clear")) {
+			alert.initOwner(mainApp.getPrimaryStage());
+			alert.setTitle("No Selection");
+			alert.setHeaderText("No Fluid Type!");
+			alert.setContentText("Please select the Fluid Type!");
+			alert.showAndWait();
+		}
+
+		else if (selectedSpot.getActive()) {
+			// Nothing selected.
+
+			alert.initOwner(mainApp.getPrimaryStage());
+			alert.setTitle("Active Spot");
+			alert.setHeaderText("Timmer Running");
+			alert.setContentText("Please Stop the timer before releasing!");
+			alert.showAndWait();
+		} else if (!selectedSpot.getActive() && selectedSpot.getDeicing().getStartTime().equalsIgnoreCase("")) {
+			// Nothing selected.
+
+			alert.initOwner(mainApp.getPrimaryStage());
+			alert.setTitle("Active Spot");
+			alert.setHeaderText("Timmer not started!");
+			alert.setContentText("Please start the timer before releasing!");
+			alert.showAndWait();
 		} else {
-			selectedSpot.getDeicing().setAircraftCheck("Post Check");
+			try {
+				selectedSpot.getDashboardApi().ClearData();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			try {
+				selectedSpot.getDashboardApi().ClearConf();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			String ac = selectedSpot.getFlight().getAircraftType();
+			if (ac.equals("XMJ") || ac.equals("XR4")) {
+				selectedSpot.getDeicing().setAircraftCheck("Tactile");
+			} else {
+				selectedSpot.getDeicing().setAircraftCheck("Post Check");
+			}
+
+			releaseTableData.add(copySpot(selectedSpot));
+			releaseTable.setItems(releaseTableData);
+			selectedSpot.setSpotHasFlightData(false);
+			selectedSpot.setActive(false);
+
+			clearSpot(selectedSpot);
+
+			// spotsTable.getSelectionModel().clearSelection();
+			// fluidTypeComboBox.setValue("Fluid Type");
 		}
-
-		releaseTableData.add(copySpot(selectedSpot));
-		releaseTable.setItems(releaseTableData);
-		clearSpot(selectedSpot);
-
-		//spotsTable.getSelectionModel().clearSelection();
-		// fluidTypeComboBox.setValue("Fluid Type");
 	}
 
 	public Spot copySpot(Spot spot) {
@@ -402,35 +483,24 @@ public class SpotOverviewController {
 
 	@FXML
 	public void setFluidType() {
-		Alert alert = new Alert(AlertType.WARNING);
 		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
 
-		if (selectedSpot == null)
+		if (selectedSpot.getSpotHasFlightData())
 
 		{
-			alert.initOwner(mainApp.getPrimaryStage());
-			alert.setTitle("No Selection");
-			alert.setHeaderText("No SPOT is Selected");
-			alert.setContentText("Please select a SPOT from the table.");
-			alert.showAndWait();
-
+			selectedSpot.getDeicing().setFluidType(fluidTypeComboBox.getSelectionModel().getSelectedItem());
+			if (selectedSpot.getDeicing().getFluidType().equalsIgnoreCase("TYPE I")) {
+				selectedSpot.setSpotImage(imageType1);
+				imageView.setImage(selectedSpot.getSpotImage());
+			} else if (selectedSpot.getDeicing().getFluidType().equalsIgnoreCase("TYPE IV")) {
+				selectedSpot.setSpotImage(imageType4);
+				imageView.setImage(selectedSpot.getSpotImage());
+			} else {
+				selectedSpot.setSpotImage(imageBlack);
+				imageView.setImage(selectedSpot.getSpotImage());
+			}
 		}
 
-		else {
-			selectedSpot.getDeicing().setFluidType(fluidTypeComboBox.getValue());
-		}
-
-		if (selectedSpot.getDeicing().getFluidType().equalsIgnoreCase("TYPE I")) {
-			selectedSpot.setSpotImage(imageType1);
-			imageView.setImage(selectedSpot.getSpotImage());
-		} else if (selectedSpot.getDeicing().getFluidType().equalsIgnoreCase("TYPE IV")) {
-			selectedSpot.setSpotImage(imageType4);
-			imageView.setImage(selectedSpot.getSpotImage());
-		} else if (selectedSpot.getDeicing().getFluidType().equalsIgnoreCase("Clear")
-				|| selectedSpot.getDeicing().getFluidType().equalsIgnoreCase(null)) {
-			selectedSpot.setSpotImage(imageBlack);
-			imageView.setImage(selectedSpot.getSpotImage());
-		}
 
 	}
 
@@ -469,16 +539,24 @@ public class SpotOverviewController {
 		spotsTable.getSelectionModel().getSelectedItem().getFlight()
 				.setApiTileID(spotsTable.getSelectionModel().getSelectedItem().getSpotNumber()
 						.substring(spotsTable.getSelectionModel().getSelectedItem().getSpotNumber().length() - 1));
-		selectedSpot.setActive(true);
 
-		if (selectedSpot.getFlight().getFlightNumber() == null) {
+		if (!selectedSpot.getSpotHasFlightData()) {
 			alert.initOwner(mainApp.getPrimaryStage());
 			alert.setTitle("No Selection");
 			alert.setHeaderText("Selected Spot is empty");
 			alert.setContentText("Please select a Flight in the table");
 			alert.showAndWait();
-		} else if (selectedSpot.getDeicing().getFluidType().equals("TYPE I")) {
+		} else if (fluidTypeComboBox.getValue().equals("Fluid Type")) {
+			alert.initOwner(mainApp.getPrimaryStage());
+			alert.setTitle("No Selection");
+			alert.setHeaderText("No Fluid Type!");
+			alert.setContentText("Please select the Fluid Type!");
+			alert.showAndWait();
+		}
+
+		else if (selectedSpot.getDeicing().getFluidType().equals("TYPE I")) {
 			selectedSpot.getDeicing().setStartTime(setTime());
+			selectedSpot.setActive(true);
 			try {
 				selectedSpot.getDashboardApi().PostData();
 			} catch (Exception e) {
@@ -493,6 +571,7 @@ public class SpotOverviewController {
 			imageView.setImage(selectedSpot.getSpotImage());
 		} else if (selectedSpot.getDeicing().getFluidType().equals("TYPE IV")) {
 			selectedSpot.getDeicing().setStartTime(setTime());
+			selectedSpot.setActive(true);
 			try {
 				selectedSpot.getDashboardApi().PostData();
 			} catch (Exception e2) {
@@ -513,28 +592,45 @@ public class SpotOverviewController {
 	public void handleStop() {
 		Alert alert = new Alert(AlertType.WARNING);
 		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
-		selectedSpot.setActive(false);
 
-		if (selectedSpot.getFlight().getFlightNumber() == null) {
+		if (!selectedSpot.getSpotHasFlightData()) {
 			alert.initOwner(mainApp.getPrimaryStage());
 			alert.setTitle("No Selection");
 			alert.setHeaderText("Selected Spot is empty");
 			alert.setContentText("Please select a Flight in the table");
 			alert.showAndWait();
-		} else {
+		}
+
+		else if (fluidTypeComboBox.getValue().equals(null)) {
+			alert.initOwner(mainApp.getPrimaryStage());
+			alert.setTitle("No Selection");
+			alert.setHeaderText("No Fluid Type!");
+			alert.setContentText("Please select the Fluid Type!");
+			alert.showAndWait();
+		} else if (!selectedSpot.getActive()) {
+			alert.initOwner(mainApp.getPrimaryStage());
+			alert.setTitle("Not Active");
+			alert.setHeaderText("Timer Not Running!");
+			alert.setContentText("Timer has not been started!");
+			alert.showAndWait();
+		}
+
+		else {
 			selectedSpot.getDeicing().setEndTime(setTime());
+			selectedSpot.setActive(false);
 			if (selectedSpot.getDeicing().getFluidType().equalsIgnoreCase("TYPE I")) {
 				selectedSpot.setSpotImage(imageType1);
 				imageView.setImage(selectedSpot.getSpotImage());
 			} else if (selectedSpot.getDeicing().getFluidType().equalsIgnoreCase("TYPE IV")) {
 				selectedSpot.setSpotImage(imageType4);
 				imageView.setImage(selectedSpot.getSpotImage());
-			} else if (selectedSpot.getDeicing().getFluidType().equalsIgnoreCase("Clear")
+			} else if (selectedSpot.getDeicing().getFluidType().equalsIgnoreCase("")
 					|| selectedSpot.getDeicing().getFluidType().equalsIgnoreCase(null)) {
 				selectedSpot.setSpotImage(imageBlack);
 				imageView.setImage(selectedSpot.getSpotImage());
-			};
 
+			}
+			;
 
 		}
 
@@ -543,9 +639,9 @@ public class SpotOverviewController {
 	@FXML
 	private void handleResetWeb() {
 		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
-
+		DashboardApi i = new DashboardApi(null, null);
 		try {
-			selectedSpot.getDashboardApi().ResetDashboard();
+			i.ResetDashboard();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
