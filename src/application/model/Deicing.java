@@ -68,30 +68,10 @@ public class Deicing {
 	public void setAircraftCheck(String aircraftCheck) {
 		this.aircraftCheck.set(aircraftCheck);
 	}
-	
-	
+
 	public String toString() {
 		return "startTime: " + getStartTime() + "\nendTime: " + getEndTime() + "\nfluidType: " + getFluidType()
 				+ "\naircraftCheck: " + getAircraftCheck();
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }

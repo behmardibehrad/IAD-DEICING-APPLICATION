@@ -2,6 +2,7 @@ package application;
 
 import java.io.IOException;
 
+import application.model.ReadEmployees;
 import application.model.Spot;
 import application.view.FlightEditDialogController;
 import application.view.SettingEditController;
@@ -52,7 +53,6 @@ public class MainApp extends Application {
 
 		initRootLayout();
 		showSpotOverview();
-		
 
 	}
 
@@ -61,7 +61,6 @@ public class MainApp extends Application {
 	 */
 	public void initRootLayout() {
 		try {
-
 
 			// Load root layout from fxml file.
 			FXMLLoader loader = new FXMLLoader();
@@ -189,6 +188,8 @@ public class MainApp extends Application {
 			return false;
 		}
 	}
+	
+
 
 	/**
 	 * Returns the main stage.

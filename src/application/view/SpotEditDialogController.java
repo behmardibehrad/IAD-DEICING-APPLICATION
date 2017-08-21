@@ -34,32 +34,20 @@ public class SpotEditDialogController {
 	private Stage dialogStage;
 	private Spot spot;
 	private boolean okClicked = false;
+	
 
-	/**
-	 * Initializes the controller class. This method is automatically called after
-	 * the fxml file has been loaded.
-	 */
 	@FXML
 	private void initialize() {
 	}
 
-	/**
-	 * Sets the stage of this dialog.
-	 * 
-	 * @param dialogStage
-	 */
+
 	public void setDialogStage(Stage dialogStage) {
 		this.dialogStage = dialogStage;
 	}
 
-	/**
-	 * Sets the spot to be edited in the dialog.
-	 * 
-	 * @param spot
-	 */
+
 	public void setSpot(Spot spot) {
 		this.spot = spot;
-
 		/*
 		 * these were the original code from tutorial;
 		 * truck1Field.setText(spot.getTruck1());
@@ -71,6 +59,7 @@ public class SpotEditDialogController {
 		 */
 
 		TextFields.bindAutoCompletion(truck1Field, DeicersInfo.getTrucks());
+		//TextFields.bindAutoCompletion(dirver1Field, DeicersInfo.getDeicers());
 		TextFields.bindAutoCompletion(dirver1Field, DeicersInfo.getDeicers());
 		TextFields.bindAutoCompletion(sprayer1Field, DeicersInfo.getDeicers());
 		TextFields.bindAutoCompletion(truck2Field, DeicersInfo.getTrucks());
@@ -82,18 +71,12 @@ public class SpotEditDialogController {
 
 	}
 
-	/**
-	 * Returns true if the user clicked OK, false otherwise.
-	 * 
-	 * @return
-	 */
+
 	public boolean isOkClicked() {
 		return okClicked;
 	}
 
-	/**
-	 * Called when the user clicks ok.
-	 */
+
 	@FXML
 	private void handleOk() {
 		if (isInputValid()) {
@@ -142,20 +125,7 @@ public class SpotEditDialogController {
 			errorMessage += "No valid Employee!\n";
 		}
 
-		/*
-		 * if (truck2Field.getText() == null || truck2Field.getText().length() == 0) {
-		 * errorMessage += "No valid Truck Number!\n"; }
-		 * 
-		 * if (freezepoint2Field.getText() == null ||
-		 * freezepoint2Field.getText().length() == 0) { errorMessage +=
-		 * "No valid Freezepoint!\n"; }
-		 * 
-		 * if (dirver2Field.getText() == null || dirver2Field.getText().length() == 0) {
-		 * errorMessage += "No valid Employee!\n"; }
-		 * 
-		 * if (sprayer2Field.getText() == null || sprayer2Field.getText().length() == 0)
-		 * { errorMessage += "No valid Employee!\n"; }
-		 */
+
 
 		if (errorMessage.length() == 0) {
 			return true;
@@ -166,7 +136,6 @@ public class SpotEditDialogController {
 			alert.setTitle("Invalid Fields");
 			alert.setHeaderText("Please correct invalid fields");
 			alert.setContentText(errorMessage);
-
 			alert.showAndWait();
 
 			return false;

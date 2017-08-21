@@ -39,9 +39,9 @@ public class DashboardApi {
 		urlParameters1.add(new BasicNameValuePair("key", flight.getApiTileID()));
 		String tileDataString;
 		JSONObject tileData = new JSONObject();
-		tileData.put("title", flight.getCarrier().toUpperCase()+ "  "+flight.getFlightNumber() );
+		tileData.put("title", flight.getCarrier().toUpperCase() + "  " + flight.getFlightNumber());
 		tileData.put("description", "Arrived at pad on : " + setTime1());
-		tileData.put("big-value", flight.getCarrier().toUpperCase()+flight.getFlightNumber());
+		tileData.put("big-value", flight.getCarrier().toUpperCase() + flight.getFlightNumber());
 		tileData.put("upper-left-label", "carrier:  ");
 		tileData.put("upper-left-value", flight.getCarrier().toUpperCase());
 		tileData.put("second-upper-left-label", "A/C :  ");
@@ -188,7 +188,7 @@ public class DashboardApi {
 		client.execute(post);
 
 	}
-	
+
 	public String setTime1() {
 		String time = "";
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm");

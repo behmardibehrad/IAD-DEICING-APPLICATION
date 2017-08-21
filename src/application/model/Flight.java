@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class Flight {
-   
+
 	private String apiTileID;
 	private StringProperty flightNumber;
 	private StringProperty tailNumber;
@@ -36,6 +36,7 @@ public class Flight {
 		this.carrier = new SimpleStringProperty(carrier);
 
 	}
+
 	public String getApiTileID() {
 		return apiTileID;
 	}
@@ -104,32 +105,5 @@ public class Flight {
 		return "Flight: " + getFlightNumber() + "\nCarrier: " + getCarrier() + "\nAircraft: " + getAircraftType()
 				+ "\nTail#: " + getTailNumber() + "\napiTileID: " + getApiTileID();
 	}
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 }

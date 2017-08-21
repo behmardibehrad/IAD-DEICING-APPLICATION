@@ -1,12 +1,19 @@
 package application.view;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import javax.swing.JFileChooser;
+
 import org.controlsfx.control.textfield.TextFields;
 import application.MainApp;
 import application.model.DashboardApi;
 import application.model.Flight;
+import application.model.SavedExcelData;
 import application.model.Spot;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,6 +27,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
+import jxl.write.WriteException;
 
 public class SpotOverviewController {
 
@@ -381,6 +390,11 @@ public class SpotOverviewController {
 			alert.showAndWait();
 		}
 	}
+	
+	
+
+	
+	
 
 	@FXML
 	private void handleSetting() {
@@ -451,12 +465,28 @@ public class SpotOverviewController {
 			releaseTable.setItems(releaseTableData);
 			selectedSpot.setSpotHasFlightData(false);
 			selectedSpot.setActive(false);
-
 			clearSpot(selectedSpot);
 
 			// spotsTable.getSelectionModel().clearSelection();
 			// fluidTypeComboBox.setValue("Fluid Type");
 		}
+	}
+	
+	@FXML
+	private void handleSaveReleaseTable() {
+		SavedExcelData excel = new SavedExcelData();
+		//excel.write2(existingData, "C:/Users/DarkAngel/Desktop/bbb.xls");
+		try {
+			excel.write2(releaseTable);
+		} catch (WriteException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+		
+
+		
+
+		
 	}
 
 	public Spot copySpot(Spot spot) {
@@ -499,7 +529,6 @@ public class SpotOverviewController {
 				imageView.setImage(selectedSpot.getSpotImage());
 			}
 		}
-
 
 	}
 
