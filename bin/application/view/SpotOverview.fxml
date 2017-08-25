@@ -107,6 +107,7 @@
                      </children>
                   </GridPane>
                   <Button layoutX="355.0" layoutY="375.0" mnemonicParsing="false" onAction="#handleSaveReleaseTable" prefHeight="25.0" prefWidth="90.0" text="Save Table" />
+                  <Button layoutX="445.0" layoutY="375.0" mnemonicParsing="false" onAction="#handleSaveReleaseTableOnline" text="Save Online" />
                </children>
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" SplitPane.resizableWithParent="false">

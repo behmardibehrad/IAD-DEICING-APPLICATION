@@ -28,9 +28,6 @@ public class SavedExcelData {
   DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
   Date date = new Date();
   String currentDate = dateFormat.format(date);
-  
-
-
 
   public void write2(TableView<Spot> releaseTable) throws IOException, WriteException {
 
@@ -46,15 +43,9 @@ public class SavedExcelData {
 
 	    WorkbookSettings wbSettings = new WorkbookSettings();
 	    wbSettings.setLocale(new Locale("en", "EN"));
-	    
-	    
-	    
 	    WritableWorkbook workbook = Workbook.createWorkbook(file, wbSettings);
 	    workbook.createSheet("SEDO OUTPUT", 0);
 	    WritableSheet excelSheet = workbook.getSheet(0);
-	    
-	   
-	    
 	    WritableFont times12pt = new WritableFont(WritableFont.TIMES, 12);
 	    WritableFont times13pt = new WritableFont(WritableFont.TIMES, 13);
 	
@@ -72,18 +63,12 @@ public class SavedExcelData {
 	    times1.setVerticalAlignment(jxl.format.VerticalAlignment.CENTRE);
 	    times1 .setBorder(jxl.format.Border.ALL, jxl.format.BorderLineStyle.MEDIUM, jxl.format.Colour.BLACK);
 	    times1.setBackground(jxl.format.Colour.GREY_40_PERCENT);
-	    
-	   
-	   
-	  
-	    
+
 	    // create create a bold font with unterlines
 	    WritableFont times12ptBoldUnderline = new WritableFont(WritableFont.TIMES, 12, WritableFont.BOLD, false,
 	        UnderlineStyle.SINGLE);
 	    timesBoldUnderline = new WritableCellFormat(times12ptBoldUnderline);
 	    // Lets automatically wrap the cells
-	    
-	    
 
 	    CellView cv = new CellView();
 	    cv.setFormat(times);
@@ -163,9 +148,6 @@ public class SavedExcelData {
 	    
 
 	    for (int i = 0 ; i < releaseTable.getItems().size(); i++) {
-	    	
-	    	
-	    	
 	    	//SavedFlightData item = existingdata.get(i);
 	    	
 	    	addCaption(excelSheet, 0, i+1, dateFormat.format(date));	
@@ -179,28 +161,11 @@ public class SavedExcelData {
 	    	addCaption(excelSheet, 8, i+1, releaseTable.getItems().get(i).getSprayer1());
 	    	addCaption(excelSheet, 9, i+1, releaseTable.getItems().get(i).getSpotNumber());
 	    	addCaption(excelSheet, 10, i+1, releaseTable.getItems().get(i).getDeicing().getEndTime());
-	   
 	    	
 	    }
-	    
-	    
-	  
-	    
-	    
 	    workbook.write();
 	    workbook.close();
-	    
-
-	    
 	  }
-  
-
-
-
-
-  
-
-  
 
   private void addCaption(WritableSheet excelSheet, int column, int row, String s)
       throws RowsExceededException, WriteException {
@@ -217,8 +182,4 @@ public class SavedExcelData {
 	    label = new Label(column, row, s,times1);
 	    excelSheet.addCell(label);
 	  }
-
-
-
-
 }

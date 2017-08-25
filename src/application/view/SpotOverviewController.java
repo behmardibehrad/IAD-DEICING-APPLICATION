@@ -1,14 +1,9 @@
 package application.view;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
-import javax.swing.JFileChooser;
-
 import org.controlsfx.control.textfield.TextFields;
 import application.MainApp;
 import application.model.DashboardApi;
@@ -27,7 +22,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.FileChooser;
 import jxl.write.WriteException;
 
 public class SpotOverviewController {
@@ -132,17 +126,16 @@ public class SpotOverviewController {
 	private MainApp mainApp;
 	private ObservableList<Spot> releaseTableData = FXCollections.observableArrayList();
 	private ObservableList<Flight> flightData = FXCollections.observableArrayList();
+	
+	private Boolean dataSaved = false;
 
-	/**
-	 * The constructor. The constructor is called before the initialize() method.
-	 */
+	
+
+	
+	
 	public SpotOverviewController() {
 	}
 
-	/**
-	 * Initializes the controller class. This method is automatically called after
-	 * the fxml file has been loaded.
-	 */
 
 	@FXML
 	public void initialize() {
@@ -207,11 +200,7 @@ public class SpotOverviewController {
 
 	// change the spotmodeling data look at the getter and setters
 
-	/**
-	 * Is called by the main application to give a reference back to itself.
-	 * 
-	 * @param mainApp
-	 */
+
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
 		// Add observable list data to the table
@@ -222,13 +211,7 @@ public class SpotOverviewController {
 
 	}
 
-	/**
-	 * Fills all text fields to show details about the spot. If the specified spot
-	 * is null, all text fields are cleared.
-	 * 
-	 * @param spot
-	 *            the spot or null
-	 */
+
 	@SuppressWarnings("null")
 	private void showSpotDetails(Spot selectedSpot) {
 		if (selectedSpot == null)
@@ -339,10 +322,6 @@ public class SpotOverviewController {
 
 	}
 
-	/**
-	 * Called when the user clicks the edit button. Opens a dialog to edit details
-	 * for the selected spot.
-	 */
 	@FXML
 	private void handleEditSpot() {
 		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
@@ -481,14 +460,27 @@ public class SpotOverviewController {
 		} catch (WriteException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}	
-		
-
-		
-
-		
+		}		
 	}
 
+	
+	@FXML
+	private void handleSaveReleaseTableOnline() {
+	
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public Spot copySpot(Spot spot) {
 		Spot copiedSpot = new Spot();
 		copiedSpot.setFlight(spot.getFlight());
@@ -562,13 +554,14 @@ public class SpotOverviewController {
 
 	@FXML
 	public void handleStart() {
-		Alert alert = new Alert(AlertType.WARNING);
+		Alert alert = new Alert(AlertType.WARNING);	
 		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
 		spotsTable.getSelectionModel().getSelectedItem().getFlight()
 				.setApiTileID(spotsTable.getSelectionModel().getSelectedItem().getSpotNumber()
 						.substring(spotsTable.getSelectionModel().getSelectedItem().getSpotNumber().length() - 1));
 
-		if (!selectedSpot.getSpotHasFlightData()) {
+		
+       if (!selectedSpot.getSpotHasFlightData()) {
 			alert.initOwner(mainApp.getPrimaryStage());
 			alert.setTitle("No Selection");
 			alert.setHeaderText("Selected Spot is empty");
@@ -580,9 +573,7 @@ public class SpotOverviewController {
 			alert.setHeaderText("No Fluid Type!");
 			alert.setContentText("Please select the Fluid Type!");
 			alert.showAndWait();
-		}
-
-		else if (selectedSpot.getDeicing().getFluidType().equals("TYPE I")) {
+		} else if (selectedSpot.getDeicing().getFluidType().equals("TYPE I")) {
 			selectedSpot.getDeicing().setStartTime(setTime());
 			selectedSpot.setActive(true);
 			try {
@@ -658,7 +649,7 @@ public class SpotOverviewController {
 				imageView.setImage(selectedSpot.getSpotImage());
 
 			}
-			;
+			
 
 		}
 

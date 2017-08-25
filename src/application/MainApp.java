@@ -2,7 +2,6 @@ package application;
 
 import java.io.IOException;
 
-import application.model.ReadEmployees;
 import application.model.Spot;
 import application.view.FlightEditDialogController;
 import application.view.SettingEditController;
@@ -33,11 +32,7 @@ public class MainApp extends Application {
 
 	}
 
-	/**
-	 * Returns the data as an observable list of Spots.
-	 * 
-	 * @return
-	 */
+
 	public ObservableList<Spot> getSpotData() {
 		return spotData;
 	}
@@ -50,15 +45,12 @@ public class MainApp extends Application {
 
 		this.primaryStage = primaryStage;
 		this.primaryStage.setTitle("ICEMAN");
-
 		initRootLayout();
 		showSpotOverview();
 
 	}
 
-	/**
-	 * Initializes the root layout.
-	 */
+
 	public void initRootLayout() {
 		try {
 
@@ -76,9 +68,7 @@ public class MainApp extends Application {
 		}
 	}
 
-	/**
-	 * Shows the Spot overview inside the root layout.
-	 */
+
 	public void showSpotOverview() {
 		try {
 			// Load Spot overview.
@@ -190,12 +180,6 @@ public class MainApp extends Application {
 	}
 	
 
-
-	/**
-	 * Returns the main stage.
-	 * 
-	 * @return
-	 */
 	public Stage getPrimaryStage() {
 		return primaryStage;
 	}
