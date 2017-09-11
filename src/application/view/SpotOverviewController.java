@@ -573,6 +573,12 @@ public class SpotOverviewController {
 			alert.setHeaderText("No Fluid Type!");
 			alert.setContentText("Please select the Fluid Type!");
 			alert.showAndWait();
+		}else if (selectedSpot.getActive()) {
+			alert.initOwner(mainApp.getPrimaryStage());
+			alert.setTitle("Active Spot");
+			alert.setHeaderText("Timer is already running!!");
+			alert.setContentText("Timer is already running!!");
+			alert.showAndWait();
 		} else if (selectedSpot.getDeicing().getFluidType().equals("TYPE I")) {
 			selectedSpot.getDeicing().setStartTime(setTime());
 			selectedSpot.setActive(true);
