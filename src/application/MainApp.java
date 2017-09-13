@@ -23,12 +23,16 @@ public class MainApp extends Application {
 
 	public MainApp() {
 		// Add some sample data
-		spotData.add(new Spot("SPOT 1"));
-		spotData.add(new Spot("SPOT 2"));
-		spotData.add(new Spot("SPOT 3"));
-		spotData.add(new Spot("SPOT 4"));
-		spotData.add(new Spot("SPOT 5"));
-		spotData.add(new Spot("SPOT 6"));
+		spotData.add(new Spot("SPOT 1 F"));
+		spotData.add(new Spot("SPOT 1 R"));
+		spotData.add(new Spot("SPOT 2 F"));
+		spotData.add(new Spot("SPOT 2 R"));
+		spotData.add(new Spot("SPOT 3 F"));
+		spotData.add(new Spot("SPOT 3 R"));
+		spotData.add(new Spot("SPOT 4 F"));
+		spotData.add(new Spot("SPOT 4 R"));
+		spotData.add(new Spot("SPOT 5 F"));
+		spotData.add(new Spot("SPOT 5 R"));
 
 	}
 

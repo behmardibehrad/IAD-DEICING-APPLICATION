@@ -7,7 +7,6 @@ import javafx.scene.image.Image;
 public class Spot {
 
 	private int spotIntType;
-
 	private Boolean spotHasFlightData;
 	private Boolean active;
 	private StringProperty spotNumber;
@@ -217,5 +216,7 @@ public class Spot {
 	public String toString() {
 		return "SPOT: " + getSpotNumber();
 	}
+	
+
 
 }

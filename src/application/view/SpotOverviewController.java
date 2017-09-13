@@ -102,6 +102,26 @@ public class SpotOverviewController {
 
 	@FXML
 	private ImageView imageView;
+	@FXML
+	private ImageView padStatusImageViewSpot1Front;
+	@FXML
+	private ImageView padStatusImageViewSpot1Rear;
+	@FXML
+	private ImageView padStatusImageViewSpot2Front;
+	@FXML
+	private ImageView padStatusImageViewSpot2Rear;
+	@FXML
+	private ImageView padStatusImageViewSpot3Front;
+	@FXML
+	private ImageView padStatusImageViewSpot3Rear;
+	@FXML
+	private ImageView padStatusImageViewSpot4Front;
+	@FXML
+	private ImageView padStatusImageViewSpot4Rear;
+	@FXML
+	private ImageView padStatusImageViewSpot5Front;
+	@FXML
+	private ImageView padStatusImageViewSpot5Rear;
 	private Image imageType1 = new Image("application/image/orangeall.png");
 	private Image imageType4 = new Image("application/image/greenfull.png");;
 	private Image imageType1Blink = new Image("application/image/Type1.gif");;
@@ -170,6 +190,18 @@ public class SpotOverviewController {
 				.addListener((observable, oldValue, newValue) -> showSpotDetails(newValue));
 
 		imageView.setImage(imageBlack);
+		padStatusImageViewSpot1Front.setImage(imageBlack);
+		padStatusImageViewSpot1Rear.setImage(imageBlack);
+		padStatusImageViewSpot2Front.setImage(imageBlack);
+		padStatusImageViewSpot2Rear.setImage(imageBlack);
+		padStatusImageViewSpot3Front.setImage(imageBlack);
+		padStatusImageViewSpot3Rear.setImage(imageBlack);
+		padStatusImageViewSpot4Front.setImage(imageBlack);
+		padStatusImageViewSpot4Rear.setImage(imageBlack);
+		padStatusImageViewSpot5Front.setImage(imageBlack);
+		padStatusImageViewSpot5Rear.setImage(imageBlack);
+		
+		
 
 		// showSpotDetails(null);
 
@@ -214,8 +246,9 @@ public class SpotOverviewController {
 
 	@SuppressWarnings("null")
 	private void showSpotDetails(Spot selectedSpot) {
-		if (selectedSpot == null)
+		if (selectedSpot == null) {
 			selectedSpot.setSpotImage(imageBlack);
+		}
 
 		if (selectedSpot.getSpotHasFlightData()) {
 			// Fill the labels with info from the spot object
@@ -236,7 +269,6 @@ public class SpotOverviewController {
 			flightNumberLabel1.setVisible(true);
 			tailNumberLabel1.setVisible(true);
 			aircraftTypeLabel1.setVisible(true);
-			;
 			carrierLabel1.setVisible(true);
 			flightNumberLabel1.setText("Flight#: ");
 			tailNumberLabel1.setText("Tail#: ");
@@ -244,6 +276,7 @@ public class SpotOverviewController {
 			carrierLabel1.setText("Carrier: ");
 			if (selectedSpot.getDeicing().getFluidType().equalsIgnoreCase("")) {
 				selectedSpot.getDeicing().setFluidType("Fluid Type");
+				selectedSpot.setSpotImage(imageBlack);
 				imageView.setImage(imageBlack);
 			} else {
 				fluidTypeComboBox.setValue(selectedSpot.getDeicing().getFluidType());
@@ -292,10 +325,11 @@ public class SpotOverviewController {
 			flightNumberLabel1.setVisible(false);
 			tailNumberLabel1.setVisible(false);
 			aircraftTypeLabel1.setVisible(false);
-			;
 			carrierLabel1.setVisible(false);
+			selectedSpot.setSpotImage(imageBlack);
 		}
-
+		
+		UpdateStatusTableImage(selectedSpot);
 	}
 
 	private void clearSpot(Spot spot) {
@@ -319,6 +353,7 @@ public class SpotOverviewController {
 		tailNumberLabel1.setVisible(false);
 		aircraftTypeLabel1.setVisible(false);
 		carrierLabel1.setVisible(false);
+		UpdateStatusTableImage(spot);
 
 	}
 
@@ -521,6 +556,7 @@ public class SpotOverviewController {
 				imageView.setImage(selectedSpot.getSpotImage());
 			}
 		}
+		UpdateStatusTableImage(selectedSpot);
 
 	}
 
@@ -559,7 +595,6 @@ public class SpotOverviewController {
 		spotsTable.getSelectionModel().getSelectedItem().getFlight()
 				.setApiTileID(spotsTable.getSelectionModel().getSelectedItem().getSpotNumber()
 						.substring(spotsTable.getSelectionModel().getSelectedItem().getSpotNumber().length() - 1));
-
 		
        if (!selectedSpot.getSpotHasFlightData()) {
 			alert.initOwner(mainApp.getPrimaryStage());
@@ -611,6 +646,7 @@ public class SpotOverviewController {
 			imageView.setImage(selectedSpot.getSpotImage());
 
 		}
+       UpdateStatusTableImage(selectedSpot);
 	}
 
 	@FXML
@@ -658,12 +694,12 @@ public class SpotOverviewController {
 			
 
 		}
+		UpdateStatusTableImage(selectedSpot);
 
 	}
 
 	@FXML
 	private void handleResetWeb() {
-		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
 		DashboardApi i = new DashboardApi(null, null);
 		try {
 			i.ResetDashboard();
@@ -682,5 +718,92 @@ public class SpotOverviewController {
 		return time;
 
 	}
+	
+	
+	private void UpdateStatusTableImage(Spot selectedSpot) {
+		String spotNumber = selectedSpot.getSpotNumber();
+
+		switch(spotNumber) {
+		   case "SPOT 1 F" :
+				padStatusImageViewSpot1Front.setImage(selectedSpot.getSpotImage());
+				break; // optional
+		   
+		   case "SPOT 1 R" :
+			   padStatusImageViewSpot1Rear.setImage(selectedSpot.getSpotImage());
+			   break; // optional
+		      
+		   case "SPOT 2 F" :
+			   padStatusImageViewSpot2Front.setImage(selectedSpot.getSpotImage());
+			  break; // optional
+			   
+		   case "SPOT 2 R" :
+			   padStatusImageViewSpot2Rear.setImage(selectedSpot.getSpotImage());
+			   break; // optional
+			      
+		   case "SPOT 3 F" :
+			   padStatusImageViewSpot3Front.setImage(selectedSpot.getSpotImage());
+			   break; // optional
+				   
+		   case "SPOT 3 R" :
+			   padStatusImageViewSpot3Rear.setImage(selectedSpot.getSpotImage());
+			   break; // optional
+				      
+		   case "SPOT 4 F" :
+			   padStatusImageViewSpot4Front.setImage(selectedSpot.getSpotImage());
+			   break; // optional
+					   
+		   case "SPOT 4 R" :
+			   padStatusImageViewSpot4Rear.setImage(selectedSpot.getSpotImage());
+			   break; // optional
+					      
+		   case "SPOT 5 F" :
+			   padStatusImageViewSpot5Front.setImage(selectedSpot.getSpotImage());
+			   break; // optional
+						   
+		   case "SPOT 5 R" :
+			   padStatusImageViewSpot5Rear.setImage(selectedSpot.getSpotImage());
+			   break; // optional
+		   
+		   // You can have any number of case statements.
+		   default : // Optional
+		      // Statements
+		}
+
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
