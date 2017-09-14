@@ -18,10 +18,12 @@ public class Spot {
 	private StringProperty driver2;
 	private StringProperty freezepoint1;
 	private StringProperty freezepoint2;
+	private String apiTileID;
 	private Image spotImage;
 
 	Flight flight;
 	Deicing deicing;
+	Spot spot;
 	DashboardApi spotApi;
 
 	public Spot() {
@@ -44,8 +46,10 @@ public class Spot {
 		this.sprayer2 = new SimpleStringProperty("");
 		this.flight = new Flight();
 		this.deicing = new Deicing();
-		this.spotApi = new DashboardApi(flight, deicing);
+		this.spotApi = new DashboardApi(flight, deicing, this);
+
 	}
+
 
 	public Boolean getSpotHasFlightData() {
 		return spotHasFlightData;
@@ -208,6 +212,52 @@ public class Spot {
 		this.flight.setFlightNumber(flight.getFlightNumber());
 		this.flight.setTailNumber(flight.getTailNumber());
 	}
+	
+
+	public String getApiTileID() {
+		
+		return apiTileID;
+	}
+
+	public String setApiTileID(String spotNumber) {
+		
+
+    switch(spotNumber) {
+       case "SPOT 1 F" :
+      	 this.apiTileID = "1";
+      	 break;
+       case "SPOT 1 R" :
+      	 this.apiTileID = "6";
+      	 break;	        	 
+       case "SPOT 2 F" :
+      	 this.apiTileID = "2";
+      	 break;
+       case "SPOT 2 R" :
+      	 this.apiTileID = "7";
+      	 break;
+       case "SPOT 3 F" :
+      	 this.apiTileID = "3";
+      	 break;
+       case "SPOT 3 R" :
+      	 this.apiTileID = "8";
+      	 break;
+	     case "SPOT 4 F" :
+	    	 this.apiTileID = "4";
+	    	 break;
+	     case "SPOT 4 R" :
+	    	 this.apiTileID = "9";
+	    	 break;
+	     case "SPOT 5 F" :
+	    	 this.apiTileID = "5";
+	    	 break;
+	     case "SPOT 5 R" :
+	    	 this.apiTileID = "10";
+	    	 break;
+    }
+	return apiTileID;
+}
+	
+	
 
 	public DashboardApi getDashboardApi() {
 		return spotApi;

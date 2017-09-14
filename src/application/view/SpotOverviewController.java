@@ -4,10 +4,15 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import org.apache.poi.ss.formula.functions.T;
 import org.controlsfx.control.textfield.TextFields;
 import application.MainApp;
 import application.model.DashboardApi;
+import application.model.DeicersInfo;
 import application.model.Flight;
+import application.model.FlightInfo;
+import application.model.MyCustomeFlightComboBox;
 import application.model.SavedExcelData;
 import application.model.Spot;
 import javafx.collections.FXCollections;
@@ -18,15 +23,23 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import jxl.write.WriteException;
 
 public class SpotOverviewController {
 
 	// Spot Table With 3 Columns.
+	//@FXML
+	//private TextField searchSSD;
+	
+	@FXML
+	private ComboBox<Flight> searchSSD = new ComboBox<>();
+	
 	@FXML
 	private TableView<Spot> spotsTable;
 	@FXML
@@ -69,6 +82,8 @@ public class SpotOverviewController {
 	private Label aircraftTypeLabel1;
 	@FXML
 	private Label carrierLabel1;
+	@FXML
+	private Label middleHiddenSpotNumber;
 	// Released Flights Table With 9 Columns.
 	@FXML
 	private TableView<Spot> releaseTable;
@@ -147,8 +162,6 @@ public class SpotOverviewController {
 	private ObservableList<Spot> releaseTableData = FXCollections.observableArrayList();
 	private ObservableList<Flight> flightData = FXCollections.observableArrayList();
 	
-	private Boolean dataSaved = false;
-
 	
 
 	
@@ -164,6 +177,15 @@ public class SpotOverviewController {
 
 		// Initialize the spot table with the one columns.
 		spotsNumberColumn.setCellValueFactory(cellData -> cellData.getValue().spotNumberProperty());
+		
+       // spotsNumberColumn.setStyle("-fx-background-color:red");
+        //flightNumberColumn.setStyle("-fx-background-color:red");
+        //aircraftColumn.setStyle("-fx-background-color:red");
+        //spotsTable.getSelectionModel().select(0);
+        
+        
+		
+		
 		flightNumberColumn.setCellValueFactory(cellData -> cellData.getValue().getFlight().flightNumberProperty());
 		aircraftColumn.setCellValueFactory(cellData -> cellData.getValue().getFlight().aircraftTypeProperty());
 
@@ -188,6 +210,7 @@ public class SpotOverviewController {
 		// Listen for selection changes and show the spot details when changed.
 		spotsTable.getSelectionModel().selectedItemProperty()
 				.addListener((observable, oldValue, newValue) -> showSpotDetails(newValue));
+		
 
 		imageView.setImage(imageBlack);
 		padStatusImageViewSpot1Front.setImage(imageBlack);
@@ -225,8 +248,46 @@ public class SpotOverviewController {
 		fluidTypeComboBox.getItems().addAll("TYPE I", "TYPE IV");
 		// fluidTypeComboBox.getSelectionModel().selectFirst();
 		// fluidTypeComboBox.setValue("Clear");
-
 		// spotData.addAll(mainApp.getSpotData());
+		//searchSSD1.getItems().addAll(FlightInfo.getFlights());
+		
+		//TextFields.bindAutoCompletion(searchSSD, FlightInfo.getFlights());
+		searchSSD.setEditable(true);
+		searchSSD.getItems().addAll(FlightInfo.getFlights());
+		
+
+		
+		padStatusImageViewSpot1Front.setOnMouseClicked((MouseEvent e) -> {
+		    spotsTable.getSelectionModel().select(0);
+		});
+		padStatusImageViewSpot1Rear.setOnMouseClicked((MouseEvent e) -> {
+		    spotsTable.getSelectionModel().select(1);
+		});
+		padStatusImageViewSpot2Front.setOnMouseClicked((MouseEvent e) -> {
+		    spotsTable.getSelectionModel().select(2);
+		});
+		padStatusImageViewSpot2Rear.setOnMouseClicked((MouseEvent e) -> {
+		    spotsTable.getSelectionModel().select(3);
+		});
+		padStatusImageViewSpot3Front.setOnMouseClicked((MouseEvent e) -> {
+		    spotsTable.getSelectionModel().select(4);
+		});
+		padStatusImageViewSpot3Rear.setOnMouseClicked((MouseEvent e) -> {
+		    spotsTable.getSelectionModel().select(5);
+		});
+		padStatusImageViewSpot4Front.setOnMouseClicked((MouseEvent e) -> {
+		    spotsTable.getSelectionModel().select(6);
+		});
+		padStatusImageViewSpot4Rear.setOnMouseClicked((MouseEvent e) -> {
+		    spotsTable.getSelectionModel().select(7);
+		});
+		padStatusImageViewSpot5Front.setOnMouseClicked((MouseEvent e) -> {
+		    spotsTable.getSelectionModel().select(8);
+		});
+		padStatusImageViewSpot5Rear.setOnMouseClicked((MouseEvent e) -> {
+		    spotsTable.getSelectionModel().select(9);
+		});
+		
 
 	}
 
@@ -252,7 +313,7 @@ public class SpotOverviewController {
 
 		if (selectedSpot.getSpotHasFlightData()) {
 			// Fill the labels with info from the spot object
-
+			middleHiddenSpotNumber.setText(selectedSpot.getSpotNumber().toString());
 			spotLabel.setText(selectedSpot.getSpotNumber());
 			truck1Label.setText(selectedSpot.getTruck1());
 			freezepoint1Label.setText(selectedSpot.getFreezepoint1());
@@ -270,6 +331,7 @@ public class SpotOverviewController {
 			tailNumberLabel1.setVisible(true);
 			aircraftTypeLabel1.setVisible(true);
 			carrierLabel1.setVisible(true);
+			middleHiddenSpotNumber.setVisible(true);
 			flightNumberLabel1.setText("Flight#: ");
 			tailNumberLabel1.setText("Tail#: ");
 			aircraftTypeLabel1.setText("A/C: ");
@@ -304,6 +366,7 @@ public class SpotOverviewController {
 
 		} else {
 			// spot is null, remove all the text.
+			middleHiddenSpotNumber.setText("");
 			truck1Label.setText("");
 			freezepoint1Label.setText("");
 			dirver1Label.setText("");
@@ -326,6 +389,7 @@ public class SpotOverviewController {
 			tailNumberLabel1.setVisible(false);
 			aircraftTypeLabel1.setVisible(false);
 			carrierLabel1.setVisible(false);
+			middleHiddenSpotNumber.setVisible(false);
 			selectedSpot.setSpotImage(imageBlack);
 		}
 		
@@ -420,9 +484,7 @@ public class SpotOverviewController {
 	private void handleReleaseFlight() {
 		Alert alert = new Alert(AlertType.WARNING);
 		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
-		spotsTable.getSelectionModel().getSelectedItem().getFlight()
-				.setApiTileID(spotsTable.getSelectionModel().getSelectedItem().getSpotNumber()
-						.substring(spotsTable.getSelectionModel().getSelectedItem().getSpotNumber().length() - 1));
+			
 
 		if (!selectedSpot.getSpotHasFlightData()) {
 			alert.initOwner(mainApp.getPrimaryStage());
@@ -505,7 +567,7 @@ public class SpotOverviewController {
 	}
 	
 	
-	
+
 	
 	
 	
@@ -532,8 +594,27 @@ public class SpotOverviewController {
 	@FXML
 	public void setSearchFlight() {
 
-		Flight selectedFlight = flightComboBox.getSelectionModel().getSelectedItem();
-		flightData.add(selectedFlight);
+		//Flight selectedFlight = flightComboBox.getSelectionModel().getSelectedItem();
+		//flightData.add(selectedFlight);
+
+	}
+	
+	@FXML
+	public void setSearchSsd() {
+		
+		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
+		Alert alert = new Alert(AlertType.WARNING);
+		
+			//selectedSpot.setFlight(searchSSD.getSelectionModel().selectedItemProperty().get());
+		//Flight ss = searchSSD.getValue();
+		//selectedSpot.setFlight(searchSSD.getSelectionModel().getSelectedItem());
+		//selectedSpot.getFlight().setFlightNumber(searchSSD.getSelectionModel().getSelectedItem().flightNumberProperty().getValue());
+		//System.out.print((Flight)searchSSD.getSelectionModel().getSelectedItem());
+			
+			
+	
+		//selectedSpot.setFlight(searchSSD.getUserData().equals(Flight));
+		
 
 	}
 
@@ -592,9 +673,7 @@ public class SpotOverviewController {
 	public void handleStart() {
 		Alert alert = new Alert(AlertType.WARNING);	
 		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
-		spotsTable.getSelectionModel().getSelectedItem().getFlight()
-				.setApiTileID(spotsTable.getSelectionModel().getSelectedItem().getSpotNumber()
-						.substring(spotsTable.getSelectionModel().getSelectedItem().getSpotNumber().length() - 1));
+		selectedSpot.setApiTileID(selectedSpot.getSpotNumber());
 		
        if (!selectedSpot.getSpotHasFlightData()) {
 			alert.initOwner(mainApp.getPrimaryStage());
@@ -700,7 +779,7 @@ public class SpotOverviewController {
 
 	@FXML
 	private void handleResetWeb() {
-		DashboardApi i = new DashboardApi(null, null);
+		DashboardApi i = new DashboardApi(null, null, null);
 		try {
 			i.ResetDashboard();
 		} catch (Exception e) {
@@ -763,10 +842,7 @@ public class SpotOverviewController {
 		   case "SPOT 5 R" :
 			   padStatusImageViewSpot5Rear.setImage(selectedSpot.getSpotImage());
 			   break; // optional
-		   
-		   // You can have any number of case statements.
-		   default : // Optional
-		      // Statements
+		
 		}
 
 		

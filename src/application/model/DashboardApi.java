@@ -22,11 +22,13 @@ public class DashboardApi {
 	private final String USER_AGENT = "Mozilla/5.0";
 	private Flight flight;
 	private Deicing deicing;
+	private Spot spot;
 
-	public DashboardApi(Flight flight, Deicing deicing) {
+	public DashboardApi(Flight flight, Deicing deicing, Spot spot) {
 
 		this.flight = flight;
 		this.deicing = deicing;
+		this.spot = spot;
 	}
 
 	// HTTP POST request
@@ -38,7 +40,7 @@ public class DashboardApi {
 		post1.setHeader("User-Agent", USER_AGENT);
 		List<NameValuePair> urlParameters1 = new ArrayList<NameValuePair>();
 		urlParameters1.add(new BasicNameValuePair("tile", "big_value"));
-		urlParameters1.add(new BasicNameValuePair("key", flight.getApiTileID()));
+		urlParameters1.add(new BasicNameValuePair("key", spot.getApiTileID()));
 		String tileDataString;
 		JSONObject tileData = new JSONObject();
 		tileData.put("title", flight.getCarrier().toUpperCase() + "  " + flight.getFlightNumber());
@@ -66,7 +68,7 @@ public class DashboardApi {
 	public void PostConf() throws Exception {
 
 		String urlConf = "http://52.35.148.5:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/tileconfig/"
-				+ flight.getApiTileID();
+				+ spot.getApiTileID();
 		HttpClient clientConf = new DefaultHttpClient();
 		HttpPost postConf = new HttpPost(urlConf);
 		postConf.setHeader("User-Agent", USER_AGENT);
@@ -96,7 +98,7 @@ public class DashboardApi {
 		post.setHeader("User-Agent", USER_AGENT);
 		List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
 		urlParameters.add(new BasicNameValuePair("tile", "big_value"));
-		urlParameters.add(new BasicNameValuePair("key", flight.getApiTileID()));
+		urlParameters.add(new BasicNameValuePair("key", spot.getApiTileID()));
 		String tileDataString;
 		JSONObject tileData = new JSONObject();
 		tileData.put("title", "available");
@@ -124,7 +126,7 @@ public class DashboardApi {
 	public void ClearConf() throws Exception {
 
 		String urlConf = "http://52.35.148.5:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/tileconfig/"
-				+ flight.getApiTileID();
+				+ spot.getApiTileID();
 		HttpClient clientConf = new DefaultHttpClient();
 		HttpPost postConf = new HttpPost(urlConf);
 		postConf.setHeader("User-Agent", USER_AGENT);
@@ -202,7 +204,7 @@ public class DashboardApi {
 
 	public void ResetDashboard() throws Exception {
 
-		for (int i = 1; i < 6; i++) {
+		for (int i = 1; i < 11; i++) {
 			try {
 				ResetAllData(String.valueOf(i));
 			} catch (Exception e) {

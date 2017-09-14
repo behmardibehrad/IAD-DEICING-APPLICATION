@@ -7,7 +7,6 @@ import javafx.beans.property.StringProperty;
 
 public class Flight {
 
-	private String apiTileID;
 	private StringProperty flightNumber;
 	private StringProperty tailNumber;
 	private StringProperty aircraftType;
@@ -20,7 +19,6 @@ public class Flight {
 	}
 
 	public Flight(String flightNumber) {
-		this.apiTileID = "";
 		this.flightNumber = new SimpleStringProperty(flightNumber);
 		this.tailNumber = new SimpleStringProperty("");
 		this.aircraftType = new SimpleStringProperty("");
@@ -35,14 +33,6 @@ public class Flight {
 		this.estDeparture = new SimpleStringProperty(estDeparture);
 		this.carrier = new SimpleStringProperty(carrier);
 
-	}
-
-	public String getApiTileID() {
-		return apiTileID;
-	}
-
-	public void setApiTileID(String apiTileID) {
-		this.apiTileID = apiTileID;
 	}
 
 	public String getFlightNumber() {
@@ -103,7 +93,11 @@ public class Flight {
 
 	public String toString() {
 		return "Flight: " + getFlightNumber() + "\nCarrier: " + getCarrier() + "\nAircraft: " + getAircraftType()
-				+ "\nTail#: " + getTailNumber() + "\napiTileID: " + getApiTileID();
+				+ "\nTail#: " + getTailNumber();
 	}
+	
+
+	
+	
 
 }
