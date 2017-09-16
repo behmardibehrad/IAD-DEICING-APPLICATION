@@ -12,12 +12,13 @@ import application.model.DashboardApi;
 import application.model.DeicersInfo;
 import application.model.Flight;
 import application.model.FlightInfo;
-import application.model.MyCustomeFlightComboBox;
 import application.model.SavedExcelData;
 import application.model.Spot;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -29,6 +30,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.transform.Scale;
 import jxl.write.WriteException;
 
 public class SpotOverviewController {
@@ -106,8 +108,8 @@ public class SpotOverviewController {
 	@FXML
 	private TableColumn<Spot, String> employeeInit;
 	// Selected Flight Table with 3 Columns
-	@FXML
-	private TableView<Flight> selectedFlightTable;
+	//@FXML
+	//private TableView<Flight> selectedFlightTable;
 	@FXML
 	private TableColumn<Flight, String> flightSelectedColumn;
 	@FXML
@@ -119,6 +121,7 @@ public class SpotOverviewController {
 	private ImageView imageView;
 	@FXML
 	private ImageView padStatusImageViewSpot1Front;
+	
 	@FXML
 	private ImageView padStatusImageViewSpot1Rear;
 	@FXML
@@ -160,7 +163,7 @@ public class SpotOverviewController {
 	// Reference to the main application.
 	private MainApp mainApp;
 	private ObservableList<Spot> releaseTableData = FXCollections.observableArrayList();
-	private ObservableList<Flight> flightData = FXCollections.observableArrayList();
+	//private ObservableList<Flight> flightData = FXCollections.observableArrayList();
 	
 	
 
@@ -168,12 +171,19 @@ public class SpotOverviewController {
 	
 	public SpotOverviewController() {
 	}
+	public void setMainApp(MainApp mainApp) {
+		this.mainApp = mainApp;
+		// Add observable list data to the table
+		// spotsTable.setItems(mainApp.getSpotData());
+		// spotData.addAll(mainApp.getSpotData());
+		spotsTable.setItems(mainApp.getSpotData());
+		sendToComboBox.getItems().addAll(spotsTable.getItems());
 
+	}
 
 	@FXML
 	public void initialize() {
-
-		selectedFlightTable.setItems(flightData);
+		//selectedFlightTable.setItems(flightData);
 
 		// Initialize the spot table with the one columns.
 		spotsNumberColumn.setCellValueFactory(cellData -> cellData.getValue().spotNumberProperty());
@@ -182,7 +192,7 @@ public class SpotOverviewController {
         //flightNumberColumn.setStyle("-fx-background-color:red");
         //aircraftColumn.setStyle("-fx-background-color:red");
         //spotsTable.getSelectionModel().select(0);
-        
+		
         
 		
 		
@@ -192,7 +202,9 @@ public class SpotOverviewController {
 		// Initialize the releaseSpotTable table with the one columns.
 		carrierColumn.setCellValueFactory(cellData -> cellData.getValue().getFlight().carrierProperty());
 		aircraftTypeColumn.setCellValueFactory(cellData -> cellData.getValue().getFlight().aircraftTypeProperty());
-		flightReleasedColumn.setCellValueFactory(cellData -> cellData.getValue().getFlight().flightNumberProperty());
+		
+		//behrad2
+		//flightReleasedColumn.setCellValueFactory(cellData -> cellData.getValue().getFlight().flightNumberProperty());
 		tailNumberColumn.setCellValueFactory(cellData -> cellData.getValue().getFlight().tailNumberProperty());
 		fluidColumn.setCellValueFactory(cellData -> cellData.getValue().getDeicing().fluidTypeProperty());
 		checkColumn.setCellValueFactory(cellData -> cellData.getValue().getDeicing().aircraftCheckProperty());
@@ -201,16 +213,19 @@ public class SpotOverviewController {
 		employeeInit.setCellValueFactory(cellData -> cellData.getValue().sprayer1Property());
 
 		// Initialize the selectedflight table with the 3 columns.
-		flightSelectedColumn.setCellValueFactory(cellData -> cellData.getValue().flightNumberProperty());
-		aircraftSelectedColumn.setCellValueFactory(cellData -> cellData.getValue().aircraftTypeProperty());
-		tailSelectedColumn.setCellValueFactory(cellData -> cellData.getValue().tailNumberProperty());
+		
+		//behrad2
+		//flightSelectedColumn.setCellValueFactory(cellData -> cellData.getValue().flightNumberProperty());
+		//aircraftSelectedColumn.setCellValueFactory(cellData -> cellData.getValue().aircraftTypeProperty());
+		//tailSelectedColumn.setCellValueFactory(cellData -> cellData.getValue().tailNumberProperty());
 
-		// Clear spot details.
 
 		// Listen for selection changes and show the spot details when changed.
 		spotsTable.getSelectionModel().selectedItemProperty()
 				.addListener((observable, oldValue, newValue) -> showSpotDetails(newValue));
 		
+		fluidTypeComboBox.getSelectionModel().selectedItemProperty()
+		.addListener((observable, oldValue, newValue) -> spotsTable.getSelectionModel().getSelectedItem().getDeicing().setFluidType(newValue)); 
 
 		imageView.setImage(imageBlack);
 		padStatusImageViewSpot1Front.setImage(imageBlack);
@@ -224,7 +239,6 @@ public class SpotOverviewController {
 		padStatusImageViewSpot5Front.setImage(imageBlack);
 		padStatusImageViewSpot5Rear.setImage(imageBlack);
 		
-		
 
 		// showSpotDetails(null);
 
@@ -236,7 +250,7 @@ public class SpotOverviewController {
 
 		// behrad
 		// flightComboBox.getItems().addAll(DeicersInfo.getApiFlightsFlightNumber());
-		TextFields.bindAutoCompletion(flightComboBox.getEditor(), flightComboBox.getItems());
+		//TextFields.bindAutoCompletion(flightComboBox.getEditor(), flightComboBox.getItems());
 
 		// TextFields.bindAutoCompletion(flightComboBox,
 		// DeicersInfo.getApiFlightsFlightNumber());
@@ -257,36 +271,7 @@ public class SpotOverviewController {
 		
 
 		
-		padStatusImageViewSpot1Front.setOnMouseClicked((MouseEvent e) -> {
-		    spotsTable.getSelectionModel().select(0);
-		});
-		padStatusImageViewSpot1Rear.setOnMouseClicked((MouseEvent e) -> {
-		    spotsTable.getSelectionModel().select(1);
-		});
-		padStatusImageViewSpot2Front.setOnMouseClicked((MouseEvent e) -> {
-		    spotsTable.getSelectionModel().select(2);
-		});
-		padStatusImageViewSpot2Rear.setOnMouseClicked((MouseEvent e) -> {
-		    spotsTable.getSelectionModel().select(3);
-		});
-		padStatusImageViewSpot3Front.setOnMouseClicked((MouseEvent e) -> {
-		    spotsTable.getSelectionModel().select(4);
-		});
-		padStatusImageViewSpot3Rear.setOnMouseClicked((MouseEvent e) -> {
-		    spotsTable.getSelectionModel().select(5);
-		});
-		padStatusImageViewSpot4Front.setOnMouseClicked((MouseEvent e) -> {
-		    spotsTable.getSelectionModel().select(6);
-		});
-		padStatusImageViewSpot4Rear.setOnMouseClicked((MouseEvent e) -> {
-		    spotsTable.getSelectionModel().select(7);
-		});
-		padStatusImageViewSpot5Front.setOnMouseClicked((MouseEvent e) -> {
-		    spotsTable.getSelectionModel().select(8);
-		});
-		padStatusImageViewSpot5Rear.setOnMouseClicked((MouseEvent e) -> {
-		    spotsTable.getSelectionModel().select(9);
-		});
+
 		
 
 	}
@@ -294,22 +279,80 @@ public class SpotOverviewController {
 	// change the spotmodeling data look at the getter and setters
 
 
-	public void setMainApp(MainApp mainApp) {
-		this.mainApp = mainApp;
-		// Add observable list data to the table
-		// spotsTable.setItems(mainApp.getSpotData());
-		// spotData.addAll(mainApp.getSpotData());
-		spotsTable.setItems(mainApp.getSpotData());
-		sendToComboBox.getItems().addAll(spotsTable.getItems());
 
+	
+	
+	
+	private void showSpotDetails(Spot selectedSpot) {
+
+			middleHiddenSpotNumber.setText(selectedSpot.getSpotNumber());
+			spotLabel.setText(selectedSpot.getSpotNumber());
+			truck1Label.setText(selectedSpot.getTruck1());
+			freezepoint1Label.setText(selectedSpot.getFreezepoint1());
+			dirver1Label.setText(selectedSpot.getDriver1());
+			sprayer1Label.setText(selectedSpot.getSprayer1());
+			truck2Label.setText(selectedSpot.getTruck2());
+			freezepoint2Label.setText(selectedSpot.getFreezepoint2());
+			dirver2Label.setText(selectedSpot.getDriver2());
+			sprayer2Label.setText(selectedSpot.getSprayer2());
+			flightNumberLabel.setText(selectedSpot.getFlight().getFlightNumber());
+			tailNumberLabel.setText(selectedSpot.getFlight().getTailNumber());
+			aircraftTypeLabel.setText(selectedSpot.getFlight().getAircraftType());
+			carrierLabel.setText(selectedSpot.getFlight().getCarrier());
+			imageView.setImage(selectedSpot.getSpotImage());
+			if (selectedSpot.getDeicing().getFluidType().equalsIgnoreCase("")) 
+			{
+				selectedSpot.getDeicing().setFluidType("Fluid Type");
+			}
+			else
+			{
+			fluidTypeComboBox.setValue(selectedSpot.getDeicing().getFluidType());
+			}
+			UpdateStatusTableImage(selectedSpot);
+			/*
+			if (selectedSpot.getDeicing().getFluidType().equalsIgnoreCase("")) {
+				selectedSpot.getDeicing().setFluidType("Fluid Type");
+				selectedSpot.setSpotImage(imageBlack);
+				imageView.setImage(imageBlack);
+			} 
+		//}
+			else 
+			{
+				fluidTypeComboBox.setValue(selectedSpot.getDeicing().getFluidType());
+
+				if (selectedSpot.getDeicing().getFluidType().equals("TYPE I")
+						&& selectedSpot.getActive().equals(false)) {
+					selectedSpot.setSpotImage(imageType1);
+					imageView.setImage(selectedSpot.getSpotImage());
+				} else if (selectedSpot.getDeicing().getFluidType().equals("TYPE I")
+						&& selectedSpot.getActive().equals(true)) {
+					selectedSpot.setSpotImage(imageType1Blink);
+					imageView.setImage(selectedSpot.getSpotImage());
+				} else if (selectedSpot.getDeicing().getFluidType().equals("TYPE IV")
+						&& selectedSpot.getActive().equals(false)) {
+					selectedSpot.setSpotImage(imageType4);
+					imageView.setImage(selectedSpot.getSpotImage());
+				} else if (selectedSpot.getDeicing().getFluidType().equals("TYPE IV")
+						&& selectedSpot.getActive().equals(true)) {
+					selectedSpot.setSpotImage(imageType4Blink);
+					imageView.setImage(selectedSpot.getSpotImage());
+				}
+
+			}
+*/
+
+		
+		//UpdateStatusTableImage(selectedSpot);
 	}
+	
+	
 
-
+/*
 	@SuppressWarnings("null")
 	private void showSpotDetails(Spot selectedSpot) {
-		if (selectedSpot == null) {
-			selectedSpot.setSpotImage(imageBlack);
-		}
+		//if (selectedSpot == null) {
+		//	selectedSpot.setSpotImage(imageBlack);
+		//}
 
 		if (selectedSpot.getSpotHasFlightData()) {
 			// Fill the labels with info from the spot object
@@ -340,7 +383,9 @@ public class SpotOverviewController {
 				selectedSpot.getDeicing().setFluidType("Fluid Type");
 				selectedSpot.setSpotImage(imageBlack);
 				imageView.setImage(imageBlack);
-			} else {
+			} 
+			else 
+			{
 				fluidTypeComboBox.setValue(selectedSpot.getDeicing().getFluidType());
 
 				if (selectedSpot.getDeicing().getFluidType().equals("TYPE I")
@@ -395,7 +440,7 @@ public class SpotOverviewController {
 		
 		UpdateStatusTableImage(selectedSpot);
 	}
-
+*/
 	private void clearSpot(Spot spot) {
 		spot.getFlight().setAircraftType("");
 		spot.getFlight().setCarrier("");
@@ -421,6 +466,13 @@ public class SpotOverviewController {
 
 	}
 
+	
+	
+	
+	
+	
+	
+	
 	@FXML
 	private void handleEditSpot() {
 		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
@@ -439,6 +491,7 @@ public class SpotOverviewController {
 			alert.setContentText("Please select a SPOT in the table.");
 			alert.showAndWait();
 		}
+		
 	}
 
 	@FXML
@@ -579,7 +632,7 @@ public class SpotOverviewController {
 	
 	
 	public Spot copySpot(Spot spot) {
-		Spot copiedSpot = new Spot();
+		Spot copiedSpot = new Spot(spot.getSpotNumber());
 		copiedSpot.setFlight(spot.getFlight());
 		copiedSpot.setDeicing(spot.getDeicing());
 		copiedSpot.setSpotNumber(spot.getSpotNumber());
@@ -643,6 +696,7 @@ public class SpotOverviewController {
 
 	@FXML
 	public void handleSendTo() {
+		/*
 		Flight selectedFlight = selectedFlightTable.getSelectionModel().getSelectedItem();
 		Spot selectedSpot = sendToComboBox.getSelectionModel().getSelectedItem();
 		Alert alert = new Alert(AlertType.WARNING);
@@ -664,10 +718,11 @@ public class SpotOverviewController {
 			selectedFlightTable.getSelectionModel().clearSelection();
 			flightData.remove(selectedFlight);
 			selectedSpot.setSpotImage(imageBlack);
+			*/
 
 		}
 
-	}
+	
 
 	@FXML
 	public void handleStart() {
@@ -801,7 +856,6 @@ public class SpotOverviewController {
 	
 	private void UpdateStatusTableImage(Spot selectedSpot) {
 		String spotNumber = selectedSpot.getSpotNumber();
-
 		switch(spotNumber) {
 		   case "SPOT 1 F" :
 				padStatusImageViewSpot1Front.setImage(selectedSpot.getSpotImage());

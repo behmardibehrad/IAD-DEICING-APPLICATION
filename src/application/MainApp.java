@@ -1,7 +1,8 @@
 package application;
 
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.io.IOException;
-
 import application.model.Spot;
 import application.view.FlightEditDialogController;
 import application.view.SettingEditController;
@@ -62,9 +63,11 @@ public class MainApp extends Application {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(MainApp.class.getResource("view/RootLayout.fxml"));
 			rootLayout = (BorderPane) loader.load();
-
+			GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+			int width = gd.getDisplayMode().getWidth();
+			int height = gd.getDisplayMode().getHeight();
 			// Show the scene containing the root layout.
-			Scene scene = new Scene(rootLayout);
+			Scene scene = new Scene(rootLayout,width,height );
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch (IOException e) {
@@ -82,7 +85,7 @@ public class MainApp extends Application {
 
 			// Set Spot overview into the center of root layout.
 			rootLayout.setCenter(spotOverview);
-
+			rootLayout.autosize();
 			// Give the controller access to the main app.
 			SpotOverviewController controller = loader.getController();
 			controller.setMainApp(this);

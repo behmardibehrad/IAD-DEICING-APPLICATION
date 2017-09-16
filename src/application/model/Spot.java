@@ -26,10 +26,6 @@ public class Spot {
 	Spot spot;
 	DashboardApi spotApi;
 
-	public Spot() {
-		this(null);
-	}
-
 	public Spot(String spotNumber) {
 
 		this.spotIntType = 0;
@@ -47,7 +43,8 @@ public class Spot {
 		this.flight = new Flight();
 		this.deicing = new Deicing();
 		this.spotApi = new DashboardApi(flight, deicing, this);
-
+		this.spotImage = new Image("application/image/blackback.png");
+		this.apiTileID = "";
 	}
 
 
@@ -78,13 +75,13 @@ public class Spot {
 	public String getSpotNumber() {
 		return spotNumber.get();
 	}
-
 	public StringProperty spotNumberProperty() {
 		return spotNumber;
 	}
 
+
 	public void setSpotNumber(String spotNumber) {
-		this.spotNumber.set(spotNumber);
+		this.spotNumber.set(spotNumber);;
 	}
 
 	public String getTruck1() {

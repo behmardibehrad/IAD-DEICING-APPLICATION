@@ -5,8 +5,8 @@ import javafx.beans.property.StringProperty;
 
 public class Deicing {
 
-	private Spot spot;
-	private Flight flight;
+	//private Spot spot;
+	//private Flight flight;
 	private StringProperty startTime;
 	private StringProperty endTime;
 	private StringProperty fluidType;

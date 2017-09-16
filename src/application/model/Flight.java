@@ -14,8 +14,14 @@ public class Flight {
 	private StringProperty estDeparture;
 
 
+	//public Flight() {
+	//	this(null);
+	//}
 	public Flight() {
-		this(null);
+	this.flightNumber = new SimpleStringProperty("");
+	this.tailNumber = new SimpleStringProperty("");
+	this.aircraftType = new SimpleStringProperty("");
+	this.carrier = new SimpleStringProperty("");
 	}
 
 	public Flight(String flightNumber) {
