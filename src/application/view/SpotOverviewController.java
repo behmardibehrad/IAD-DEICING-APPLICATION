@@ -14,11 +14,17 @@ import application.model.Flight;
 import application.model.FlightInfo;
 import application.model.SavedExcelData;
 import application.model.Spot;
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -35,6 +41,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.transform.Scale;
+import javafx.util.Duration;
 import jxl.write.WriteException;
 
 public class SpotOverviewController {
@@ -135,25 +142,33 @@ public class SpotOverviewController {
 	private TableColumn<Spot, String> flightReleasedColumn;
 	@FXML
 	private TableColumn<Spot, String> tailNumberColumn;
+	//@FXML
+	//private TableColumn<Spot, String> fluidColumn;
+	
 	@FXML
-	private TableColumn<Spot, String> fluidColumn;
+	private TableColumn<Spot, String> type1Column;
+	@FXML
+	private TableColumn<Spot, String> type4Column;
+	@FXML
+	private TableColumn<Spot, String> type4startColumn;
+	@FXML
+	private TableColumn<Spot, String> type4stopColumn;
+	@FXML
+	private TableColumn<Spot, String> type1startColumn;
+	@FXML
+	private TableColumn<Spot, String> type1stopColumn;
+	
+	
+	
 	@FXML
 	private TableColumn<Spot, String> checkColumn;
 	@FXML
-	private TableColumn<Spot, String> startColumn;
-	@FXML
-	private TableColumn<Spot, String> endColumn;
-	@FXML
 	private TableColumn<Spot, String> employeeInit;
+	@FXML
+	private TableColumn<Spot, String> comment;
 	// Selected Flight Table with 3 Columns
 	//@FXML
 	//private TableView<Flight> selectedFlightTable;
-	@FXML
-	private TableColumn<Flight, String> flightSelectedColumn;
-	@FXML
-	private TableColumn<Flight, String> aircraftSelectedColumn;
-	@FXML
-	private TableColumn<Flight, String> tailSelectedColumn;
 
 	@FXML
 	private ImageView imageView;
@@ -204,9 +219,9 @@ public class SpotOverviewController {
 	private MainApp mainApp;
 	private ObservableList<Spot> releaseTableData = FXCollections.observableArrayList();
 	//private ObservableList<Flight> flightData = FXCollections.observableArrayList();
-	
-	
+    
 
+	
 	
 	
 	public SpotOverviewController() {
@@ -224,7 +239,7 @@ public class SpotOverviewController {
 	@FXML
 	public void initialize() {
 		//selectedFlightTable.setItems(flightData);
-
+		
 		// Initialize the spot table with the one columns.
 		spotsNumberColumn.setCellValueFactory(cellData -> cellData.getValue().spotNumberProperty());
 		
@@ -232,8 +247,37 @@ public class SpotOverviewController {
         //flightNumberColumn.setStyle("-fx-background-color:red");
         //aircraftColumn.setStyle("-fx-background-color:red");
         //spotsTable.getSelectionModel().select(0);
-		
-        
+		padStatusImageViewSpot1Front.setOnMouseClicked((MouseEvent e) -> {
+ 		    spotsTable.getSelectionModel().select(0);
+ 		});
+ 		padStatusImageViewSpot1Rear.setOnMouseClicked((MouseEvent e) -> {
+ 		    spotsTable.getSelectionModel().select(1);
+ 		});
+ 		padStatusImageViewSpot2Front.setOnMouseClicked((MouseEvent e) -> {
+ 		    spotsTable.getSelectionModel().select(2);
+ 		});
+ 		padStatusImageViewSpot2Rear.setOnMouseClicked((MouseEvent e) -> {
+ 		    spotsTable.getSelectionModel().select(3);
+ 		});
+ 		padStatusImageViewSpot3Front.setOnMouseClicked((MouseEvent e) -> {
+ 		    spotsTable.getSelectionModel().select(4);
+ 		});
+ 		padStatusImageViewSpot3Rear.setOnMouseClicked((MouseEvent e) -> {
+ 	    spotsTable.getSelectionModel().select(5);
+ 		});
+ 		padStatusImageViewSpot4Front.setOnMouseClicked((MouseEvent e) -> {
+ 		    spotsTable.getSelectionModel().select(6);
+ 		});
+ 	    padStatusImageViewSpot4Rear.setOnMouseClicked((MouseEvent e) -> {
+ 		    spotsTable.getSelectionModel().select(7);
+ 		});
+ 		padStatusImageViewSpot5Front.setOnMouseClicked((MouseEvent e) -> {
+ 		    spotsTable.getSelectionModel().select(8);
+ 		});
+ 		padStatusImageViewSpot5Rear.setOnMouseClicked((MouseEvent e) -> {
+ 		    spotsTable.getSelectionModel().select(9);
+ 		});
+
 		
 		
 		flightNumberColumn.setCellValueFactory(cellData -> cellData.getValue().getFlight().flightNumberProperty());
@@ -246,11 +290,14 @@ public class SpotOverviewController {
 		//behrad2
 		//flightReleasedColumn.setCellValueFactory(cellData -> cellData.getValue().getFlight().flightNumberProperty());
 		tailNumberColumn.setCellValueFactory(cellData -> cellData.getValue().getFlight().tailNumberProperty());
-		fluidColumn.setCellValueFactory(cellData -> cellData.getValue().getDeicing().fluidTypeProperty());
+		//fluidColumn.setCellValueFactory(cellData -> cellData.getValue().getDeicing().fluidTypeProperty());
 		checkColumn.setCellValueFactory(cellData -> cellData.getValue().getDeicing().aircraftCheckProperty());
-		startColumn.setCellValueFactory(cellData -> cellData.getValue().getDeicing().startTimeProperty());
-		endColumn.setCellValueFactory(cellData -> cellData.getValue().getDeicing().endTimeProperty());
 		employeeInit.setCellValueFactory(cellData -> cellData.getValue().sprayer1Property());
+		type4startColumn.setCellValueFactory(cellData -> cellData.getValue().getDeicing().type4StarttTime());
+		type4stopColumn.setCellValueFactory(cellData -> cellData.getValue().getDeicing().type4StoptTime());
+		type1startColumn.setCellValueFactory(cellData -> cellData.getValue().getDeicing().type1StarttTime());
+		type1stopColumn.setCellValueFactory(cellData -> cellData.getValue().getDeicing().type1StoptTime());
+		flightReleasedColumn.setCellValueFactory(cellData -> cellData.getValue().getFlight().flightNumberProperty());
 
 		// Initialize the selectedflight table with the 3 columns.
 		
@@ -274,6 +321,13 @@ public class SpotOverviewController {
 		
 
 		imageView.setImage(imageBlack);
+		
+		
+
+		 
+		 
+		 
+		 
 		padStatusImageViewSpot1Front.setImage(imageBlack);
 		padStatusImageViewSpot1Rear.setImage(imageBlack);
 		padStatusImageViewSpot2Front.setImage(imageBlack);
@@ -338,10 +392,11 @@ public class SpotOverviewController {
 			fluidTypeComboBox.getSelectionModel().clearSelection();
 		fluidTypeComboBox.setPromptText("Fluid Type");
 		}
-		
-
-		
-
+		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), activityLable);
+	    fadeTransition.setFromValue(1.0);
+	    fadeTransition.setToValue(0.0);
+	    fadeTransition.setCycleCount(Animation.INDEFINITE);
+	    fadeTransition.play();
 		
 		//check to see if spot has flight
 		if(!selectedSpot.getFlight().getFlightNumber().equals(""))
@@ -355,6 +410,7 @@ public class SpotOverviewController {
 			type4starttime.setText(selectedSpot.getDeicing().getType4Startime());
 			type1stoptime.setText(selectedSpot.getDeicing().getType1StoptTime());
 			type4stoptime.setText(selectedSpot.getDeicing().getType4StoptTime());
+			fluidTypeLable.setText(selectedSpot.getDeicing().getFluidType());
 			
 			if(selectedSpot.getDeicing().getFluidTypeInt()==2 && selectedSpot.getSpotHasFlightData())
 			{
@@ -386,6 +442,7 @@ public class SpotOverviewController {
 				release.setDisable(false);
 				start.setDisable(false);
 				stop.setDisable(false);
+				activityLable.setText("");
 			}
 			
 		
@@ -396,6 +453,16 @@ public class SpotOverviewController {
 			release.setDisable(true);
 			start.setDisable(true);
 			stop.setDisable(true);
+			flightNumberLabel.setText("");
+			tailNumberLabel.setText("");
+			aircraftTypeLabel.setText("");
+			carrierLabel.setText("");
+			type1starttime.setText("");
+			type4starttime.setText("");
+			type1stoptime.setText("");
+			type4stoptime.setText("");
+			fluidTypeLable.setText("");
+			activityLable.setText("");
 		}
 		
 		middleHiddenSpotNumber.setText(selectedSpot.getSpotNumber());
@@ -412,12 +479,11 @@ public class SpotOverviewController {
 		UpdateStatusTableImage(selectedSpot);
 
 		
-System.out.print(selectedSpot.toString()+ "\n" + selectedSpot.getDeicing().toString());
 
 	}
-	
-	
 
+	
+	
 /*
 	@SuppressWarnings("null")
 	private void showSpotDetails(Spot selectedSpot) {
@@ -532,6 +598,7 @@ System.out.print(selectedSpot.toString()+ "\n" + selectedSpot.getDeicing().toStr
 		type4starttime.setText("");
 		type1stoptime.setText("");
 		type4stoptime.setText("");
+		fluidTypeLable.setText("");
 		spot.setSpotImage(imageBlack);
 		imageView.setImage(spot.getSpotImage());
 		spot.setActive(false);
@@ -640,7 +707,7 @@ System.out.print(selectedSpot.toString()+ "\n" + selectedSpot.getDeicing().toStr
 			//selectedSpot.setSpotHasFlightData(false);
 			//selectedSpot.setActive(false);
 			clearSpot(selectedSpot);
-showSpotDetails(selectedSpot);
+			showSpotDetails(selectedSpot);
 			// spotsTable.getSelectionModel().clearSelection();
 			// fluidTypeComboBox.setValue("Fluid Type");
 		}
@@ -685,6 +752,8 @@ showSpotDetails(selectedSpot);
 		copiedSpot.setSprayer1(spot.getSprayer1());
 		copiedSpot.setDriver2(spot.getDriver2());
 		copiedSpot.setSprayer2(spot.getSprayer2());
+		copiedSpot.getFlight().setFlightNumber(spot.getFlight().getFlightNumber());
+
 		return copiedSpot;
 
 	}
@@ -799,7 +868,7 @@ showSpotDetails(selectedSpot);
           if (selectedSpot.getDeicing().getFluidType().equals("TYPE I")) {
 			selectedSpot.getDeicing().setStartTime(setTime());
 			selectedSpot.setActive(true);
-			selectedSpot.setActivityLable("ACTIVE");
+			selectedSpot.setActivityLable("De-Icing In Progress!");
 
 			try {
 				selectedSpot.getDashboardApi().PostData();
@@ -843,16 +912,8 @@ showSpotDetails(selectedSpot);
 	public void handleStop() {
 		Alert alert = new Alert(AlertType.WARNING);
 		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
-
-
-
-	 if (fluidTypeComboBox.getValue().equals(null)) {
-			alert.initOwner(mainApp.getPrimaryStage());
-			alert.setTitle("No Selection");
-			alert.setHeaderText("No Fluid Type!");
-			alert.setContentText("Please select the Fluid Type!");
-			alert.showAndWait();
-		} else if (!selectedSpot.getActive()) {
+		
+		if (!selectedSpot.getActive()) {
 			alert.initOwner(mainApp.getPrimaryStage());
 			alert.setTitle("Not Active");
 			alert.setHeaderText("Timer Not Running!");
@@ -866,7 +927,7 @@ showSpotDetails(selectedSpot);
 			selectedSpot.setActivityLable("");
 			switch(selectedSpot.getDeicing().getFluidTypeInt()) {
 			   case 0 :
-				   selectedSpot.setSpotImage(imageType1);
+				    selectedSpot.setSpotImage(imageType1);
 					selectedSpot.getDeicing().setType1StopTime(setTime());
 					break; // optional
 			   case 1 :

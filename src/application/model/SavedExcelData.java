@@ -139,12 +139,30 @@ public class SavedExcelData {
 	    addCaption1(excelSheet, 2, 0, "FLIGHT\nNumber");
 	    addCaption1(excelSheet, 3, 0, "Aircraft Identificaton Number");
 	    addCaption1(excelSheet, 4, 0, "Type 1 Freez Point Type 4 % of Mixture");
-	    addCaption1(excelSheet, 5, 0, "Final Step Type Fluid Used Type 1 Type 4");
-	    addCaption1(excelSheet, 6, 0, "Final Fluid Application Start Time");
-	    addCaption1(excelSheet, 7, 0, "Aircraft Specific Check Accomplished");
-	    addCaption1(excelSheet, 8, 0, "Employee Completed Post Check");
-	    addCaption1(excelSheet, 9, 0, "Spot");
-	    addCaption1(excelSheet, 10, 0, "Release Time");
+	    
+	    
+	    addCaption1(excelSheet, 5, 0, "Type I Start");
+	    addCaption1(excelSheet, 6, 0, "Type I Stop");
+	    addCaption1(excelSheet, 7, 0, "Type IV Start");
+	    addCaption1(excelSheet, 8, 0, "Type IV Stop");
+	    
+	    
+	    
+	    
+	    
+	    
+	    //addCaption1(excelSheet, 4, 0, "Type 1 Freez Point Type 4 % of Mixture");
+	   // addCaption1(excelSheet, 5, 0, "Final Step Type Fluid Used Type 1 Type 4");
+	   // addCaption1(excelSheet, 6, 0, "Final Fluid Application Start Time");
+	   // addCaption1(excelSheet, 7, 0, "Aircraft Specific Check Accomplished");
+	   // addCaption1(excelSheet, 8, 0, "Employee Completed Post Check");
+	   // addCaption1(excelSheet, 9, 0, "Spot");
+	   // addCaption1(excelSheet, 10, 0, "Release Time");
+	    
+	    addCaption1(excelSheet, 9, 0, "Aircraft Specific Check Accomplished");
+	    addCaption1(excelSheet, 10, 0, "Employee Completed Post Check");
+	    addCaption1(excelSheet, 11, 0, "Spot");
+	    addCaption1(excelSheet, 12, 0, "Release Time");
 	    
 
 	    for (int i = 0 ; i < releaseTable.getItems().size(); i++) {
@@ -155,12 +173,27 @@ public class SavedExcelData {
 	    	addCaption(excelSheet, 2, i+1, releaseTable.getItems().get(i).getFlight().getFlightNumber());
 	    	addCaption(excelSheet, 3, i+1, releaseTable.getItems().get(i).getFlight().getTailNumber());
 	    	addCaption(excelSheet, 4, i+1, releaseTable.getItems().get(i).getDeicing().getFluidType());
-	    	addCaption(excelSheet, 5, i+1, releaseTable.getItems().get(i).getDeicing().getFluidType());
-	    	addCaption(excelSheet, 6, i+1, releaseTable.getItems().get(i).getDeicing().getStartTime());
-	    	addCaption(excelSheet, 7, i+1, releaseTable.getItems().get(i).getDeicing().getAircraftCheck());
-	    	addCaption(excelSheet, 8, i+1, releaseTable.getItems().get(i).getSprayer1());
-	    	addCaption(excelSheet, 9, i+1, releaseTable.getItems().get(i).getSpotNumber());
-	    	addCaption(excelSheet, 10, i+1, releaseTable.getItems().get(i).getDeicing().getEndTime());
+	    	addCaption(excelSheet, 5, i+1, releaseTable.getItems().get(i).getDeicing().getType1StarttTime());
+	    	addCaption(excelSheet, 6, i+1, releaseTable.getItems().get(i).getDeicing().getType1StoptTime());
+	    	addCaption(excelSheet, 7, i+1, releaseTable.getItems().get(i).getDeicing().getType4Startime());
+	    	addCaption(excelSheet, 8, i+1, releaseTable.getItems().get(i).getDeicing().getType4StoptTime());
+	    	addCaption(excelSheet, 9, i+1, releaseTable.getItems().get(i).getDeicing().getAircraftCheck());
+	    	addCaption(excelSheet, 10, i+1, releaseTable.getItems().get(i).getSprayer1());
+	    	
+	    	
+	    	//addCaption(excelSheet, 9, i+1, releaseTable.getItems().get(i).getSpotNumber());
+	    	//addCaption(excelSheet, 10, i+1, releaseTable.getItems().get(i).getDeicing().getEndTime());
+	    	addCaption(excelSheet, 11, i+1, releaseTable.getItems().get(i).getSpotNumber());
+	    	addCaption(excelSheet, 12, i+1, releaseTable.getItems().get(i).getDeicing().getEndTime());
+	    	
+	    	//addCaption(excelSheet, 5, i+1, releaseTable.getItems().get(i).getDeicing().getFluidType());
+	    	//addCaption(excelSheet, 6, i+1, releaseTable.getItems().get(i).getDeicing().getStartTime());
+	    	//addCaption(excelSheet, 7, i+1, releaseTable.getItems().get(i).getDeicing().getAircraftCheck());
+	    	//addCaption(excelSheet, 8, i+1, releaseTable.getItems().get(i).getSprayer1());
+	    	//addCaption(excelSheet, 9, i+1, releaseTable.getItems().get(i).getSpotNumber());
+	    	///addCaption(excelSheet, 10, i+1, releaseTable.getItems().get(i).getDeicing().getEndTime());
+	    	
+	    	
 	    	
 	    }
 	    workbook.write();

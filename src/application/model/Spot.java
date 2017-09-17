@@ -199,6 +199,10 @@ public class Spot {
 		this.deicing.setStartTime(deicing.getStartTime());
 		this.deicing.setAircraftCheck(deicing.getAircraftCheck());
 		this.deicing.setEndTime(deicing.getEndTime());
+		this.deicing.setType1StartTime(deicing.getType1StarttTime());
+		this.deicing.setType1StopTime(deicing.getType1StoptTime());
+		this.deicing.setType4StartTime(deicing.getType4Startime());
+		this.deicing.setType4StopTime(deicing.getType4StoptTime());
 	}
 
 	public Flight getFlight() {
