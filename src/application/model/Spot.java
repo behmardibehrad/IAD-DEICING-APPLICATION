@@ -18,6 +18,7 @@ public class Spot {
 	private StringProperty driver2;
 	private StringProperty freezepoint1;
 	private StringProperty freezepoint2;
+	private String activityLable;
 	private String apiTileID;
 	private Image spotImage;
 
@@ -45,6 +46,7 @@ public class Spot {
 		this.spotApi = new DashboardApi(flight, deicing, this);
 		this.spotImage = new Image("application/image/blackback.png");
 		this.apiTileID = "";
+		this.activityLable = "";
 	}
 
 
@@ -254,7 +256,14 @@ public class Spot {
 	return apiTileID;
 }
 	
-	
+	public String getActivityLable() {
+		return activityLable;
+	}
+
+
+	public void setActivityLable(String activityLable) {
+		this.activityLable = activityLable;
+	}
 
 	public DashboardApi getDashboardApi() {
 		return spotApi;
