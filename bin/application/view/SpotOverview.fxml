@@ -135,6 +135,11 @@
                                           <Button mnemonicParsing="false" onAction="#handleEditFlight" prefHeight="25.0" prefWidth="123.0" text="Flight edit" GridPane.rowIndex="6" />
                                        </children>
                                     </GridPane>
+                                    <TableView fx:id="storedFlightTable" layoutX="147.0" layoutY="70.0" prefHeight="298.0" prefWidth="161.0">
+                                       <columns>
+                                          <TableColumn fx:id="storedFlightTableColumn" prefWidth="160.0" text="Stored Flights" />
+                                       </columns>
+                                    </TableView>
                                  </children>
                               </AnchorPane>
                             <AnchorPane minHeight="0.0" minWidth="0.0">

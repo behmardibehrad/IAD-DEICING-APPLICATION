@@ -10,22 +10,22 @@ import javafx.collections.ObservableList;
 public class FlightInfo {
 	// This is the the name and Nnumbers of All the Deicers!
 	
-	//public static ArrayList<Flight> getFlights() {
-//ReadFlights f = new ReadFlights();
-////return f.readFlightsFromExcel2();
-	//}
+	public static ArrayList<Flight> getFlights() {
+ReadFlights f = new ReadFlights();
+return f.readFlightsFromExcel2();
+	}
 
 	
 	
 	
-	
+	/*
 	//working
 	
 	public static ObservableList<Flight> getFlights() {
 ReadFlights f = new ReadFlights();
 return f.readFlightsFromExcel3();
 	}
-	
+	*/
 	
 	
 	

@@ -217,6 +217,8 @@ public class Spot {
 	}
 	
 
+	
+
 	public String getApiTileID() {
 		
 		return apiTileID;

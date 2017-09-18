@@ -8,6 +8,7 @@ import java.util.Calendar;
 import org.apache.poi.ss.formula.functions.T;
 import org.controlsfx.control.textfield.TextFields;
 import application.MainApp;
+import application.model.AutoCompleteComboBoxListener;
 import application.model.DashboardApi;
 import application.model.DeicersInfo;
 import application.model.Flight;
@@ -42,6 +43,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.transform.Scale;
 import javafx.util.Duration;
+import javafx.util.StringConverter;
 import jxl.write.WriteException;
 
 public class SpotOverviewController {
@@ -50,8 +52,15 @@ public class SpotOverviewController {
 	//@FXML
 	//private TextField searchSSD;
 	
+	//@FXML
+	//private ComboBox<Flight>  searchSSD = new ComboBox<>();	
+	
 	@FXML
-	private ComboBox<Flight> searchSSD = new ComboBox<>();
+	private ComboBox<Flight>  searchSSD = new ComboBox<Flight>();
+	@FXML
+	private TableView<Spot> storedFlightTable;
+	@FXML
+	private TableColumn<Spot, String> storedFlightTableColumn;
 	
 	@FXML
 	private TableView<Spot> spotsTable;
@@ -240,6 +249,10 @@ public class SpotOverviewController {
 	public void initialize() {
 		//selectedFlightTable.setItems(flightData);
 		
+
+		
+		
+		
 		// Initialize the spot table with the one columns.
 		spotsNumberColumn.setCellValueFactory(cellData -> cellData.getValue().spotNumberProperty());
 		
@@ -365,9 +378,19 @@ public class SpotOverviewController {
 		// spotData.addAll(mainApp.getSpotData());
 		//searchSSD1.getItems().addAll(FlightInfo.getFlights());
 		
-		//TextFields.bindAutoCompletion(searchSSD, FlightInfo.getFlights());
+		searchSSD.getEditor();
 		searchSSD.setEditable(true);
+		
+		
 		searchSSD.getItems().addAll(FlightInfo.getFlights());
+		TextFields.bindAutoCompletion(searchSSD.getEditor(),FlightInfo.getFlights());
+		//searchSSD.setItems(FlightInfo.getFlights().addAll(c));
+		//searchSSD.getItems().addAll(FlightInfo.getFlights().toString());
+		
+		
+		
+		
+
 		
 		
 
@@ -643,6 +666,9 @@ public class SpotOverviewController {
 	private void handleEditFlight() {
 
 		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
+		
+
+
 		if (selectedSpot != null) {
 			boolean okClicked = mainApp.showFlightEditDialog(selectedSpot);
 			if (okClicked) {
@@ -771,22 +797,25 @@ public class SpotOverviewController {
 		
 		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
 		Alert alert = new Alert(AlertType.WARNING);
+		//selectedSpot.getFlight().setFlightNumber(searchSSD.getEditor().getSelectedText());
+		selectedSpot.setFlight(searchSSD.getValue());
+		System.out.print("worked");
 		
-			//selectedSpot.setFlight(searchSSD.getSelectionModel().selectedItemProperty().get());
-		//Flight ss = searchSSD.getValue();
-		//selectedSpot.setFlight(searchSSD.getSelectionModel().getSelectedItem());
-		//selectedSpot.getFlight().setFlightNumber(searchSSD.getSelectionModel().getSelectedItem().flightNumberProperty().getValue());
-		//System.out.print((Flight)searchSSD.getSelectionModel().getSelectedItem());
-			
-			
-	
-		//selectedSpot.setFlight(searchSSD.getUserData().equals(Flight));
+		searchSSD.setValue(searchSSD.getSelectionModel().getSelectedItem());
+		System.out.print("worked");
+
+		//searchSSD.getSelectionModel().clearSelection();
+		//selectedSpot.getFlight().setFlightNumber(searchSSD.getSelectionModel().getSelectedItem().getFlightNumber());
+		
+
 		
 
 	}
 
 	@FXML
 	public void setFluidType() {
+		
+		
 		//0=type 1
 		//1=type4
 		Alert alert = new Alert(AlertType.WARNING);	
@@ -888,7 +917,7 @@ public class SpotOverviewController {
 			//selectedSpot.getDeicing().setStartTime(setTime());
 			selectedSpot.getDeicing().setType4StartTime(setTime());
 			selectedSpot.setActive(true);
-			selectedSpot.setActivityLable("ACTIVE");
+			selectedSpot.setActivityLable("De-Icing In Progress!");
 			try {
 				selectedSpot.getDashboardApi().PostData();
 			} catch (Exception e2) {
