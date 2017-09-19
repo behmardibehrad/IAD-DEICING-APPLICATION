@@ -400,11 +400,6 @@ public class SpotOverviewController {
 
 	// change the spotmodeling data look at the getter and setters
 
-
-
-	
-	
-	
 	private void showSpotDetails(Spot selectedSpot) {
 		if(selectedSpot.getDeicing().getFluidTypeInt()==0)
 		{
@@ -634,13 +629,7 @@ public class SpotOverviewController {
 
 	}
 
-	
-	
-	
-	
-	
-	
-	
+
 	@FXML
 	private void handleEditSpot() {
 		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
@@ -757,18 +746,7 @@ public class SpotOverviewController {
 	
 	}
 	
-	
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	public Spot copySpot(Spot spot) {
 		Spot copiedSpot = new Spot(spot.getSpotNumber());
 		copiedSpot.setFlight(spot.getFlight());
