@@ -8,11 +8,11 @@ import java.util.Calendar;
 import org.apache.poi.ss.formula.functions.T;
 import org.controlsfx.control.textfield.TextFields;
 import application.MainApp;
-import application.model.AutoCompleteComboBoxListener;
 import application.model.DashboardApi;
 import application.model.DeicersInfo;
 import application.model.Flight;
 import application.model.FlightInfo;
+import application.model.FxUtilTest;
 import application.model.SavedExcelData;
 import application.model.Spot;
 import javafx.animation.Animation;
@@ -378,23 +378,18 @@ public class SpotOverviewController {
 		// spotData.addAll(mainApp.getSpotData());
 		//searchSSD1.getItems().addAll(FlightInfo.getFlights());
 		
-		searchSSD.getEditor();
-		searchSSD.setEditable(true);
+		//searchSSD.getEditor();
+		//searchSSD.setEditable(true);
 		
 		
 		searchSSD.getItems().addAll(FlightInfo.getFlights());
-		TextFields.bindAutoCompletion(searchSSD.getEditor(),FlightInfo.getFlights());
+		//TextFields.bindAutoCompletion(searchSSD.getEditor(),FlightInfo.getFlights());
 		//searchSSD.setItems(FlightInfo.getFlights().addAll(c));
 		//searchSSD.getItems().addAll(FlightInfo.getFlights().toString());
 		
-		
-		
-		
-
-		
-		
-
-		
+        FxUtilTest.autoCompleteComboBoxPlus(searchSSD, 
+        		(typedText, itemToCompare) -> 
+        itemToCompare.getFlightNumber().toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.getTailNumber().toLowerCase().contains(typedText.toLowerCase()) );
 
 	}
 
@@ -776,11 +771,10 @@ public class SpotOverviewController {
 		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
 		Alert alert = new Alert(AlertType.WARNING);
 		//selectedSpot.getFlight().setFlightNumber(searchSSD.getEditor().getSelectedText());
-		selectedSpot.setFlight(searchSSD.getValue());
-		System.out.print("worked");
-		
-		searchSSD.setValue(searchSSD.getSelectionModel().getSelectedItem());
-		System.out.print("worked");
+		selectedSpot.setFlight(FxUtilTest.getComboBoxValue(searchSSD));
+		showSpotDetails(selectedSpot);
+		//searchSSD.getSelectionModel().c
+	
 
 		//searchSSD.getSelectionModel().clearSelection();
 		//selectedSpot.getFlight().setFlightNumber(searchSSD.getSelectionModel().getSelectedItem().getFlightNumber());
