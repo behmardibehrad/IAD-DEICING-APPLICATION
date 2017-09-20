@@ -773,7 +773,8 @@ public class SpotOverviewController {
 		//selectedSpot.getFlight().setFlightNumber(searchSSD.getEditor().getSelectedText());
 		selectedSpot.setFlight(FxUtilTest.getComboBoxValue(searchSSD));
 		showSpotDetails(selectedSpot);
-		//searchSSD.getSelectionModel().c
+		searchSSD.getSelectionModel().clearSelection();
+		searchSSD.getItems().addAll(FlightInfo.getFlights());
 	
 
 		//searchSSD.getSelectionModel().clearSelection();
