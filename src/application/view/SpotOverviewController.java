@@ -757,13 +757,6 @@ public class SpotOverviewController {
 
 	}
 
-	@FXML
-	public void setSearchFlight() {
-
-		//Flight selectedFlight = flightComboBox.getSelectionModel().getSelectedItem();
-		//flightData.add(selectedFlight);
-
-	}
 	
 	@FXML
 	public void setSearchSsd() {
@@ -831,33 +824,7 @@ public class SpotOverviewController {
 
 	}
 
-	@FXML
-	public void handleSendTo() {
-		/*
-		Flight selectedFlight = selectedFlightTable.getSelectionModel().getSelectedItem();
-		Spot selectedSpot = sendToComboBox.getSelectionModel().getSelectedItem();
-		Alert alert = new Alert(AlertType.WARNING);
 
-		if (selectedFlightTable.getItems().isEmpty()) {
-			alert.initOwner(mainApp.getPrimaryStage());
-			alert.setTitle("No Selection");
-			alert.setHeaderText("Empty Table");
-			alert.setContentText("Table is Empty, Add Flights.");
-			alert.showAndWait();
-		} else if (selectedFlightTable.getSelectionModel().isEmpty()) {
-			alert.initOwner(mainApp.getPrimaryStage());
-			alert.setTitle("No Selection");
-			alert.setHeaderText("No Flight Selected");
-			alert.setContentText("Please select a Flight in the table.");
-			alert.showAndWait();
-		} else {
-			selectedSpot.setFlight(selectedFlight);
-			selectedFlightTable.getSelectionModel().clearSelection();
-			flightData.remove(selectedFlight);
-			selectedSpot.setSpotImage(imageBlack);
-			*/
-
-		}
 
 	
 
