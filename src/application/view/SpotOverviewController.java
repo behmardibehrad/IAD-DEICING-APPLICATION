@@ -381,8 +381,9 @@ public class SpotOverviewController {
 		//searchSSD.getEditor();
 		//searchSSD.setEditable(true);
 		
-		
 		searchSSD.getItems().addAll(FlightInfo.getFlights());
+		
+		
 		//TextFields.bindAutoCompletion(searchSSD.getEditor(),FlightInfo.getFlights());
 		//searchSSD.setItems(FlightInfo.getFlights().addAll(c));
 		//searchSSD.getItems().addAll(FlightInfo.getFlights().toString());
@@ -763,12 +764,21 @@ public class SpotOverviewController {
 		
 		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
 		Alert alert = new Alert(AlertType.WARNING);
-		//selectedSpot.getFlight().setFlightNumber(searchSSD.getEditor().getSelectedText());
+		
 		selectedSpot.setFlight(FxUtilTest.getComboBoxValue(searchSSD));
+
+//		selectedSpot.setFlight(FxUtilTest.getComboBoxValue(searchSSD));
+		
+		//if (FxUtilTest.getComboBoxValue(searchSSD) instanceof Flight) {
+//System.out.print("flight");
+//}
+		//f=FxUtilTest.getComboBoxValue(searchSSD);
+		//System.out.println(FxUtilTest.getComboBoxValue(searchSSD).getFlightNumber());
 		showSpotDetails(selectedSpot);
 		searchSSD.getSelectionModel().clearSelection();
 		searchSSD.getItems().addAll(FlightInfo.getFlights());
-	
+
+
 
 		//searchSSD.getSelectionModel().clearSelection();
 		//selectedSpot.getFlight().setFlightNumber(searchSSD.getSelectionModel().getSelectedItem().getFlightNumber());

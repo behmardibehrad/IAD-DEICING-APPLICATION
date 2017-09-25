@@ -43,17 +43,17 @@ public class DashboardApi {
 		urlParameters1.add(new BasicNameValuePair("key", spot.getApiTileID()));
 		String tileDataString;
 		JSONObject tileData = new JSONObject();
-		tileData.put("title", flight.getCarrier().toUpperCase() + "  " + flight.getFlightNumber());
+		tileData.put("title", flight.getCarrier().toUpperCase() + "  " + flight.getFlightNumber().replace("\n", "").replace("\r", ""));
 		tileData.put("description", "Arrived at pad on : " + setTime1());
-		tileData.put("big-value", flight.getCarrier().toUpperCase() + flight.getFlightNumber());
+		tileData.put("big-value", flight.getCarrier().toUpperCase() + flight.getFlightNumber().replace("\n", "").replace("\r", ""));
 		tileData.put("upper-left-label", "carrier:  ");
-		tileData.put("upper-left-value", flight.getCarrier().toUpperCase());
+		tileData.put("upper-left-value", flight.getCarrier().toUpperCase().replace("\n", "").replace("\r", ""));
 		tileData.put("second-upper-left-label", "A/C :  ");
-		tileData.put("second-upper-left-value", flight.getAircraftType().toUpperCase());
+		tileData.put("second-upper-left-value", flight.getAircraftType().toUpperCase().replace("\n", "").replace("\r", ""));
 		tileData.put("lower-left-label", "Flight#:  ");
-		tileData.put("lower-left-value", flight.getFlightNumber());
+		tileData.put("lower-left-value", flight.getFlightNumber().replace("\n", "").replace("\r", ""));
 		tileData.put("second-lower-left-label", "Tail #:  ");
-		tileData.put("second-lower-left-value", flight.getTailNumber().toUpperCase());
+		tileData.put("second-lower-left-value", flight.getTailNumber().toUpperCase().replace("\n", "").replace("\r", ""));
 		tileData.put("upper-right-label", "start time:  ");
 		tileData.put("upper-right-value", deicing.getStartTime());
 		tileData.put("lower-right-label", "Fluid:  ");
@@ -62,6 +62,7 @@ public class DashboardApi {
 		urlParameters1.add(new BasicNameValuePair("data", tileDataString));
 		post1.setEntity(new UrlEncodedFormEntity(urlParameters1));
 		client1.execute(post1);
+		post1.abort();
 
 	}
 
@@ -87,6 +88,7 @@ public class DashboardApi {
 		urlParametersConf.add(new BasicNameValuePair("value", tileConfValueString));
 		postConf.setEntity(new UrlEncodedFormEntity(urlParametersConf));
 		clientConf.execute(postConf);
+		postConf.abort();
 
 	}
 
@@ -120,6 +122,7 @@ public class DashboardApi {
 		urlParameters.add(new BasicNameValuePair("data", tileDataString));
 		post.setEntity(new UrlEncodedFormEntity(urlParameters));
 		client.execute(post);
+		post.abort();
 
 	}
 
@@ -139,6 +142,7 @@ public class DashboardApi {
 		urlParametersConf.add(new BasicNameValuePair("value", tileConfValueString));
 		postConf.setEntity(new UrlEncodedFormEntity(urlParametersConf));
 		clientConf.execute(postConf);
+		postConf.abort();
 
 	}
 
@@ -157,6 +161,7 @@ public class DashboardApi {
 		urlParametersConf.add(new BasicNameValuePair("value", tileConfValueString));
 		postConf.setEntity(new UrlEncodedFormEntity(urlParametersConf));
 		clientConf.execute(postConf);
+		postConf.abort();
 
 	}
 
@@ -190,6 +195,7 @@ public class DashboardApi {
 		urlParameters.add(new BasicNameValuePair("data", tileDataString));
 		post.setEntity(new UrlEncodedFormEntity(urlParameters));
 		client.execute(post);
+		post.abort();
 
 	}
 
