@@ -598,8 +598,10 @@ public class SpotOverviewController {
 		spot.getFlight().setFlightNumber("");
 		spot.getFlight().setTailNumber("");
 		spot.getDeicing().setAircraftCheck("");
-		spot.getDeicing().setEndTime("");
-		spot.getDeicing().setStartTime("");
+		spot.getDeicing().setType1StartTime("");
+		spot.getDeicing().setType1StopTime("");
+		spot.getDeicing().setType4StartTime("");
+		spot.getDeicing().setType4StopTime("");
 		spot.getDeicing().setFluidType("");
 		spot.setActivityLable("");
 		spot.getDeicing().setFluidTypeInt(2);
@@ -831,6 +833,12 @@ public class SpotOverviewController {
 		showSpotDetails(selectedSpot);
 
         }
+		try {
+			selectedSpot.getDashboardApi().PostData();
+			selectedSpot.getDashboardApi().PostConf1();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -843,44 +851,45 @@ public class SpotOverviewController {
 		Alert alert = new Alert(AlertType.WARNING);	
 		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
 		selectedSpot.setApiTileID(selectedSpot.getSpotNumber());
+		
+		
+		switch(selectedSpot.getDeicing().getFluidTypeInt()) {
+		   case 0 :
+				selectedSpot.getDeicing().setStartTime(setTime());
+				selectedSpot.setActive(true);
+				selectedSpot.setActivityLable("De-Icing In Progress!");
+				selectedSpot.setSpotImage(imageType1Blink);
+				selectedSpot.getDeicing().setType1StartTime(setTime());
+				imageView.setImage(selectedSpot.getSpotImage());
+				try {
+					selectedSpot.getDashboardApi().PostData();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				try {
+					selectedSpot.getDashboardApi().PostConf();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				break; // optional
+		   case 1 :
+				selectedSpot.getDeicing().setType4StartTime(setTime());
+				selectedSpot.setActive(true);
+				selectedSpot.setActivityLable("De-Icing In Progress!");
+				selectedSpot.setSpotImage(imageType4Blink);
+				imageView.setImage(selectedSpot.getSpotImage());
+				try {
+					selectedSpot.getDashboardApi().PostData();
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
+				try {
+					selectedSpot.getDashboardApi().PostConf();
+				} catch (Exception e3) {
+					e3.printStackTrace();
+				}
 
-          if (selectedSpot.getDeicing().getFluidType().equals("TYPE I")) {
-			selectedSpot.getDeicing().setStartTime(setTime());
-			selectedSpot.setActive(true);
-			selectedSpot.setActivityLable("De-Icing In Progress!");
-
-			try {
-				selectedSpot.getDashboardApi().PostData();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			try {
-				selectedSpot.getDashboardApi().PostConf();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-			selectedSpot.setSpotImage(imageType1Blink);
-			selectedSpot.getDeicing().setType1StartTime(setTime());
-			imageView.setImage(selectedSpot.getSpotImage());
-		} 
-          else if (selectedSpot.getDeicing().getFluidType().equals("TYPE IV")) {
-			//selectedSpot.getDeicing().setStartTime(setTime());
-			selectedSpot.getDeicing().setType4StartTime(setTime());
-			selectedSpot.setActive(true);
-			selectedSpot.setActivityLable("De-Icing In Progress!");
-			try {
-				selectedSpot.getDashboardApi().PostData();
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
-			try {
-				selectedSpot.getDashboardApi().PostConf();
-			} catch (Exception e3) {
-				e3.printStackTrace();
-			}
-			selectedSpot.setSpotImage(imageType4Blink);
-			imageView.setImage(selectedSpot.getSpotImage());
-
+				break; // optional
 		}
        UpdateStatusTableImage(selectedSpot);
 		showSpotDetails(selectedSpot);
@@ -908,10 +917,22 @@ public class SpotOverviewController {
 			   case 0 :
 				    selectedSpot.setSpotImage(imageType1);
 					selectedSpot.getDeicing().setType1StopTime(setTime());
+					try {
+						selectedSpot.getDashboardApi().PostData();
+						selectedSpot.getDashboardApi().PostConf1();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 					break; // optional
 			   case 1 :
 				   selectedSpot.setSpotImage(imageType4);
 				   selectedSpot.getDeicing().setType4StopTime(setTime());
+					try {
+						selectedSpot.getDashboardApi().PostData();
+						selectedSpot.getDashboardApi().PostConf1();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 
 					break; // optional
 			}
