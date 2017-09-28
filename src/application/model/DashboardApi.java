@@ -66,6 +66,7 @@ public class DashboardApi {
 		urlParameters1.add(new BasicNameValuePair("data", tileDataString));
 		post1.setEntity(new UrlEncodedFormEntity(urlParameters1));
 		client1.execute(post1);
+		System.out.print(spot.toString() + flight.toString() + deicing.toString());
 		post1.abort();
 
 	}
