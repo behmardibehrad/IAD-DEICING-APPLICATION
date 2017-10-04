@@ -105,7 +105,7 @@ public class Flight {
 	
 
 	public String toString() {
-		return "Flight: " + getFlightNumber() + "\nCarrier: " + getCarrier() + "\nAircraft: " + getAircraftType()
+		return "\nFlight: " + getFlightNumber() + "\nCarrier: " + getCarrier() + "\nAircraft: " + getAircraftType()
 				+ "\nTail#: " + getTailNumber();
 	}
 	/*

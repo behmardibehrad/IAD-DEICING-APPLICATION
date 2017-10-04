@@ -20,6 +20,9 @@ public class Spot {
 	private StringProperty freezepoint2;
 	private String activityLable;
 	private String apiTileID;
+	private StringProperty comment;
+
+
 	private Image spotImage;
 
 	Flight flight;
@@ -47,6 +50,7 @@ public class Spot {
 		this.spotImage = new Image("application/image/blackback.png");
 		this.apiTileID = "";
 		this.activityLable = "";
+		this.comment = new SimpleStringProperty("");
 	}
 
 
@@ -193,7 +197,36 @@ public class Spot {
 	public Deicing getDeicing() {
 		return deicing;
 	}
+	
+	public String getComment() {
+		return comment.get();
+	}
 
+	public StringProperty commentProperty() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment.set(comment);
+	}
+	
+	public String getApiTileID() {
+		
+		return apiTileID;
+	}
+	
+	public String getActivityLable() {
+		return activityLable;
+	}
+
+
+	public void setActivityLable(String activityLable) {
+		this.activityLable = activityLable;
+	}
+
+	public DashboardApi getDashboardApi() {
+		return spotApi;
+	}
 	public void setDeicing(Deicing deicing) {
 		this.deicing.setFluidType(deicing.getFluidType());
 		this.deicing.setStartTime(deicing.getStartTime());
@@ -211,18 +244,18 @@ public class Spot {
 
 	public void setFlight(Flight flight) {
 	
-		this.flight.setAircraftType(flight.getAircraftType());
-		this.flight.setCarrier(flight.getCarrier());
-		this.flight.setFlightNumber(flight.getFlightNumber());
-		this.flight.setTailNumber(flight.getTailNumber());
-	}
-	
-	
-
-	public String getApiTileID() {
+		if (flight == null ) {
+			System.out.println("EMPTY FLIGHT OBJECT");
+		} else {
+			this.flight.setAircraftType(flight.getAircraftType());
+			this.flight.setCarrier(flight.getCarrier());
+			this.flight.setFlightNumber(flight.getFlightNumber());
+			this.flight.setTailNumber(flight.getTailNumber());
+			
+		}
 		
-		return apiTileID;
 	}
+	
 
 	public String setApiTileID(String spotNumber) {
 		
@@ -262,18 +295,7 @@ public class Spot {
 	return apiTileID;
 }
 	
-	public String getActivityLable() {
-		return activityLable;
-	}
 
-
-	public void setActivityLable(String activityLable) {
-		this.activityLable = activityLable;
-	}
-
-	public DashboardApi getDashboardApi() {
-		return spotApi;
-	}
 
 	public String toString() {
 		return "SPOT: " + getSpotNumber();

@@ -45,7 +45,7 @@ public class DashboardApi {
 		JSONObject tileData = new JSONObject();
 		tileData.put("title", flight.getCarrier().toUpperCase() + "  " + flight.getFlightNumber());
 		tileData.put("description", "Arrived at pad on : " + setTime1());
-		tileData.put("big-value", flight.getCarrier().toUpperCase() + flight.getFlightNumber());
+		tileData.put("big-value", flight.getFlightNumber());
 		tileData.put("upper-left-label", "carrier:  ");
 		tileData.put("upper-left-value", flight.getCarrier().toUpperCase());
 		tileData.put("second-upper-left-label", "A/C :  ");
@@ -66,7 +66,6 @@ public class DashboardApi {
 		urlParameters1.add(new BasicNameValuePair("data", tileDataString));
 		post1.setEntity(new UrlEncodedFormEntity(urlParameters1));
 		client1.execute(post1);
-		System.out.print(spot.toString() + flight.toString() + deicing.toString());
 		post1.abort();
 
 	}
