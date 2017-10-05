@@ -21,6 +21,9 @@ public class Spot {
 	private String activityLable;
 	private String apiTileID;
 	private Image spotImage;
+	private StringProperty comment; 
+
+
 
 	Flight flight;
 	Deicing deicing;
@@ -47,6 +50,7 @@ public class Spot {
 		this.spotImage = new Image("application/image/blackback.png");
 		this.apiTileID = "";
 		this.activityLable = "";
+		this.comment = new SimpleStringProperty("");
 	}
 
 
@@ -169,7 +173,21 @@ public class Spot {
 	public void setDriver1(String driver1) {
 		this.driver1.set(driver1);
 	}
+	
+	
+	
+	public String getComment() {
+		return comment.get();
+	}
 
+	public StringProperty commentProperty() {
+		return comment;
+	}
+
+	public void setcomment(String comment) {
+		this.comment.set(comment);
+	}
+	
 	public String getDriver2() {
 		return driver2.get();
 	}

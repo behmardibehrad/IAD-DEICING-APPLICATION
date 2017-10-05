@@ -265,6 +265,7 @@
                                           <Button mnemonicParsing="false" onAction="#handleSaveReleaseTableOnline" text="Save Online" GridPane.columnIndex="1" GridPane.rowIndex="11" />
                                        </children>
                                     </GridPane>
+                                    <TextArea fx:id="commentArea" layoutX="697.0" layoutY="79.0" onKeyReleased="#handleCommentArea" prefHeight="200.0" prefWidth="200.0" />
                                  </children>
                               </AnchorPane>
                           </items>

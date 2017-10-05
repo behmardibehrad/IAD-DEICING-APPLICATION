@@ -38,8 +38,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.transform.Scale;
 import javafx.util.Duration;
@@ -224,6 +226,8 @@ public class SpotOverviewController {
 	private Button setting;
 	@FXML
 	private Button release;
+	@FXML
+	private TextArea commentArea;
 	// Reference to the main application.
 	private MainApp mainApp;
 	private ObservableList<Spot> releaseTableData = FXCollections.observableArrayList();
@@ -311,6 +315,7 @@ public class SpotOverviewController {
 		type1startColumn.setCellValueFactory(cellData -> cellData.getValue().getDeicing().type1StarttTime());
 		type1stopColumn.setCellValueFactory(cellData -> cellData.getValue().getDeicing().type1StoptTime());
 		flightReleasedColumn.setCellValueFactory(cellData -> cellData.getValue().getFlight().flightNumberProperty());
+		comment.setCellValueFactory(cellData -> cellData.getValue().commentProperty());
 
 		// Initialize the selectedflight table with the 3 columns.
 		
@@ -424,6 +429,7 @@ public class SpotOverviewController {
 			type1stoptime.setText(selectedSpot.getDeicing().getType1StoptTime());
 			type4stoptime.setText(selectedSpot.getDeicing().getType4StoptTime());
 			fluidTypeLable.setText(selectedSpot.getDeicing().getFluidType());
+			commentArea.setText(selectedSpot.getComment());
 			
 			if(selectedSpot.getDeicing().getFluidTypeInt()==2 && selectedSpot.getSpotHasFlightData())
 			{
@@ -476,6 +482,7 @@ public class SpotOverviewController {
 			type4stoptime.setText("");
 			fluidTypeLable.setText("");
 			activityLable.setText("");
+			commentArea.setText("");
 		}
 		
 		middleHiddenSpotNumber.setText(selectedSpot.getSpotNumber());
@@ -602,6 +609,10 @@ public class SpotOverviewController {
 		spot.getDeicing().setFluidType("");
 		spot.setActivityLable("");
 		spot.getDeicing().setFluidTypeInt(2);
+		spot.setActive(false);
+		spot.setSpotHasFlightData(false);
+		spot.setcomment("");
+		spot.setSpotImage(imageBlack);
 		flightNumberLabel.setText("");
 		tailNumberLabel.setText("");
 		aircraftTypeLabel.setText("");
@@ -612,10 +623,9 @@ public class SpotOverviewController {
 		type1stoptime.setText("");
 		type4stoptime.setText("");
 		fluidTypeLable.setText("");
-		spot.setSpotImage(imageBlack);
+		commentArea.setText("");
 		imageView.setImage(spot.getSpotImage());
-		spot.setActive(false);
-		spot.setSpotHasFlightData(false);
+
 		//flightNumberLabel1.setVisible(false);
 		//tailNumberLabel1.setVisible(false);
 		//aircraftTypeLabel1.setVisible(false);
@@ -875,6 +885,13 @@ public class SpotOverviewController {
        UpdateStatusTableImage(selectedSpot);
 		showSpotDetails(selectedSpot);
 
+	}
+	
+	@FXML
+	public void handleCommentArea()
+	{
+		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
+		selectedSpot.setcomment(commentArea.getText());
 	}
 
 	@FXML
