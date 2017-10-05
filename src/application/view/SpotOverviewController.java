@@ -48,6 +48,13 @@ import javafx.util.StringConverter;
 import jxl.write.WriteException;
 
 public class SpotOverviewController {
+
+	// Spot Table With 3 Columns.
+	//@FXML
+	//private TextField searchSSD;
+	
+	//@FXML
+	//private ComboBox<Flight>  searchSSD = new ComboBox<>();	
 	
 	@FXML
 	private ComboBox<Flight>  searchSSD = new ComboBox<Flight>();
@@ -55,8 +62,10 @@ public class SpotOverviewController {
 	private TableView<Spot> storedFlightTable;
 	@FXML
 	private TableColumn<Spot, String> storedFlightTableColumn;
+	
 	@FXML
 	private TextArea commentArea;
+	
 	@FXML
 	private TableView<Spot> spotsTable;
 	@FXML
@@ -126,11 +135,15 @@ public class SpotOverviewController {
 	private Label fluidTypeLable1;
 	
 	
+	
+	
+	
+
+
 	@FXML
 	private Label middleHiddenSpotNumber;
 	@FXML
 	private Label activityLable;
-	
 	// Released Flights Table With 9 Columns.
 	@FXML
 	private TableView<Spot> releaseTable;
@@ -142,7 +155,8 @@ public class SpotOverviewController {
 	private TableColumn<Spot, String> flightReleasedColumn;
 	@FXML
 	private TableColumn<Spot, String> tailNumberColumn;
-
+	//@FXML
+	//private TableColumn<Spot, String> fluidColumn;
 	
 	@FXML
 	private TableColumn<Spot, String> type1Column;
@@ -156,18 +170,24 @@ public class SpotOverviewController {
 	private TableColumn<Spot, String> type1startColumn;
 	@FXML
 	private TableColumn<Spot, String> type1stopColumn;
+	
+	
+	
 	@FXML
 	private TableColumn<Spot, String> checkColumn;
 	@FXML
 	private TableColumn<Spot, String> employeeInit;
 	@FXML
 	private TableColumn<Spot, String> comment;
-
+	// Selected Flight Table with 3 Columns
+	//@FXML
+	//private TableView<Flight> selectedFlightTable;
 
 	@FXML
 	private ImageView imageView;
 	@FXML
 	private ImageView padStatusImageViewSpot1Front;
+	
 	@FXML
 	private ImageView padStatusImageViewSpot1Rear;
 	@FXML
@@ -212,6 +232,10 @@ public class SpotOverviewController {
 	private MainApp mainApp;
 	private ObservableList<Spot> releaseTableData = FXCollections.observableArrayList();
 	//private ObservableList<Flight> flightData = FXCollections.observableArrayList();
+    
+
+	
+	
 	
 	public SpotOverviewController() {
 	}
@@ -222,14 +246,24 @@ public class SpotOverviewController {
 		// spotData.addAll(mainApp.getSpotData());
 		spotsTable.setItems(mainApp.getSpotData());
 		sendToComboBox.getItems().addAll(spotsTable.getItems());
+
 	}
 
 	@FXML
 	public void initialize() {
+		//selectedFlightTable.setItems(flightData);
+		
 
+		
+		
+		
 		// Initialize the spot table with the one columns.
 		spotsNumberColumn.setCellValueFactory(cellData -> cellData.getValue().spotNumberProperty());
 		
+       // spotsNumberColumn.setStyle("-fx-background-color:red");
+        //flightNumberColumn.setStyle("-fx-background-color:red");
+        //aircraftColumn.setStyle("-fx-background-color:red");
+        //spotsTable.getSelectionModel().select(0);
 		padStatusImageViewSpot1Front.setOnMouseClicked((MouseEvent e) -> {
  		    spotsTable.getSelectionModel().select(0);
  		});
@@ -271,7 +305,9 @@ public class SpotOverviewController {
 		aircraftTypeColumn.setCellValueFactory(cellData -> cellData.getValue().getFlight().aircraftTypeProperty());
 		
 		//behrad2
+		//flightReleasedColumn.setCellValueFactory(cellData -> cellData.getValue().getFlight().flightNumberProperty());
 		tailNumberColumn.setCellValueFactory(cellData -> cellData.getValue().getFlight().tailNumberProperty());
+		//fluidColumn.setCellValueFactory(cellData -> cellData.getValue().getDeicing().fluidTypeProperty());
 		checkColumn.setCellValueFactory(cellData -> cellData.getValue().getDeicing().aircraftCheckProperty());
 		employeeInit.setCellValueFactory(cellData -> cellData.getValue().sprayer1Property());
 		type4startColumn.setCellValueFactory(cellData -> cellData.getValue().getDeicing().type4StarttTime());
@@ -281,11 +317,35 @@ public class SpotOverviewController {
 		flightReleasedColumn.setCellValueFactory(cellData -> cellData.getValue().getFlight().flightNumberProperty());
 		comment.setCellValueFactory(cellData -> cellData.getValue().commentProperty());
 
+		// Initialize the selectedflight table with the 3 columns.
+		
+		//behrad2
+		//flightSelectedColumn.setCellValueFactory(cellData -> cellData.getValue().flightNumberProperty());
+		//aircraftSelectedColumn.setCellValueFactory(cellData -> cellData.getValue().aircraftTypeProperty());
+		//tailSelectedColumn.setCellValueFactory(cellData -> cellData.getValue().tailNumberProperty());
+
+
 		// Listen for selection changes and show the spot details when changed.
 		spotsTable.getSelectionModel().selectedItemProperty()
 				.addListener((observable, oldValue, newValue) -> showSpotDetails(newValue));
+		
+		//fluidTypeComboBox.getSelectionModel().selectedItemProperty()
+		//.addListener((observable, oldValue, newValue) -> spotsTable.getSelectionModel().getSelectedItem().getDeicing().setFluidType(newValue)); 
+		
+		
+
+	
+		
+		
 
 		imageView.setImage(imageBlack);
+		
+		
+
+		 
+		 
+		 
+		 
 		padStatusImageViewSpot1Front.setImage(imageBlack);
 		padStatusImageViewSpot1Rear.setImage(imageBlack);
 		padStatusImageViewSpot2Front.setImage(imageBlack);
@@ -296,9 +356,42 @@ public class SpotOverviewController {
 		padStatusImageViewSpot4Rear.setImage(imageBlack);
 		padStatusImageViewSpot5Front.setImage(imageBlack);
 		padStatusImageViewSpot5Rear.setImage(imageBlack);
+		
+
+		// showSpotDetails(null);
+
+		// flightComboBox.getItems().addAll(DeicersInfo.getApiFlightsFlightNumber());
+		// flightComboBox.setItems(DeicersInfo.getApiFlightsFlightNumber());
+		// flightComboBox.getItems().addAll(DeicersInfo.getApiFlightsFlightNumber());
+
+		// flightComboBox.setEditable(true);
+
+		// behrad
+		// flightComboBox.getItems().addAll(DeicersInfo.getApiFlightsFlightNumber());
+		//TextFields.bindAutoCompletion(flightComboBox.getEditor(), flightComboBox.getItems());
+
+		// TextFields.bindAutoCompletion(flightComboBox,
+		// DeicersInfo.getApiFlightsFlightNumber());
+		// TextFields.bindAutoCompletion(flightComboBox,
+		// DeicersInfo.getApiFlightsFlightNumber());
+
+		// flightComboBox.setItems(selectedFlightTableData);
 
 		fluidTypeComboBox.getItems().addAll("TYPE I", "TYPE IV");
+		// fluidTypeComboBox.getSelectionModel().selectFirst();
+		// fluidTypeComboBox.setValue("Clear");
+		// spotData.addAll(mainApp.getSpotData());
+		//searchSSD1.getItems().addAll(FlightInfo.getFlights());
+		
+		//searchSSD.getEditor();
+		//searchSSD.setEditable(true);
+		
 		searchSSD.getItems().addAll(FlightInfo.getFlights());
+		
+		
+		//TextFields.bindAutoCompletion(searchSSD.getEditor(),FlightInfo.getFlights());
+		//searchSSD.setItems(FlightInfo.getFlights().addAll(c));
+		//searchSSD.getItems().addAll(FlightInfo.getFlights().toString());
 		
         FxUtilTest.autoCompleteComboBoxPlus(searchSSD, 
         		(typedText, itemToCompare) -> 
@@ -309,26 +402,19 @@ public class SpotOverviewController {
 	// change the spotmodeling data look at the getter and setters
 
 	private void showSpotDetails(Spot selectedSpot) {
-		System.out.println(selectedSpot.toString());
-		System.out.println(selectedSpot.getFlight().toString());
-		System.out.println(selectedSpot.getDeicing().toString());
-
-		switch(selectedSpot.getDeicing().getFluidTypeInt()) {
-		   case 0 :
-			   fluidTypeComboBox.getSelectionModel().selectFirst();
-				break; // optional
-		   case 1 :
-			   fluidTypeComboBox.getSelectionModel().select(1);
-				break; // optional
-				default:
-					fluidTypeComboBox.getSelectionModel().clearSelection();
-					selectedSpot.getDeicing().setFluidTypeInt(2);
-				fluidTypeComboBox.setPromptText("Fluid Type");
-					
+		if(selectedSpot.getDeicing().getFluidTypeInt()==0)
+		{
+		fluidTypeComboBox.getSelectionModel().selectFirst();}
+		else if(selectedSpot.getDeicing().getFluidTypeInt()==1) {
+			fluidTypeComboBox.getSelectionModel().select(1);}
+		else {
+			fluidTypeComboBox.getSelectionModel().clearSelection();
+		fluidTypeComboBox.setPromptText("Fluid Type");
 		}
 		
 		
-
+		
+		
 		
 		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), activityLable);
 	    fadeTransition.setFromValue(1.0);
@@ -420,7 +506,7 @@ public class SpotOverviewController {
 		commentArea.setText(selectedSpot.getComment());
 		UpdateStatusTableImage(selectedSpot);
 
-
+		
 
 	}
 
@@ -617,10 +703,9 @@ public class SpotOverviewController {
 	@FXML
 	public void setFluidType() {
 		
-		//System.out.println("fluid box");
+		System.out.println("fluid box");
 
-		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();	
-		if(!selectedSpot.getActive()) {
+		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();			
 		selectedSpot.getDeicing().setFluidType(fluidTypeComboBox.getSelectionModel().getSelectedItem());
 		selectedSpot.getDeicing().setFluidTypeInt(fluidTypeComboBox.getSelectionModel().getSelectedIndex());
 		
@@ -639,7 +724,7 @@ public class SpotOverviewController {
 		imageView.setImage(selectedSpot.getSpotImage());
 		UpdateStatusTableImage(selectedSpot);
 		showSpotDetails(selectedSpot);
-		
+		if(!selectedSpot.getActive()) {
 		try {
 			selectedSpot.getDashboardApi().PostData();
 			selectedSpot.getDashboardApi().PostConf1();
@@ -736,7 +821,7 @@ public class SpotOverviewController {
 				   selectedSpot.getDeicing().setType4StopTime(setTime());
 					try {
 						selectedSpot.getDashboardApi().PostData();
-						//selectedSpot.getDashboardApi().PostConf1();
+						selectedSpot.getDashboardApi().PostConf1();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
