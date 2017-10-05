@@ -178,6 +178,8 @@ public class SpotOverviewController {
 	@FXML
 	private Button release;
 	@FXML
+	private Button resetWeb;
+	@FXML
 	private TextArea commentArea;
 	// Reference to the main application.
 	private MainApp mainApp;
@@ -413,11 +415,8 @@ public class SpotOverviewController {
 
 	@FXML
 	private void handleEditFlight() {
-
-		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
 		
-
-
+		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
 		if (selectedSpot != null) {
 			boolean okClicked = mainApp.showFlightEditDialog(selectedSpot);
 			if (okClicked) {

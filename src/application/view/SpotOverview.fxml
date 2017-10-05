@@ -131,7 +131,7 @@
                                           <Button fx:id="start" mnemonicParsing="false" onAction="#handleStart" prefHeight="31.0" prefWidth="122.0" text="Start" GridPane.rowIndex="2" />
                                           <Button fx:id="release" mnemonicParsing="false" onMousePressed="#handleReleaseFlight" prefWidth="122.0" text="Release" GridPane.rowIndex="4" />
                                           <ComboBox fx:id="fluidTypeComboBox" onAction="#setFluidType" prefHeight="31.0" prefWidth="122.0" promptText="Fluid Type" GridPane.rowIndex="1" />
-                                          <Button mnemonicParsing="false" onMouseClicked="#handleResetWeb" prefHeight="25.0" prefWidth="123.0" text="Reset Web" GridPane.rowIndex="5" />
+                                          <Button fx:id="resetWeb" mnemonicParsing="false" onMouseClicked="#handleResetWeb" prefHeight="25.0" prefWidth="123.0" text="Reset Web" GridPane.rowIndex="5" />
                                           <ComboBox fx:id="searchSSD" onAction="#setSearchSsd" prefWidth="150.0" promptText="SSD" />
                                           <Button mnemonicParsing="false" onAction="#handleEditFlight" prefHeight="25.0" prefWidth="123.0" text="Flight edit" GridPane.rowIndex="6" />
                                        </children>
