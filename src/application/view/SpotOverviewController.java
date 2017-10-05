@@ -386,8 +386,9 @@ public class SpotOverviewController {
 		//searchSSD.getEditor();
 		//searchSSD.setEditable(true);
 		
-		
 		searchSSD.getItems().addAll(FlightInfo.getFlights());
+		
+		
 		//TextFields.bindAutoCompletion(searchSSD.getEditor(),FlightInfo.getFlights());
 		//searchSSD.setItems(FlightInfo.getFlights().addAll(c));
 		//searchSSD.getItems().addAll(FlightInfo.getFlights().toString());
@@ -604,8 +605,10 @@ public class SpotOverviewController {
 		spot.getFlight().setFlightNumber("");
 		spot.getFlight().setTailNumber("");
 		spot.getDeicing().setAircraftCheck("");
-		spot.getDeicing().setEndTime("");
-		spot.getDeicing().setStartTime("");
+		spot.getDeicing().setType1StartTime("");
+		spot.getDeicing().setType1StopTime("");
+		spot.getDeicing().setType4StartTime("");
+		spot.getDeicing().setType4StopTime("");
 		spot.getDeicing().setFluidType("");
 		spot.setActivityLable("");
 		spot.getDeicing().setFluidTypeInt(2);
@@ -773,12 +776,21 @@ public class SpotOverviewController {
 		
 		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
 		Alert alert = new Alert(AlertType.WARNING);
-		//selectedSpot.getFlight().setFlightNumber(searchSSD.getEditor().getSelectedText());
+		
 		selectedSpot.setFlight(FxUtilTest.getComboBoxValue(searchSSD));
+
+//		selectedSpot.setFlight(FxUtilTest.getComboBoxValue(searchSSD));
+		
+		//if (FxUtilTest.getComboBoxValue(searchSSD) instanceof Flight) {
+//System.out.print("flight");
+//}
+		//f=FxUtilTest.getComboBoxValue(searchSSD);
+		//System.out.println(FxUtilTest.getComboBoxValue(searchSSD).getFlightNumber());
 		showSpotDetails(selectedSpot);
 		searchSSD.getSelectionModel().clearSelection();
 		searchSSD.getItems().addAll(FlightInfo.getFlights());
-	
+
+
 
 		//searchSSD.getSelectionModel().clearSelection();
 		//selectedSpot.getFlight().setFlightNumber(searchSSD.getSelectionModel().getSelectedItem().getFlightNumber());
@@ -794,45 +806,45 @@ public class SpotOverviewController {
 		
 		//0=type 1
 		//1=type4
-		Alert alert = new Alert(AlertType.WARNING);	
 		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
 		
-        if (selectedSpot==null) {
-			alert.initOwner(mainApp.getPrimaryStage());
-			alert.setTitle("No Selection");
-			alert.setHeaderText("No Fluid Type!");
-			alert.setContentText("Please select the Fluid Type!");
-			alert.showAndWait();
-        }
-        else
-        {
+ 
 			
 			
 		selectedSpot.getDeicing().setFluidType(fluidTypeComboBox.getSelectionModel().getSelectedItem());
 		selectedSpot.getDeicing().setFluidTypeInt(fluidTypeComboBox.getSelectionModel().getSelectedIndex());
 		
-		if(selectedSpot.getDeicing().getFluidTypeInt()==0)
-		{
-			selectedSpot.setSpotImage(imageType1);
-			selectedSpot.getDeicing().setFluidTypeInt(0);
+		switch(selectedSpot.getDeicing().getFluidTypeInt()) {
+		   case 0 :
+			   selectedSpot.setSpotImage(imageType1);
+				try {
+					selectedSpot.getDashboardApi().PostData();
+					selectedSpot.getDashboardApi().PostConf1();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				break; // optional
+		   case 1 :
+			   selectedSpot.setSpotImage(imageType4);
+				try {
+					selectedSpot.getDashboardApi().PostData();
+					//selectedSpot.getDashboardApi().PostConf1();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				break; // optional		
 		}
-		else if (selectedSpot.getDeicing().getFluidTypeInt()==1)
-		{
-			selectedSpot.setSpotImage(imageType4);
-			selectedSpot.getDeicing().setFluidTypeInt(1);
-		}
-		else
-		{
-			selectedSpot.setSpotImage(imageBlack);
-			selectedSpot.getDeicing().setFluidTypeInt(2);
-		}
+		
+
 		imageView.setImage(selectedSpot.getSpotImage());
 		UpdateStatusTableImage(selectedSpot);
 		showSpotDetails(selectedSpot);
 
-        }
+        
 
-	}
+
+}
+
 
 
 
@@ -843,44 +855,45 @@ public class SpotOverviewController {
 		Alert alert = new Alert(AlertType.WARNING);	
 		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
 		selectedSpot.setApiTileID(selectedSpot.getSpotNumber());
+		
+		
+		switch(selectedSpot.getDeicing().getFluidTypeInt()) {
+		   case 0 :
+				selectedSpot.getDeicing().setStartTime(setTime());
+				selectedSpot.setActive(true);
+				selectedSpot.setActivityLable("De-Icing In Progress!");
+				selectedSpot.setSpotImage(imageType1Blink);
+				selectedSpot.getDeicing().setType1StartTime(setTime());
+				imageView.setImage(selectedSpot.getSpotImage());
+				try {
+					selectedSpot.getDashboardApi().PostData();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				try {
+					selectedSpot.getDashboardApi().PostConf();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				break; // optional
+		   case 1 :
+				selectedSpot.getDeicing().setType4StartTime(setTime());
+				selectedSpot.setActive(true);
+				selectedSpot.setActivityLable("De-Icing In Progress!");
+				selectedSpot.setSpotImage(imageType4Blink);
+				imageView.setImage(selectedSpot.getSpotImage());
+				try {
+					selectedSpot.getDashboardApi().PostData();
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
+				try {
+					selectedSpot.getDashboardApi().PostConf();
+				} catch (Exception e3) {
+					e3.printStackTrace();
+				}
 
-          if (selectedSpot.getDeicing().getFluidType().equals("TYPE I")) {
-			selectedSpot.getDeicing().setStartTime(setTime());
-			selectedSpot.setActive(true);
-			selectedSpot.setActivityLable("De-Icing In Progress!");
-
-			try {
-				selectedSpot.getDashboardApi().PostData();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			try {
-				selectedSpot.getDashboardApi().PostConf();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-			selectedSpot.setSpotImage(imageType1Blink);
-			selectedSpot.getDeicing().setType1StartTime(setTime());
-			imageView.setImage(selectedSpot.getSpotImage());
-		} 
-          else if (selectedSpot.getDeicing().getFluidType().equals("TYPE IV")) {
-			//selectedSpot.getDeicing().setStartTime(setTime());
-			selectedSpot.getDeicing().setType4StartTime(setTime());
-			selectedSpot.setActive(true);
-			selectedSpot.setActivityLable("De-Icing In Progress!");
-			try {
-				selectedSpot.getDashboardApi().PostData();
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
-			try {
-				selectedSpot.getDashboardApi().PostConf();
-			} catch (Exception e3) {
-				e3.printStackTrace();
-			}
-			selectedSpot.setSpotImage(imageType4Blink);
-			imageView.setImage(selectedSpot.getSpotImage());
-
+				break; // optional
 		}
        UpdateStatusTableImage(selectedSpot);
 		showSpotDetails(selectedSpot);
@@ -915,10 +928,22 @@ public class SpotOverviewController {
 			   case 0 :
 				    selectedSpot.setSpotImage(imageType1);
 					selectedSpot.getDeicing().setType1StopTime(setTime());
+					try {
+						selectedSpot.getDashboardApi().PostData();
+						selectedSpot.getDashboardApi().PostConf1();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 					break; // optional
 			   case 1 :
 				   selectedSpot.setSpotImage(imageType4);
 				   selectedSpot.getDeicing().setType4StopTime(setTime());
+					try {
+						selectedSpot.getDashboardApi().PostData();
+						selectedSpot.getDashboardApi().PostConf1();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 
 					break; // optional
 			}

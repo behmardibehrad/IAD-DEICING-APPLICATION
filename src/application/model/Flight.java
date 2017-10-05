@@ -14,6 +14,7 @@ public class Flight {
 	private StringProperty estDeparture;
 
 
+
 	//public Flight() {
 	//	this(null);
 	//}
@@ -23,6 +24,7 @@ public class Flight {
 	this.aircraftType = new SimpleStringProperty("");
 	this.carrier = new SimpleStringProperty("");
 	}
+	
 
 	public Flight(String flightNumber) {
 		this.flightNumber = new SimpleStringProperty(flightNumber);
@@ -40,6 +42,8 @@ public class Flight {
 		this.carrier = new SimpleStringProperty(carrier);
 
 	}
+	
+
 
 	public String getFlightNumber() {
 		return flightNumber.get();
@@ -98,13 +102,29 @@ public class Flight {
 		this.aircraftType = new SimpleStringProperty("");
 		this.carrier = new SimpleStringProperty("");
 	}
+	
 
 	public String toString() {
 		return "Flight: " + getFlightNumber() + "\nCarrier: " + getCarrier() + "\nAircraft: " + getAircraftType()
 				+ "\nTail#: " + getTailNumber();
 	}
+	/*
+	public String toString() {
+		return  getFlightNumber() + "\n" + getCarrier() + "\n" + getAircraftType()
+				+ "\n" + getTailNumber();
+	}
 	
+	*/
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 

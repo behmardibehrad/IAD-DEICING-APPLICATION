@@ -228,13 +228,13 @@ public class Spot {
 	}
 
 	public void setFlight(Flight flight) {
+	
 		this.flight.setAircraftType(flight.getAircraftType());
 		this.flight.setCarrier(flight.getCarrier());
 		this.flight.setFlightNumber(flight.getFlightNumber());
 		this.flight.setTailNumber(flight.getTailNumber());
 	}
 	
-
 	
 
 	public String getApiTileID() {

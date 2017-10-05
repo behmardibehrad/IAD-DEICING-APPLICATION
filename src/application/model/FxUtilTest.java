@@ -15,6 +15,7 @@ public class FxUtilTest {
     public static<T> void autoCompleteComboBoxPlus(ComboBox<T> comboBox, AutoCompleteComparator<T> comparatorMethod) {
         ObservableList<T> data = comboBox.getItems();
 
+
         comboBox.setEditable(true);
         comboBox.getEditor().focusedProperty().addListener(observable -> {
             if (comboBox.getSelectionModel().getSelectedIndex() < 0) {
@@ -90,7 +91,8 @@ public class FxUtilTest {
         if (comboBox.getSelectionModel().getSelectedIndex() < 0) {
             return null;
         } else {
-            return comboBox.getItems().get(comboBox.getSelectionModel().getSelectedIndex());
+           //return comboBox.getItems().get(comboBox.getSelectionModel().getSelectedIndex());
+           return comboBox.getValue();
         }
     }
 

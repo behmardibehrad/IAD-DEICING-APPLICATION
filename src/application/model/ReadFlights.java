@@ -35,23 +35,15 @@ public class ReadFlights {
 						Cell aircraftTypeCell = currentRow.getCell(2);
 						Cell carrierCell = currentRow.getCell(3);
 						
+		                
+		                
 		                Flight f = new Flight();
-		                
-		                
 		                
 						f.setFlightNumber(formatter.formatCellValue(flightNumberCell));
 						f.setTailNumber(formatter.formatCellValue(tailNumberCell));
 						f.setAircraftType(formatter.formatCellValue(aircraftTypeCell));
 						f.setCarrier(formatter.formatCellValue(carrierCell));
 						flights.add(f);
-						//s2[rowIndex] = firstname.getStringCellValue().toString() + " " + lastName.getStringCellValue().toString() + " "
-								//+ nNumber.getStringCellValue().toString();
-						
-						//employees.add(firstNameCell.getStringCellValue().toString() + " " + lastName.getStringCellValue().toString() + " "
-								//+ nNumber.getStringCellValue().toString());
-						
-						//flights.add("FLIGHT: "+f.getFlightNumber() + "\nTAIL: " + f.getTailNumber() + "\nA/c: "
-								//+ f.getAircraftType() + "\nCarrier: "+f.getCarrier());
 
 					}
 				}
@@ -103,8 +95,8 @@ public class ReadFlights {
 					//employees.add(firstNameCell.getStringCellValue().toString() + " " + lastName.getStringCellValue().toString() + " "
 							//+ nNumber.getStringCellValue().toString());
 					
-					flights.add("FLIGHT: "+flightNumber + "\nTAIL: " + tailNumber + "\nA/c: "
-							+ aircraftType + "\nCarrier: "+carrier);
+					flights.add("FLIGHT:"+flightNumber + "\nTAIL:" + tailNumber + "\nA/c:"
+							+ aircraftType + "\nCarrier:"+carrier);
 
 				}
 			}
