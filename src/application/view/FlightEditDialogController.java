@@ -81,7 +81,7 @@ public class FlightEditDialogController {
 			spot.getFlight().setTailNumber(tailNumberField.getText());
 			spot.getFlight().setCarrier(carrierField.getText());
 			spot.getFlight().setAircraftType(aircraftTypeField.getText());
-
+			//spot.setTileDataString(tileDataString);
 			okClicked = true;
 			dialogStage.close();
 

@@ -1,5 +1,17 @@
 package application.model;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
@@ -9,6 +21,7 @@ public class Spot {
 	private int spotIntType;
 	private Boolean spotHasFlightData;
 	private Boolean active;
+	private Boolean dashboardDataPosted;
 	private StringProperty spotNumber;
 	private StringProperty truck1;
 	private StringProperty truck2;
@@ -21,9 +34,8 @@ public class Spot {
 	private String activityLable;
 	private String apiTileID;
 	private StringProperty comment;
-
-
 	private Image spotImage;
+
 
 	Flight flight;
 	Deicing deicing;
@@ -35,6 +47,7 @@ public class Spot {
 		this.spotIntType = 0;
 		this.active = false;
 		this.spotHasFlightData = false;
+		this.dashboardDataPosted = false;
 		this.spotNumber = new SimpleStringProperty(spotNumber);
 		this.truck1 = new SimpleStringProperty("");
 		this.freezepoint1 = new SimpleStringProperty("");
@@ -227,6 +240,17 @@ public class Spot {
 	public DashboardApi getDashboardApi() {
 		return spotApi;
 	}
+	
+	public Boolean getDashboardDataPosted() {
+		return dashboardDataPosted;
+	}
+
+
+	public void setDashboardDataPosted(Boolean dashboardDataPosted) {
+		this.dashboardDataPosted = dashboardDataPosted;
+	}
+	
+	
 	public void setDeicing(Deicing deicing) {
 		this.deicing.setFluidType(deicing.getFluidType());
 		this.deicing.setStartTime(deicing.getStartTime());
@@ -295,6 +319,7 @@ public class Spot {
 	return apiTileID;
 }
 	
+
 
 
 	public String toString() {

@@ -30,6 +30,9 @@ public class DashboardApi {
 		this.deicing = deicing;
 		this.spot = spot;
 	}
+	
+	
+	
 
 	// HTTP POST request
 	public void PostData() throws Exception {
