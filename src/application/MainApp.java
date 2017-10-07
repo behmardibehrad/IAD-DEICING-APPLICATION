@@ -20,6 +20,7 @@ import javafx.scene.layout.BorderPane;
 
 public class MainApp extends Application {
 
+
 	private ObservableList<Spot> spotData = FXCollections.observableArrayList();
 
 	public MainApp() {

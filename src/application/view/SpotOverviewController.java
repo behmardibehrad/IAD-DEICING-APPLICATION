@@ -203,7 +203,7 @@ public class SpotOverviewController {
     @FXML
     private NumberAxis yAxis;
     
-	private AllGraphData graphData = new AllGraphData();
+	//private AllGraphData graphData = new AllGraphData();
 	
 	
 	
@@ -222,7 +222,7 @@ public class SpotOverviewController {
 		planePerSpot.setTitle("A/C Fluid requests per SPOT ");
 		xAxis.setLabel("SPOTS");
 		yAxis.setLabel("A/C De-iced");
-		xAxis.setCategories(graphData.getxAsixSpotS());
+		//xAxis.setCategories(graphData.getxAsixSpotS());
 		
 		//planePerSpot.getData().add(graphData.getGrapg1series());
 
@@ -257,9 +257,10 @@ public class SpotOverviewController {
 		comment.setCellValueFactory(cellData -> cellData.getValue().commentProperty());
 
 		// Listen for selection changes and show the spot details when changed.
+		
 		spotsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showSpotDetails(newValue));
 		spotsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> newValue.setPlaneCalledIn(setTime()));
-	
+		spotsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> newValue.setApiTileID(newValue.getSpotNumber()));
 		
 		imageView.setImage(imageBlack);
 		padStatusImageViewSpot1Front.setImage(imageBlack);
@@ -288,7 +289,16 @@ public class SpotOverviewController {
 	
 	private void showSpotDetails(Spot selectedSpot) {
 		
-		if(!selectedSpot.getIsSetup()) {handleEditSpot();}
+		//if(!selectedSpot.getIsSetup()) {handleEditSpot();}
+		
+		if(!selectedSpot.getPostPlaneCalledInDataPosted()) {
+			try {
+				selectedSpot.getDashboardApi().PostPlaneCalledInData();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 		
 		

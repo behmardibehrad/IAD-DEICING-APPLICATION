@@ -11,6 +11,8 @@ public class Spot {
 	private Boolean isSetup;
 	private Boolean typeISprayed;
 	private Boolean typeIVSprayed;
+	private Boolean spotHasPlaneCalledInTime;
+	private Boolean PostPlaneCalledInDataPosted;
 
 	private StringProperty spotNumber;
 	private StringProperty truck1;
@@ -33,7 +35,7 @@ public class Spot {
 	private Flight flight;
 	private Deicing deicing;
 	private DashboardApi spotApi;
-	//private Spot spot;
+	private Spot spot;
 
 
 	public Spot(String spotNumber) {
@@ -43,6 +45,8 @@ public class Spot {
 		this.isSetup = false;
 		this.typeISprayed = false;
 		this.typeIVSprayed = false;
+		this.spotHasPlaneCalledInTime = false;
+		this.PostPlaneCalledInDataPosted = false;
 		this.spotNumber = new SimpleStringProperty(spotNumber);
 		this.truck1 = new SimpleStringProperty("");
 		this.truck2 = new SimpleStringProperty("");
@@ -89,6 +93,16 @@ public class Spot {
 		return typeIVSprayed;}
 	public void setTypeIVSprayed(Boolean typeIVSprayed) {
 		this.typeIVSprayed = typeIVSprayed;}
+	
+	public Boolean getSpotHasPlaneCalledInTime() {
+		return spotHasPlaneCalledInTime;}
+	public void setSpotHasPlaneCalledInTime(Boolean spotHasPlaneCalledInTime) {
+		this.spotHasPlaneCalledInTime = spotHasPlaneCalledInTime;}
+	
+	public Boolean getPostPlaneCalledInDataPosted() {
+		return PostPlaneCalledInDataPosted;}
+	public void setPostPlaneCalledInDataPosted(Boolean postPlaneCalledInDataPosted) {
+		PostPlaneCalledInDataPosted = postPlaneCalledInDataPosted;}
 	
 	public String getSpotNumber() {
 		return spotNumber.get();}
@@ -178,6 +192,7 @@ public class Spot {
 	public String getApiTileID() {
 		return apiTileID;}
 	public String setApiTileID(String spotNumber) {
+		
     switch(spotNumber) {
        case "SPOT 1 F" :
       	 this.apiTileID = "1";
