@@ -184,6 +184,10 @@ public class SpotOverviewController {
 	private Button release;
 	@FXML
 	private Button resetWeb;
+	@FXML
+	private Button editFlight;
+	@FXML
+	private Button clearSpotButton;
 
 	@FXML
 	private TextArea commentArea;
@@ -275,6 +279,7 @@ public class SpotOverviewController {
 		padStatusImageViewSpot5Rear.setImage(imageBlack);
 
 		fluidTypeComboBox.getItems().addAll("TYPE I", "TYPE IV");
+		fluidTypeComboBox.setPromptText("Fluid Type");
 		searchSSD.getItems().addAll(FlightInfo.getFlights());
 		
         FxUtilTest.autoCompleteComboBoxPlus(searchSSD, 
@@ -288,103 +293,135 @@ public class SpotOverviewController {
 	
 	
 	private void showSpotDetails(Spot selectedSpot) {
-		
-		//if(!selectedSpot.getIsSetup()) {handleEditSpot();}
-		
-		if(!selectedSpot.getPostPlaneCalledInDataPosted()) {
-			try {
-				selectedSpot.getDashboardApi().PostPlaneCalledInData();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
-
-
-		
-		
-		
-		if(selectedSpot.getDeicing().getFluidTypeInt()==0)
-		{
-		fluidTypeComboBox.getSelectionModel().selectFirst();}
-		else if(selectedSpot.getDeicing().getFluidTypeInt()==1) {
-			fluidTypeComboBox.getSelectionModel().select(1);}
-		else {
-			fluidTypeComboBox.getSelectionModel().clearSelection();
-		fluidTypeComboBox.setPromptText("Fluid Type");
-		}
 		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), activityLable);
 	    fadeTransition.setFromValue(1.0);
 	    fadeTransition.setToValue(0.0);
 	    fadeTransition.setCycleCount(Animation.INDEFINITE);
 	    fadeTransition.play();
 		
-		//check to see if spot has flight
-		if(!selectedSpot.getFlight().getFlightNumber().equals(""))
-		{
-			selectedSpot.setSpotHasFlightData(true);
-			flightNumberLabel.setText(selectedSpot.getFlight().getFlightNumber());
-			tailNumberLabel.setText(selectedSpot.getFlight().getTailNumber());
-			aircraftTypeLabel.setText(selectedSpot.getFlight().getAircraftType());
-			carrierLabel.setText(selectedSpot.getFlight().getCarrier());
-			type1starttime.setText(selectedSpot.getDeicing().getType1StarttTime());
-			type4starttime.setText(selectedSpot.getDeicing().getType4Startime());
-			type1stoptime.setText(selectedSpot.getDeicing().getType1StoptTime());
-			type4stoptime.setText(selectedSpot.getDeicing().getType4StoptTime());
-			fluidTypeLable.setText(selectedSpot.getDeicing().getFluidType());
-			commentArea.setText(selectedSpot.getComment());
+		//If the spot info is not setup keep opening the spot info dialog
+		//if(!selectedSpot.getIsSetup()) {handleEditSpot();}
+		
+		
+//*******    IF spot has flight data
+		if(selectedSpot.getSpotHasFlightData()) {
 			
-			if(selectedSpot.getDeicing().getFluidTypeInt()==2 && selectedSpot.getSpotHasFlightData())
-			{
-				start.setDisable(true);
-				stop.setDisable(true);
-				release.setDisable(true);
-				fluidTypeComboBox.setDisable(false);
+		//check to see if flight data has been posted
+		if(!selectedSpot.getPostPlaneCalledInDataPosted()) {
+			Thread th = new Thread(() -> {
+			try {
+				selectedSpot.getDashboardApi().PostPlaneCalledInData();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			else if(selectedSpot.getDeicing().getFluidTypeInt()!=2 && selectedSpot.getActive() )
-			{
-				start.setDisable(true);
-				stop.setDisable(false);
-				release.setDisable(true);
-				activityLable.setText(selectedSpot.getActivityLable());
-				fluidTypeComboBox.setDisable(true);
+			});
+			th.setDaemon(true);
+			th.start();
+		}
+		
+		// if fluid type is not set, show fluid box 
+		if(selectedSpot.getDeicing().getFluidTypeInt() == 2 || selectedSpot.getDeicing().getFluidTypeInt() == -1 ) {
+			fluidTypeComboBox.setDisable(false);
+			release.setDisable(true);
+			start.setDisable(true);
+			stop.setDisable(true);
+			resetWeb.setDisable(true);
+			editFlight.setDisable(false);
+
+			fluidTypeComboBox.getSelectionModel().clearSelection();
+			//fluidTypeComboBox.setPromptText("Fluid Type");
+			
+		}
+		// if fluid type is set, set the fluid type combobox value to spot's fluid type and 
+		// check to see if flight is active
+		else {
+			fluidTypeLable.setText(selectedSpot.getDeicing().getFluidType());
+
+			if(!selectedSpot.getActive() && (!selectedSpot.getTypeISprayed() && !selectedSpot.getTypeIVSprayed())) {
+			switch(selectedSpot.getDeicing().getFluidTypeInt()) {
+			   case 0 :
+				   selectedSpot.setSpotImage(imageType1);
+				   fluidTypeComboBox.getSelectionModel().select(0);
+					break;
+			   case 1 :
+				   selectedSpot.setSpotImage(imageType4);
+				   fluidTypeComboBox.getSelectionModel().select(1);
+					break;	
+			}
+			fluidTypeComboBox.setDisable(false);
+			release.setDisable(true);
+			start.setDisable(false);
+			stop.setDisable(true);
+			resetWeb.setDisable(true);
+			editFlight.setDisable(false);
+
+
+			}
+			else if (!selectedSpot.getActive() && (selectedSpot.getTypeISprayed() || selectedSpot.getTypeIVSprayed())) {
 				switch(selectedSpot.getDeicing().getFluidTypeInt()) {
 				   case 0 :
-					   selectedSpot.setSpotImage(imageType1Blink);
-						break; // optional
+					   selectedSpot.setSpotImage(imageType1);
+					   fluidTypeComboBox.getSelectionModel().select(0);
+						break;
 				   case 1 :
-					   selectedSpot.setSpotImage(imageType4Blink);
-						break; // optional
-				}
-			}
-			else if(selectedSpot.getDeicing().getFluidTypeInt()!=2 && !selectedSpot.getActive())
-			{
-
+					   selectedSpot.setSpotImage(imageType4);
+					   fluidTypeComboBox.getSelectionModel().select(1);
+						break;	
+				}	
 				fluidTypeComboBox.setDisable(false);
 				release.setDisable(false);
 				start.setDisable(false);
-				stop.setDisable(false);
-				activityLable.setText("");
-				if(!selectedSpot.getPostPlaneFluidSet()) {
-					Thread th1 = new Thread(() -> {
-						try {
-							selectedSpot.getDashboardApi().PostFluidTypeSet();
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						});
-						th1.setDaemon(true);
-						th1.start();
-					}
+				stop.setDisable(true);
+				resetWeb.setDisable(true);
+				editFlight.setDisable(false);
+
 			}
+			else if(selectedSpot.getActive()) {
+				switch(selectedSpot.getDeicing().getFluidTypeInt()) {
+				   case 0 :
+					   selectedSpot.setSpotImage(imageType1Blink);
+					   fluidTypeComboBox.getSelectionModel().select(0);
+						break;
+				   case 1 :
+					   selectedSpot.setSpotImage(imageType4Blink);
+					   fluidTypeComboBox.getSelectionModel().select(1);
+						break;	
+				}
+
+				fluidTypeComboBox.setDisable(true);
+				release.setDisable(true);
+				start.setDisable(true);
+				stop.setDisable(false);
+				resetWeb.setDisable(true);
+				editFlight.setDisable(true);
+			}	
 		}
+
+		flightNumberLabel.setText(selectedSpot.getFlight().getFlightNumber());
+		tailNumberLabel.setText(selectedSpot.getFlight().getTailNumber());
+		aircraftTypeLabel.setText(selectedSpot.getFlight().getAircraftType());
+		carrierLabel.setText(selectedSpot.getFlight().getCarrier());
+		activityLable.setText(selectedSpot.getActivityLable());
+		type1starttime.setText(selectedSpot.getDeicing().getType1StarttTime());
+		type4starttime.setText(selectedSpot.getDeicing().getType4Startime());
+		type1stoptime.setText(selectedSpot.getDeicing().getType1StoptTime());
+		type4stoptime.setText(selectedSpot.getDeicing().getType4StoptTime());
+		fluidTypeLable.setText(selectedSpot.getDeicing().getFluidType());
+		
+		
+
+		}
+		
+		//******************************************************
 		else
 		{
+
+			fluidTypeComboBox.getSelectionModel().clearSelection();
 			fluidTypeComboBox.setDisable(true);
 			release.setDisable(true);
 			start.setDisable(true);
 			stop.setDisable(true);
+			resetWeb.setDisable(true);
 			flightNumberLabel.setText("");
 			tailNumberLabel.setText("");
 			aircraftTypeLabel.setText("");
@@ -397,6 +434,9 @@ public class SpotOverviewController {
 			activityLable.setText("");
 			commentArea.setText("");
 		}
+		
+		
+
 		
 		middleHiddenSpotNumber.setText(selectedSpot.getSpotNumber());
 		spotLabel.setText(selectedSpot.getSpotNumber());
@@ -428,6 +468,8 @@ public class SpotOverviewController {
 		spot.setActive(false);
 		spot.setSpotHasFlightData(false);
 		spot.setPostPlaneCalledInDataPosted(false);
+		spot.setTypeISprayed(false);
+		spot.setTypeIVSprayed(false);
 		spot.setcomment("");
 		spot.setSpotImage(imageBlack);
 		flightNumberLabel.setText("");
@@ -454,7 +496,6 @@ public class SpotOverviewController {
 			boolean okClicked = mainApp.showSpotEditDialog(selectedSpot);
 			if (okClicked) {
 				showSpotDetails(selectedSpot);
-				selectedSpot.setSpotHasFlightData(true);
 			}
 
 		} else {
@@ -476,16 +517,15 @@ public class SpotOverviewController {
 		if (selectedSpot != null) {
 			boolean okClicked = mainApp.showFlightEditDialog(selectedSpot);
 			if (okClicked) {
-				
-				
-	
+				Thread th = new Thread(() -> {
 				try {
 					selectedSpot.getDashboardApi().PostPlaneCalledInData();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				} catch (Exception e) {e.printStackTrace();
 				}
-
+				});
+				th.setDaemon(true);
+				th.start();
+				selectedSpot.setSpotHasFlightData(true);
 			}
 
 		} else {
@@ -514,10 +554,6 @@ public class SpotOverviewController {
 	private void handleReleaseFlight() {
 		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
 		
-	
-		
-
-
 			String ac = selectedSpot.getFlight().getAircraftType();
 			if (ac.equals("XMJ") || ac.equals("XR4")) {
 				selectedSpot.getDeicing().setAircraftCheck("Tactile");
@@ -527,8 +563,7 @@ public class SpotOverviewController {
 
 			releaseTableData.add(copySpot(selectedSpot));
 			releaseTable.setItems(releaseTableData);
-			//selectedSpot.setSpotHasFlightData(false);
-			//selectedSpot.setActive(false);
+
 			clearSpot(selectedSpot);
 			showSpotDetails(selectedSpot);
 			Thread th = new Thread(() -> {
@@ -541,8 +576,6 @@ public class SpotOverviewController {
 			});
 			th.setDaemon(true);
 			th.start();
-			// spotsTable.getSelectionModel().clearSelection();
-			// fluidTypeComboBox.setValue("Fluid Type");
 		}
 	
 	
@@ -575,11 +608,8 @@ public class SpotOverviewController {
 		copiedSpot.setDriver2(spot.getDriver2());
 		copiedSpot.setSprayer2(spot.getSprayer2());
 		copiedSpot.getFlight().setFlightNumber(spot.getFlight().getFlightNumber());
-		System.out.println(spot.getComment());
 		copiedSpot.setcomment(spot.getComment());
-
 		return copiedSpot;
-
 	}
 
 	
@@ -589,26 +619,12 @@ public class SpotOverviewController {
 
 			Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
 			selectedSpot.setFlight(FxUtilTest.getComboBoxValue(searchSSD));
+			selectedSpot.setSpotHasFlightData(true);
 			showSpotDetails(selectedSpot);
 			searchSSD.getSelectionModel().clearSelection();
-			searchSSD.getItems().addAll(FlightInfo.getFlights());	
-
-		
+			searchSSD.getItems().addAll(FlightInfo.getFlights());		
 	}
 
-//		selectedSpot.setFlight(FxUtilTest.getComboBoxValue(searchSSD));
-		
-		//if (FxUtilTest.getComboBoxValue(searchSSD) instanceof Flight) {
-//System.out.print("flight");
-//}
-		//f=FxUtilTest.getComboBoxValue(searchSSD);
-		//System.out.println(FxUtilTest.getComboBoxValue(searchSSD).getFlightNumber());
-
-
-
-
-		//searchSSD.getSelectionModel().clearSelection();
-		//selectedSpot.getFlight().setFlightNumber(searchSSD.getSelectionModel().getSelectedItem().getFlightNumber());
 		
 
 		
@@ -625,6 +641,7 @@ public class SpotOverviewController {
 		selectedSpot.getDeicing().setFluidType(fluidTypeComboBox.getSelectionModel().getSelectedItem());
 		selectedSpot.getDeicing().setFluidTypeInt(fluidTypeComboBox.getSelectionModel().getSelectedIndex());
 		
+		/*
 		switch(selectedSpot.getDeicing().getFluidTypeInt()) {
 		   case 0 :
 			   selectedSpot.setSpotImage(imageType1);
@@ -633,7 +650,7 @@ public class SpotOverviewController {
 			   selectedSpot.setSpotImage(imageType4);
 				break;	
 		}
-
+*/
 
 		imageView.setImage(selectedSpot.getSpotImage());
 		UpdateStatusTableImage(selectedSpot);
@@ -657,9 +674,9 @@ public class SpotOverviewController {
 				selectedSpot.getDeicing().setStartTime(setTime());
 				selectedSpot.setActive(true);
 				selectedSpot.setActivityLable("De-Icing In Progress!");
-				selectedSpot.setSpotImage(imageType1Blink);
+				//selectedSpot.setSpotImage(imageType1Blink);
 				selectedSpot.getDeicing().setType1StartTime(setTime());
-				imageView.setImage(selectedSpot.getSpotImage());
+				//imageView.setImage(selectedSpot.getSpotImage());
 				selectedSpot.setTypeISprayed(true);
 				
 				//Thread th = new Thread(() -> {
@@ -683,8 +700,8 @@ public class SpotOverviewController {
 				selectedSpot.getDeicing().setType4StartTime(setTime());
 				selectedSpot.setActive(true);
 				selectedSpot.setActivityLable("De-Icing In Progress!");
-				selectedSpot.setSpotImage(imageType4Blink);
-				imageView.setImage(selectedSpot.getSpotImage());
+				//selectedSpot.setSpotImage(imageType4Blink);
+				//imageView.setImage(selectedSpot.getSpotImage());
 				selectedSpot.setTypeIVSprayed(true);
 				//Thread th1 = new Thread(() -> {
 				try {
