@@ -42,22 +42,6 @@ public class FlightEditDialogController {
 		carrierField.setText(spot.getFlight().getCarrier());
 		aircraftTypeField.setText(spot.getFlight().getAircraftType());
 
-		//behrad TextFields.bindAutoCompletion(flightNumberField, DeicersInfo.getApiFlightsFlightNumber());
-		/*
-		 * these were the original code from tutorial;
-		 * truck1Field.setText(spot.getTruck1());
-		 * dirver1Field.setText(spot.getDriver1());
-		 * sprayer1Field.setText(spot.getSprayer1());
-		 * truck2Field.setText(spot.getTruck2());
-		 * dirver2Field.setText(spot.getDriver2());
-		 * sprayer2Field.setText(spot.getSprayer2());
-		 * 
-		 * TextFields.bindAutoCompletion(truck1Field,DeicersInfo.getTrucks());
-		 * TextFields.bindAutoCompletion(dirver1Field,DeicersInfo.getDeicers());
-		 * TextFields.bindAutoCompletion(sprayer1Field,DeicersInfo.getDeicers());
-		 * TextFields.bindAutoCompletion(truck2Field,DeicersInfo.getTrucks());
-		 */
-
 	}
 
 	public void clearFlight() {

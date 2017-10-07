@@ -35,6 +35,10 @@ public class DashboardApi  {
 	}
 
 	public void PostPlaneCalledInData() throws Exception {
+		if(spot.getSpotHasFlightData() && !spot.getPostPlaneCalledInDataPosted()) {
+		spot.setPostPlaneCalledInDataPosted(true);
+		System.out.print("\nPostPlaneCalledInData" + spot.getPostPlaneCalledInDataPosted());
+		
 		String url1 = "http://52.35.148.5:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/push";
 		HttpClient client1 = new DefaultHttpClient();
 		HttpPost post1 = new HttpPost(url1);
@@ -59,11 +63,20 @@ public class DashboardApi  {
 		urlParameters1.add(new BasicNameValuePair("data", tileDataString));
 		post1.setEntity(new UrlEncodedFormEntity(urlParameters1));
 		client1.execute(post1);
-		post1.abort();
+		post1.abort();}
+		else
+		{
+			System.out.print("\nPostPlaneCalledInData() Already posted");
+		}
+
 		
 	}
 	
 	public void PostFluidTypeSet() throws Exception {
+		
+		if(!spot.getPostPlaneFluidSet()) {
+		spot.setPostPlaneCalledInDataPosted(true);
+		System.out.print("\nPostFluidTypeSet" + spot.getPostPlaneFluidSet());
 
 		String urlConf = "http://52.35.148.5:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/tileconfig/"
 				+ spot.getApiTileID();
@@ -71,7 +84,7 @@ public class DashboardApi  {
 		HttpPost postConf = new HttpPost(urlConf);
 		postConf.setHeader("User-Agent", USER_AGENT);
 		String color = "";
-		switch(0) {
+		switch(deicing.getFluidTypeInt()) {
 		   case 0 :
 			   color = "orange";
 				break; // optional
@@ -88,7 +101,12 @@ public class DashboardApi  {
 		urlParametersConf.add(new BasicNameValuePair("value", tileConfValueString));
 		postConf.setEntity(new UrlEncodedFormEntity(urlParametersConf));
 		clientConf.execute(postConf);
-		postConf.abort();
+		postConf.abort();}
+		else
+		{
+			System.out.print("\nPostPlaneFluidSet() Already posted");
+		}
+
 	}
 	
 	

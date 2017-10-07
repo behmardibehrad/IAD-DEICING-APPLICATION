@@ -295,10 +295,12 @@ public class SpotOverviewController {
 			try {
 				selectedSpot.getDashboardApi().PostPlaneCalledInData();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		
+
+
 		
 		
 		
@@ -363,6 +365,18 @@ public class SpotOverviewController {
 				start.setDisable(false);
 				stop.setDisable(false);
 				activityLable.setText("");
+				if(!selectedSpot.getPostPlaneFluidSet()) {
+					Thread th1 = new Thread(() -> {
+						try {
+							selectedSpot.getDashboardApi().PostFluidTypeSet();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						});
+						th1.setDaemon(true);
+						th1.start();
+					}
 			}
 		}
 		else
@@ -413,6 +427,7 @@ public class SpotOverviewController {
 		spot.getDeicing().setFluidTypeInt(2);
 		spot.setActive(false);
 		spot.setSpotHasFlightData(false);
+		spot.setPostPlaneCalledInDataPosted(false);
 		spot.setcomment("");
 		spot.setSpotImage(imageBlack);
 		flightNumberLabel.setText("");
@@ -439,6 +454,7 @@ public class SpotOverviewController {
 			boolean okClicked = mainApp.showSpotEditDialog(selectedSpot);
 			if (okClicked) {
 				showSpotDetails(selectedSpot);
+				selectedSpot.setSpotHasFlightData(true);
 			}
 
 		} else {
@@ -617,16 +633,7 @@ public class SpotOverviewController {
 			   selectedSpot.setSpotImage(imageType4);
 				break;	
 		}
-		Thread th = new Thread(() -> {
-		try {
-			selectedSpot.getDashboardApi().PostFluidTypeSet();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		});
-		th.setDaemon(true);
-		th.start();
+
 
 		imageView.setImage(selectedSpot.getSpotImage());
 		UpdateStatusTableImage(selectedSpot);
