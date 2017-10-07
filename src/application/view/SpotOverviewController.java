@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import application.MainApp;
+import application.model.AllGraphData;
 import application.model.DashboardApi;
 import application.model.Flight;
 import application.model.FlightInfo;
@@ -16,6 +17,10 @@ import javafx.animation.FadeTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -179,6 +184,7 @@ public class SpotOverviewController {
 	private Button release;
 	@FXML
 	private Button resetWeb;
+
 	@FXML
 	private TextArea commentArea;
 	// Reference to the main application.
@@ -189,13 +195,22 @@ public class SpotOverviewController {
 	private Image imageType1Blink = new Image("application/image/Type1.gif");;
 	private Image imageType4Blink = new Image("application/image/Type4.gif");;
 	private Image imageBlack = new Image("application/image/blackback.png");
-    
 
+    @FXML
+    private BarChart<String, Integer> planePerSpot;
+    @FXML
+    private CategoryAxis xAxis;
+    @FXML
+    private NumberAxis yAxis;
+    
+	private AllGraphData graphData = new AllGraphData();
 	
 	
 	
 	public SpotOverviewController() {
+		
 	}
+	
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
 		spotsTable.setItems(mainApp.getSpotData());
@@ -204,6 +219,14 @@ public class SpotOverviewController {
 
 	@FXML
 	public void initialize() {
+		planePerSpot.setTitle("A/C Fluid requests per SPOT ");
+		xAxis.setLabel("SPOTS");
+		yAxis.setLabel("A/C De-iced");
+		xAxis.setCategories(graphData.getxAsixSpotS());
+		
+		//planePerSpot.getData().add(graphData.getGrapg1series());
+
+		
 		
 		// Initialize the spot table with the one columns.
 		spotsNumberColumn.setCellValueFactory(cellData -> cellData.getValue().spotNumberProperty());
@@ -234,9 +257,10 @@ public class SpotOverviewController {
 		comment.setCellValueFactory(cellData -> cellData.getValue().commentProperty());
 
 		// Listen for selection changes and show the spot details when changed.
-		spotsTable.getSelectionModel().selectedItemProperty()
-				.addListener((observable, oldValue, newValue) -> showSpotDetails(newValue));
-
+		spotsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showSpotDetails(newValue));
+		spotsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> newValue.setPlaneCalledIn(setTime()));
+	
+		
 		imageView.setImage(imageBlack);
 		padStatusImageViewSpot1Front.setImage(imageBlack);
 		padStatusImageViewSpot1Rear.setImage(imageBlack);
@@ -258,9 +282,16 @@ public class SpotOverviewController {
 
 	}
 
-	// change the spotmodeling data look at the getter and setters
-
+	
+	
+	
+	
 	private void showSpotDetails(Spot selectedSpot) {
+		
+		if(!selectedSpot.getIsSetup()) {handleEditSpot();}
+		
+		
+		
 		if(selectedSpot.getDeicing().getFluidTypeInt()==0)
 		{
 		fluidTypeComboBox.getSelectionModel().selectFirst();}
@@ -323,8 +354,6 @@ public class SpotOverviewController {
 				stop.setDisable(false);
 				activityLable.setText("");
 			}
-			
-		
 		}
 		else
 		{
@@ -389,6 +418,7 @@ public class SpotOverviewController {
 		commentArea.setText("");
 		imageView.setImage(spot.getSpotImage());
 		UpdateStatusTableImage(spot);
+		
 	}
 
 
@@ -456,6 +486,17 @@ public class SpotOverviewController {
 	@FXML
 	private void handleReleaseFlight() {
 		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
+		
+	
+		/*
+		try {
+			clearSpot(selectedSpot);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 			
 			try {
 				selectedSpot.getDashboardApi().ClearData();
@@ -474,7 +515,7 @@ public class SpotOverviewController {
 			} else {
 				selectedSpot.getDeicing().setAircraftCheck("Post Check");
 			}
-
+*/
 			releaseTableData.add(copySpot(selectedSpot));
 			releaseTable.setItems(releaseTableData);
 			//selectedSpot.setSpotHasFlightData(false);
@@ -515,6 +556,8 @@ public class SpotOverviewController {
 		copiedSpot.setDriver2(spot.getDriver2());
 		copiedSpot.setSprayer2(spot.getSprayer2());
 		copiedSpot.getFlight().setFlightNumber(spot.getFlight().getFlightNumber());
+		System.out.println(spot.getComment());
+		copiedSpot.setcomment(spot.getComment());
 
 		return copiedSpot;
 
@@ -524,10 +567,14 @@ public class SpotOverviewController {
 	@FXML
 	public void setSearchSsd() {
 		
-		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
-		Alert alert = new Alert(AlertType.WARNING);
+
+			Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
+			selectedSpot.setFlight(FxUtilTest.getComboBoxValue(searchSSD));
+			showSpotDetails(selectedSpot);
+			searchSSD.getSelectionModel().clearSelection();
+			searchSSD.getItems().addAll(FlightInfo.getFlights());	
 		
-		selectedSpot.setFlight(FxUtilTest.getComboBoxValue(searchSSD));
+	}
 
 //		selectedSpot.setFlight(FxUtilTest.getComboBoxValue(searchSSD));
 		
@@ -536,9 +583,7 @@ public class SpotOverviewController {
 //}
 		//f=FxUtilTest.getComboBoxValue(searchSSD);
 		//System.out.println(FxUtilTest.getComboBoxValue(searchSSD).getFlightNumber());
-		showSpotDetails(selectedSpot);
-		searchSSD.getSelectionModel().clearSelection();
-		searchSSD.getItems().addAll(FlightInfo.getFlights());
+
 
 
 
@@ -548,7 +593,7 @@ public class SpotOverviewController {
 
 		
 
-	}
+	
 
 	@FXML
 	public void setFluidType() {
@@ -557,10 +602,6 @@ public class SpotOverviewController {
 		//0=type 1
 		//1=type4
 		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
-		
- 
-			
-			
 		selectedSpot.getDeicing().setFluidType(fluidTypeComboBox.getSelectionModel().getSelectedItem());
 		selectedSpot.getDeicing().setFluidTypeInt(fluidTypeComboBox.getSelectionModel().getSelectedIndex());
 		
@@ -577,10 +618,6 @@ public class SpotOverviewController {
 		imageView.setImage(selectedSpot.getSpotImage());
 		UpdateStatusTableImage(selectedSpot);
 		showSpotDetails(selectedSpot);
-
-        
-
-
 }
 
 
@@ -603,6 +640,9 @@ public class SpotOverviewController {
 				selectedSpot.setSpotImage(imageType1Blink);
 				selectedSpot.getDeicing().setType1StartTime(setTime());
 				imageView.setImage(selectedSpot.getSpotImage());
+				selectedSpot.setTypeISprayed(true);
+				
+				Thread th = new Thread(() -> {
 				try {
 					selectedSpot.getDashboardApi().PostData();
 				} catch (Exception e) {
@@ -613,6 +653,11 @@ public class SpotOverviewController {
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
+				
+				});
+				th.setDaemon(true);
+				th.start();
+				System.out.println("thread");
 				break; // optional
 		   case 1 :
 				selectedSpot.getDeicing().setType4StartTime(setTime());
@@ -620,6 +665,8 @@ public class SpotOverviewController {
 				selectedSpot.setActivityLable("De-Icing In Progress!");
 				selectedSpot.setSpotImage(imageType4Blink);
 				imageView.setImage(selectedSpot.getSpotImage());
+				selectedSpot.setTypeIVSprayed(true);
+				Thread th1 = new Thread(() -> {
 				try {
 					selectedSpot.getDashboardApi().PostData();
 				} catch (Exception e2) {
@@ -630,6 +677,9 @@ public class SpotOverviewController {
 				} catch (Exception e3) {
 					e3.printStackTrace();
 				}
+				});
+				th1.setDaemon(true);
+				th1.start();
 
 				break; // optional
 		}

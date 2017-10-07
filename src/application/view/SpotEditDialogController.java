@@ -88,6 +88,7 @@ public class SpotEditDialogController {
 			spot.setFreezepoint2(freezepoint2Field.getText());
 			spot.setSprayer2(dirver2Field.getText());
 			spot.setDriver2(sprayer2Field.getText());
+			spot.setIsSetup(true);
 
 			okClicked = true;
 			dialogStage.close();

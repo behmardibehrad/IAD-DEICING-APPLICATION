@@ -9,7 +9,9 @@ public class Spot {
 	private Boolean spotHasFlightData;
 	private Boolean active;
 	private Boolean isSetup;
-	
+	private Boolean typeISprayed;
+	private Boolean typeIVSprayed;
+
 	private StringProperty spotNumber;
 	private StringProperty truck1;
 	private StringProperty truck2;
@@ -19,7 +21,8 @@ public class Spot {
 	private StringProperty driver2;
 	private StringProperty freezepoint1;
 	private StringProperty freezepoint2;
-	private StringProperty comment; 
+	private StringProperty comment;
+	private String planeCalledIn;
 	
 	private int spotIntType;
 	
@@ -29,14 +32,17 @@ public class Spot {
 
 	private Flight flight;
 	private Deicing deicing;
-	private Spot spot;
 	private DashboardApi spotApi;
+	//private Spot spot;
+
 
 	public Spot(String spotNumber) {
 		
 		this.spotHasFlightData = false;
 		this.active = false;
 		this.isSetup = false;
+		this.typeISprayed = false;
+		this.typeIVSprayed = false;
 		this.spotNumber = new SimpleStringProperty(spotNumber);
 		this.truck1 = new SimpleStringProperty("");
 		this.truck2 = new SimpleStringProperty("");
@@ -47,6 +53,7 @@ public class Spot {
 		this.freezepoint1 = new SimpleStringProperty("");
 		this.freezepoint2 = new SimpleStringProperty("");
 		this.comment = new SimpleStringProperty("");
+		this.planeCalledIn = "";
 		this.spotIntType = 0;
 		this.activityLable = "";
 		this.apiTileID = "";
@@ -54,6 +61,7 @@ public class Spot {
 		this.flight = new Flight();
 		this.deicing = new Deicing();
 		this.spotApi = new DashboardApi(flight, deicing, this);
+		
 	}
 
 
@@ -71,6 +79,16 @@ public class Spot {
 		return isSetup;}
 	public void setIsSetup(Boolean isSetup) {
 		this.isSetup = isSetup;}
+	
+	public Boolean getTypeISprayed() {
+		return typeISprayed;}
+	public void setTypeISprayed(Boolean typeISprayed) {
+		this.typeISprayed = typeISprayed;}
+	
+	public Boolean getTypeIVSprayed() {
+		return typeIVSprayed;}
+	public void setTypeIVSprayed(Boolean typeIVSprayed) {
+		this.typeIVSprayed = typeIVSprayed;}
 	
 	public String getSpotNumber() {
 		return spotNumber.get();}
@@ -141,6 +159,11 @@ public class Spot {
 		return comment;}
 	public void setcomment(String comment) {
 		this.comment.set(comment);}
+	
+	public String getPlaneCalledIn() {
+		return planeCalledIn;}
+	public void setPlaneCalledIn(String planeCalledIn) {
+		this.planeCalledIn = planeCalledIn;}
 	
 	public int getSpotIntType() {
 		return spotIntType;}
