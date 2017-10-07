@@ -35,10 +35,6 @@ public class DashboardApi  {
 	}
 
 	public void PostPlaneCalledInData() throws Exception {
-		if(spot.getSpotHasFlightData() && !spot.getPostPlaneCalledInDataPosted()) {
-		spot.setPostPlaneCalledInDataPosted(true);
-		System.out.print("\nPostPlaneCalledInData" + spot.getPostPlaneCalledInDataPosted());
-		
 		String url1 = "http://52.35.148.5:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/push";
 		HttpClient client1 = new DefaultHttpClient();
 		HttpPost post1 = new HttpPost(url1);
@@ -63,21 +59,11 @@ public class DashboardApi  {
 		urlParameters1.add(new BasicNameValuePair("data", tileDataString));
 		post1.setEntity(new UrlEncodedFormEntity(urlParameters1));
 		client1.execute(post1);
-		post1.abort();}
-		else
-		{
-			System.out.print("\nPostPlaneCalledInData() Already posted");
-		}
-
-		
+		post1.abort();
 	}
 	
 	public void PostFluidTypeSet() throws Exception {
 		
-		if(!spot.getPostPlaneFluidSet()) {
-		spot.setPostPlaneCalledInDataPosted(true);
-		System.out.print("\nPostFluidTypeSet" + spot.getPostPlaneFluidSet());
-
 		String urlConf = "http://52.35.148.5:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/tileconfig/"
 				+ spot.getApiTileID();
 		HttpClient clientConf = new DefaultHttpClient();
@@ -101,13 +87,8 @@ public class DashboardApi  {
 		urlParametersConf.add(new BasicNameValuePair("value", tileConfValueString));
 		postConf.setEntity(new UrlEncodedFormEntity(urlParametersConf));
 		clientConf.execute(postConf);
-		postConf.abort();}
-		else
-		{
-			System.out.print("\nPostPlaneFluidSet() Already posted");
-		}
-
-	}
+		postConf.abort();
+        }
 	
 	
 	public void PostActivateConf() throws Exception {
@@ -126,7 +107,6 @@ public class DashboardApi  {
 		postConf.setEntity(new UrlEncodedFormEntity(urlParametersConf));
 		clientConf.execute(postConf);
 		postConf.abort();
-
 	}
 	
 	
@@ -144,84 +124,21 @@ public class DashboardApi  {
 		String tileDataString;
 		JSONObject tileData = new JSONObject();
 		tileData.put("upper-right-label", "Type I Start:  ");
-		tileData.put("upper-right-value", deicing.getType1StarttTime());
+		tileData.put("upper-right-value", spot.getDeicing().getType1StarttTime());
 		tileData.put("lower-right-label", "Type I End:  ");
-		tileData.put("lower-right-value", deicing.getType1StoptTime());
+		tileData.put("lower-right-value", spot.getDeicing().getType1StoptTime());
 		tileData.put("second-lower-right-label", "Type IV End:  ");
-		tileData.put("second-lower-right-value", deicing.getType4StoptTime());
+		tileData.put("second-lower-right-value", spot.getDeicing().getType4StoptTime());
 		tileData.put("second-upper-right-label", "Type IV Start:  ");
-		tileData.put("second-upper-right-value", deicing.getType4Startime());
+		tileData.put("second-upper-right-value", spot.getDeicing().getType4Startime());
 		tileDataString = tileData.toString();
 		urlParameters1.add(new BasicNameValuePair("data", tileDataString));
 		post1.setEntity(new UrlEncodedFormEntity(urlParameters1));
 		client1.execute(post1);
 		post1.abort();
-
 	}
 
-	/*
-	public void PostConf() throws Exception {
 
-		String urlConf = "http://52.35.148.5:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/tileconfig/"
-				+ spot.getApiTileID();
-		HttpClient clientConf = new DefaultHttpClient();
-		HttpPost postConf = new HttpPost(urlConf);
-		postConf.setHeader("User-Agent", USER_AGENT);
-		String color = "";
-		switch(deicing.getFluidTypeInt()) {
-		   case 0 :
-			   color = "orange";
-				break; // optional
-		   case 1 :
-			   color = "green";
-				break; // optional		
-		}
-		List<NameValuePair> urlParametersConf = new ArrayList<NameValuePair>();
-		String tileConfValueString;
-		JSONObject tileConfValue = new JSONObject();
-		tileConfValue.put("big_value_color", color);
-		tileConfValue.put("fading_background", true);
-		tileConfValueString = tileConfValue.toString();
-		urlParametersConf.add(new BasicNameValuePair("value", tileConfValueString));
-		postConf.setEntity(new UrlEncodedFormEntity(urlParametersConf));
-		clientConf.execute(postConf);
-		postConf.abort();
-
-	}
-	
-	public void PostConf1() throws Exception {
-
-		String urlConf = "http://52.35.148.5:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/tileconfig/"
-				+ spot.getApiTileID();
-		HttpClient clientConf = new DefaultHttpClient();
-		HttpPost postConf = new HttpPost(urlConf);
-		postConf.setHeader("User-Agent", USER_AGENT);
-		String color = "";
-		
-		
-		switch(deicing.getFluidTypeInt()) {
-		   case 0 :
-			   color = "orange";
-				break; // optional
-		   case 1 :
-			   color = "green";
-				break; // optional		
-		}
-
-		List<NameValuePair> urlParametersConf = new ArrayList<NameValuePair>();
-		String tileConfValueString;
-		JSONObject tileConfValue = new JSONObject();
-		tileConfValue.put("big_value_color", color);
-		tileConfValue.put("fading_background", false);
-		tileConfValueString = tileConfValue.toString();
-		urlParametersConf.add(new BasicNameValuePair("value", tileConfValueString));
-		postConf.setEntity(new UrlEncodedFormEntity(urlParametersConf));
-		clientConf.execute(postConf);
-		postConf.abort();
-
-	}
-	
-	*/
 
 	public void ClearData() throws Exception {
 
@@ -262,6 +179,7 @@ public class DashboardApi  {
 		post.setEntity(new UrlEncodedFormEntity(urlParameters));
 		client.execute(post);
 		post.abort();
+
 
 	}
 
@@ -321,9 +239,12 @@ public class DashboardApi  {
 		clientConf.execute(postConf);
 		postConf.abort();
 
+
+
+
 	}
 	
-	
+	/*
 	public void ClearConf() throws Exception {
 
 		String urlConf = "http://52.35.148.5:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/tileconfig/"
@@ -343,6 +264,7 @@ public class DashboardApi  {
 		postConf.abort();
 	}
 
+*/
 	private void ResetAllConf(String i) throws Exception {
 
 		String urlConf = "http://52.35.148.5:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/tileconfig/" + i;

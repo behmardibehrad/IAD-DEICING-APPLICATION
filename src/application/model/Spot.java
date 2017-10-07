@@ -15,6 +15,8 @@ public class Spot {
 	
 	private Boolean PostPlaneCalledInDataPosted;
 	private Boolean PostPlaneFluidSet;
+	private Boolean PostActiveConfPosted;
+	private Boolean PostActiveData;
 
 	private StringProperty spotNumber;
 	private StringProperty truck1;
@@ -47,10 +49,12 @@ public class Spot {
 		this.isSetup = false;
 		this.typeISprayed = false;
 		this.typeIVSprayed = false;
-		
 		this.spotHasPlaneCalledInTime = false;
+		
 		this.PostPlaneCalledInDataPosted = false;
 		this.PostPlaneFluidSet = false;
+		this.PostActiveConfPosted = false;
+		this.PostActiveData = false;
 		
 		this.spotNumber = new SimpleStringProperty(spotNumber);
 		this.truck1 = new SimpleStringProperty("");
@@ -116,6 +120,15 @@ public class Spot {
 	public void setPostPlaneFluidSet(Boolean postPlaneFluidSet) {
 		PostPlaneFluidSet = postPlaneFluidSet;}
 	
+	public Boolean getPostActiveConfPosted() {
+		return PostActiveConfPosted;}
+	public void setPostActiveConfPosted(Boolean postActiveConfPosted) {
+		PostActiveConfPosted = postActiveConfPosted;}
+	
+	public Boolean getPostActiveData() {
+		return PostActiveData;}
+	public void setPostActiveData(Boolean postActiveData) {
+		PostActiveData = postActiveData;}
 	
 	
 	public String getSpotNumber() {

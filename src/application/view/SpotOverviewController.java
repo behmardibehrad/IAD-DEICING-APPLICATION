@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Optional;
+
 import application.MainApp;
 import application.model.AllGraphData;
 import application.model.DashboardApi;
@@ -24,6 +26,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -262,9 +265,10 @@ public class SpotOverviewController {
 
 		// Listen for selection changes and show the spot details when changed.
 		
-		spotsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showSpotDetails(newValue));
+		
 		spotsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> newValue.setPlaneCalledIn(setTime()));
 		spotsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> newValue.setApiTileID(newValue.getSpotNumber()));
+		spotsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showSpotDetails(newValue));
 		
 		imageView.setImage(imageBlack);
 		padStatusImageViewSpot1Front.setImage(imageBlack);
@@ -306,18 +310,24 @@ public class SpotOverviewController {
 //*******    IF spot has flight data
 		if(selectedSpot.getSpotHasFlightData()) {
 			
-		//check to see if flight data has been posted
-		if(!selectedSpot.getPostPlaneCalledInDataPosted()) {
-			Thread th = new Thread(() -> {
-			try {
-				selectedSpot.getDashboardApi().PostPlaneCalledInData();
-			} catch (Exception e) {
-				e.printStackTrace();
+
+			//check to see if flight data has been posted
+			if(!selectedSpot.getPostPlaneCalledInDataPosted()) {
+				Thread th = new Thread(() -> {
+				try {
+					selectedSpot.getDashboardApi().PostPlaneCalledInData();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				});
+				th.setDaemon(true);
+				th.start();
 			}
-			});
-			th.setDaemon(true);
-			th.start();
-		}
+
+		
+
+		
+
 		
 		// if fluid type is not set, show fluid box 
 		if(selectedSpot.getDeicing().getFluidTypeInt() == 2 || selectedSpot.getDeicing().getFluidTypeInt() == -1 ) {
@@ -325,8 +335,10 @@ public class SpotOverviewController {
 			release.setDisable(true);
 			start.setDisable(true);
 			stop.setDisable(true);
-			resetWeb.setDisable(true);
+			resetWeb.setDisable(false);
 			editFlight.setDisable(false);
+			clearSpotButton.setDisable(false);
+			
 
 			fluidTypeComboBox.getSelectionModel().clearSelection();
 			//fluidTypeComboBox.setPromptText("Fluid Type");
@@ -352,8 +364,10 @@ public class SpotOverviewController {
 			release.setDisable(true);
 			start.setDisable(false);
 			stop.setDisable(true);
-			resetWeb.setDisable(true);
+			resetWeb.setDisable(false);
 			editFlight.setDisable(false);
+			clearSpotButton.setDisable(false);
+
 
 
 			}
@@ -372,8 +386,10 @@ public class SpotOverviewController {
 				release.setDisable(false);
 				start.setDisable(false);
 				stop.setDisable(true);
-				resetWeb.setDisable(true);
+				resetWeb.setDisable(false);
 				editFlight.setDisable(false);
+				clearSpotButton.setDisable(false);
+
 
 			}
 			else if(selectedSpot.getActive()) {
@@ -392,8 +408,10 @@ public class SpotOverviewController {
 				release.setDisable(true);
 				start.setDisable(true);
 				stop.setDisable(false);
-				resetWeb.setDisable(true);
+				resetWeb.setDisable(false);
 				editFlight.setDisable(true);
+				clearSpotButton.setDisable(true);
+
 			}	
 		}
 
@@ -421,7 +439,8 @@ public class SpotOverviewController {
 			release.setDisable(true);
 			start.setDisable(true);
 			stop.setDisable(true);
-			resetWeb.setDisable(true);
+			resetWeb.setDisable(false);
+			clearSpotButton.setDisable(true);
 			flightNumberLabel.setText("");
 			tailNumberLabel.setText("");
 			aircraftTypeLabel.setText("");
@@ -487,6 +506,60 @@ public class SpotOverviewController {
 		UpdateStatusTableImage(spot);
 		
 	}
+	private void clearSpotButton(Spot spot) {
+		spot.getFlight().setAircraftType("");
+		spot.getFlight().setCarrier("");
+		spot.getFlight().setFlightNumber("");
+		spot.getFlight().setTailNumber("");
+		spot.getDeicing().setAircraftCheck("");
+		spot.getDeicing().setType1StartTime("");
+		spot.getDeicing().setType1StopTime("");
+		spot.getDeicing().setType4StartTime("");
+		spot.getDeicing().setType4StopTime("");
+		spot.getDeicing().setFluidType("");
+		spot.setActivityLable("");
+		spot.getDeicing().setFluidTypeInt(2);
+		spot.setActive(false);
+		spot.setSpotHasFlightData(false);
+		spot.setPostPlaneCalledInDataPosted(false);
+		spot.setTypeISprayed(false);
+		spot.setTypeIVSprayed(false);
+		spot.setcomment("");
+		spot.setSpotImage(imageBlack);
+		flightNumberLabel.setText("");
+		tailNumberLabel.setText("");
+		aircraftTypeLabel.setText("");
+		carrierLabel.setText("");
+		activityLable.setText("");
+		type1starttime.setText("");
+		type4starttime.setText("");
+		type1stoptime.setText("");
+		type4stoptime.setText("");
+		fluidTypeLable.setText("");
+		commentArea.setText("");
+		imageView.setImage(spot.getSpotImage());
+		UpdateStatusTableImage(spot);
+		fluidTypeComboBox.getSelectionModel().clearSelection();
+		fluidTypeComboBox.setDisable(true);
+		release.setDisable(true);
+		start.setDisable(true);
+		stop.setDisable(true);
+		resetWeb.setDisable(false);
+		editFlight.setDisable(false);
+		clearSpotButton.setDisable(true);
+		
+		Thread th = new Thread(() -> {
+		try {
+			spot.getDashboardApi().clearSpotData();
+		} catch (Exception e) {e.printStackTrace();
+		}
+		});
+		th.setDaemon(true);
+		th.start();
+		
+		
+	}
+
 
 
 	@FXML
@@ -541,6 +614,24 @@ public class SpotOverviewController {
 	}
 	
 	
+	@FXML
+	private void handleClearSpotButton() {
+		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
+
+		
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.initOwner(mainApp.getPrimaryStage());
+			alert.setTitle("!!!!!! Warning !!!!!!");
+			alert.setHeaderText("ARE YOU SURE YOU WANT TO CLEAR?");
+			alert.setContentText("THIS WILL DELETE THE SPOT's DATA!!");			
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK){
+				clearSpotButton(selectedSpot);
+			} else {
+System.out.print("canceled");			
+}
+		
+	}
 
 	
 	
@@ -633,28 +724,26 @@ public class SpotOverviewController {
 
 	@FXML
 	public void setFluidType() {
-		
-		
-		//0=type 1
-		//1=type4
 		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
 		selectedSpot.getDeicing().setFluidType(fluidTypeComboBox.getSelectionModel().getSelectedItem());
 		selectedSpot.getDeicing().setFluidTypeInt(fluidTypeComboBox.getSelectionModel().getSelectedIndex());
 		
-		/*
-		switch(selectedSpot.getDeicing().getFluidTypeInt()) {
-		   case 0 :
-			   selectedSpot.setSpotImage(imageType1);
-				break;
-		   case 1 :
-			   selectedSpot.setSpotImage(imageType4);
-				break;	
+		if(!selectedSpot.getActive() && !selectedSpot.getPostPlaneFluidSet()) {
+			Thread th = new Thread(() -> {
+			try {
+				selectedSpot.getDashboardApi().PostFluidTypeSet();;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			});
+			th.setDaemon(true);
+			th.start();
 		}
-*/
 
 		imageView.setImage(selectedSpot.getSpotImage());
 		UpdateStatusTableImage(selectedSpot);
 		showSpotDetails(selectedSpot);
+		
 }
 
 
@@ -674,51 +763,39 @@ public class SpotOverviewController {
 				selectedSpot.getDeicing().setStartTime(setTime());
 				selectedSpot.setActive(true);
 				selectedSpot.setActivityLable("De-Icing In Progress!");
-				//selectedSpot.setSpotImage(imageType1Blink);
 				selectedSpot.getDeicing().setType1StartTime(setTime());
-				//imageView.setImage(selectedSpot.getSpotImage());
 				selectedSpot.setTypeISprayed(true);
-				
-				//Thread th = new Thread(() -> {
-				try {
-					selectedSpot.getDashboardApi().PostActiveData();;
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				try {
-					selectedSpot.getDashboardApi().PostActivateConf();;
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				
-				//});
-				//th.setDaemon(true);
-				//th.start();
-				System.out.println("thread");
 				break; // optional
 		   case 1 :
 				selectedSpot.getDeicing().setType4StartTime(setTime());
 				selectedSpot.setActive(true);
 				selectedSpot.setActivityLable("De-Icing In Progress!");
-				//selectedSpot.setSpotImage(imageType4Blink);
-				//imageView.setImage(selectedSpot.getSpotImage());
+				selectedSpot.getDeicing().setType4StartTime(setTime());
 				selectedSpot.setTypeIVSprayed(true);
-				//Thread th1 = new Thread(() -> {
-				try {
-					selectedSpot.getDashboardApi().PostActiveData();
-				} catch (Exception e2) {
-					e2.printStackTrace();
-				}
-				try {
-					selectedSpot.getDashboardApi().PostActivateConf();
-				} catch (Exception e3) {
-					e3.printStackTrace();
-				}
-				//});
-				//th1.setDaemon(true);
-				//th1.start();
-
 				break; // optional
+		}
+		if(!selectedSpot.getPostActiveData()) {
+			Thread th = new Thread(() -> {
+			try {
+				selectedSpot.getDashboardApi().PostActiveData();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			});
+			th.setDaemon(true);
+			th.start();			
+		}
+		
+		if(!selectedSpot.getPostActiveConfPosted()) {
+			Thread th = new Thread(() -> {
+			try {
+				selectedSpot.getDashboardApi().PostActivateConf();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			});
+			th.setDaemon(true);
+			th.start();		
 		}
        UpdateStatusTableImage(selectedSpot);
 		showSpotDetails(selectedSpot);
@@ -756,6 +833,7 @@ public class SpotOverviewController {
 					Thread th1 = new Thread(() -> {
 					try {
 						selectedSpot.getDashboardApi().PostFluidTypeSet();
+						selectedSpot.getDashboardApi().PostActiveData();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -769,6 +847,7 @@ public class SpotOverviewController {
 				   Thread th2 = new Thread(() -> {
 					try {
 						selectedSpot.getDashboardApi().PostFluidTypeSet();
+						selectedSpot.getDashboardApi().PostActiveData();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -778,6 +857,10 @@ public class SpotOverviewController {
 
 					break; // optional
 			}
+			
+			selectedSpot.setPostPlaneFluidSet(false);
+			selectedSpot.setPostActiveConfPosted(false);
+			selectedSpot.setPostActiveData(false);
 		}
 		UpdateStatusTableImage(selectedSpot);
 		showSpotDetails(selectedSpot);
@@ -787,12 +870,26 @@ public class SpotOverviewController {
 	@FXML
 	private void handleResetWeb() {
 		DashboardApi i = new DashboardApi(null, null, null);
-		try {
-			i.ResetDashboard();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.initOwner(mainApp.getPrimaryStage());
+		alert.setTitle("!!!!!! Warning !!!!!!");
+		alert.setHeaderText("ARE YOU SURE YOU WANT TO RESET THE DASHBOARD?");
+		alert.setContentText("THIS WILL DELETE THE DAHSBOARD's DATA!!");			
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK){
+			Thread th1 = new Thread(() -> {
+			try {
+				i.ResetDashboard();
+				} catch (Exception e) {
+				e.printStackTrace();
+			}
+			});
+			th1.setDaemon(true);
+			th1.start();
+		} else {
+System.out.print("canceled");			
+}
 
 	}
 
