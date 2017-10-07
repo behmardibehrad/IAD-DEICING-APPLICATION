@@ -451,14 +451,15 @@ public class SpotOverviewController {
 			boolean okClicked = mainApp.showFlightEditDialog(selectedSpot);
 			if (okClicked) {
 				
-				//showSpotDetails(selectedSpot);
-				//selectedSpot.setSpotImage(imageBlack);
-				//selectedSpot.setSpotHasFlightData(true);
-				//flightNumberLabel1.setVisible(true);
-				//tailNumberLabel1.setVisible(true);
-				//aircraftTypeLabel1.setVisible(true);
-				//fluidTypeLable1.setVisible(true);
-				//carrierLabel1.setVisible(true);
+				
+	
+				try {
+					selectedSpot.getDashboardApi().PostPlaneCalledInData();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 			}
 
 		} else {
@@ -488,26 +489,8 @@ public class SpotOverviewController {
 		Spot selectedSpot = spotsTable.getSelectionModel().getSelectedItem();
 		
 	
-		/*
-		try {
-			clearSpot(selectedSpot);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
-		
-			
-			try {
-				selectedSpot.getDashboardApi().ClearData();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			try {
-				selectedSpot.getDashboardApi().ClearConf();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+
 
 			String ac = selectedSpot.getFlight().getAircraftType();
 			if (ac.equals("XMJ") || ac.equals("XR4")) {
@@ -515,13 +498,23 @@ public class SpotOverviewController {
 			} else {
 				selectedSpot.getDeicing().setAircraftCheck("Post Check");
 			}
-*/
+
 			releaseTableData.add(copySpot(selectedSpot));
 			releaseTable.setItems(releaseTableData);
 			//selectedSpot.setSpotHasFlightData(false);
 			//selectedSpot.setActive(false);
 			clearSpot(selectedSpot);
 			showSpotDetails(selectedSpot);
+			Thread th = new Thread(() -> {
+			try {
+				selectedSpot.getDashboardApi().clearSpotData();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			});
+			th.setDaemon(true);
+			th.start();
 			// spotsTable.getSelectionModel().clearSelection();
 			// fluidTypeComboBox.setValue("Fluid Type");
 		}
@@ -573,6 +566,7 @@ public class SpotOverviewController {
 			showSpotDetails(selectedSpot);
 			searchSSD.getSelectionModel().clearSelection();
 			searchSSD.getItems().addAll(FlightInfo.getFlights());	
+
 		
 	}
 
@@ -613,7 +607,16 @@ public class SpotOverviewController {
 			   selectedSpot.setSpotImage(imageType4);
 				break;	
 		}
-		
+		Thread th = new Thread(() -> {
+		try {
+			selectedSpot.getDashboardApi().PostFluidTypeSet();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		});
+		th.setDaemon(true);
+		th.start();
 
 		imageView.setImage(selectedSpot.getSpotImage());
 		UpdateStatusTableImage(selectedSpot);
@@ -642,21 +645,21 @@ public class SpotOverviewController {
 				imageView.setImage(selectedSpot.getSpotImage());
 				selectedSpot.setTypeISprayed(true);
 				
-				Thread th = new Thread(() -> {
+				//Thread th = new Thread(() -> {
 				try {
-					selectedSpot.getDashboardApi().PostData();
+					selectedSpot.getDashboardApi().PostActiveData();;
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				try {
-					selectedSpot.getDashboardApi().PostConf();
+					selectedSpot.getDashboardApi().PostActivateConf();;
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 				
-				});
-				th.setDaemon(true);
-				th.start();
+				//});
+				//th.setDaemon(true);
+				//th.start();
 				System.out.println("thread");
 				break; // optional
 		   case 1 :
@@ -666,20 +669,20 @@ public class SpotOverviewController {
 				selectedSpot.setSpotImage(imageType4Blink);
 				imageView.setImage(selectedSpot.getSpotImage());
 				selectedSpot.setTypeIVSprayed(true);
-				Thread th1 = new Thread(() -> {
+				//Thread th1 = new Thread(() -> {
 				try {
-					selectedSpot.getDashboardApi().PostData();
+					selectedSpot.getDashboardApi().PostActiveData();
 				} catch (Exception e2) {
 					e2.printStackTrace();
 				}
 				try {
-					selectedSpot.getDashboardApi().PostConf();
+					selectedSpot.getDashboardApi().PostActivateConf();
 				} catch (Exception e3) {
 					e3.printStackTrace();
 				}
-				});
-				th1.setDaemon(true);
-				th1.start();
+				//});
+				//th1.setDaemon(true);
+				//th1.start();
 
 				break; // optional
 		}
@@ -716,22 +719,28 @@ public class SpotOverviewController {
 			   case 0 :
 				    selectedSpot.setSpotImage(imageType1);
 					selectedSpot.getDeicing().setType1StopTime(setTime());
+					Thread th1 = new Thread(() -> {
 					try {
-						selectedSpot.getDashboardApi().PostData();
-						selectedSpot.getDashboardApi().PostConf1();
+						selectedSpot.getDashboardApi().PostFluidTypeSet();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
+					});
+					th1.setDaemon(true);
+					th1.start();
 					break; // optional
 			   case 1 :
 				   selectedSpot.setSpotImage(imageType4);
 				   selectedSpot.getDeicing().setType4StopTime(setTime());
+				   Thread th2 = new Thread(() -> {
 					try {
-						selectedSpot.getDashboardApi().PostData();
-						selectedSpot.getDashboardApi().PostConf1();
+						selectedSpot.getDashboardApi().PostFluidTypeSet();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
+					});
+					th2.setDaemon(true);
+					th2.start();
 
 					break; // optional
 			}

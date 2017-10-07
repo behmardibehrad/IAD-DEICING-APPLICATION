@@ -34,12 +34,7 @@ public class DashboardApi  {
 		this.spot = spot;
 	}
 
-
-	// HTTP POST request
-	public void PostData() throws Exception {
-
-		
-		
+	public void PostPlaneCalledInData() throws Exception {
 		String url1 = "http://52.35.148.5:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/push";
 		HttpClient client1 = new DefaultHttpClient();
 		HttpPost post1 = new HttpPost(url1);
@@ -50,8 +45,8 @@ public class DashboardApi  {
 		String tileDataString;
 		JSONObject tileData = new JSONObject();
 		tileData.put("title", flight.getCarrier().toUpperCase() + "  " + flight.getFlightNumber());
-		tileData.put("description", "Arrived at pad on : " + setTime1());
-		tileData.put("big-value", flight.getCarrier().toUpperCase() + flight.getFlightNumber());
+		tileData.put("description", "Arrived at pad on : " + spot.getPlaneCalledIn());
+		tileData.put("big-value", flight.getFlightNumber());
 		tileData.put("upper-left-label", "carrier:  ");
 		tileData.put("upper-left-value", flight.getCarrier().toUpperCase());
 		tileData.put("second-upper-left-label", "A/C :  ");
@@ -60,6 +55,76 @@ public class DashboardApi  {
 		tileData.put("lower-left-value", flight.getFlightNumber());
 		tileData.put("second-lower-left-label", "Tail #:  ");
 		tileData.put("second-lower-left-value", flight.getTailNumber().toUpperCase());
+		tileDataString = tileData.toString();
+		urlParameters1.add(new BasicNameValuePair("data", tileDataString));
+		post1.setEntity(new UrlEncodedFormEntity(urlParameters1));
+		client1.execute(post1);
+		post1.abort();
+		
+	}
+	
+	public void PostFluidTypeSet() throws Exception {
+
+		String urlConf = "http://52.35.148.5:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/tileconfig/"
+				+ spot.getApiTileID();
+		HttpClient clientConf = new DefaultHttpClient();
+		HttpPost postConf = new HttpPost(urlConf);
+		postConf.setHeader("User-Agent", USER_AGENT);
+		String color = "";
+		switch(0) {
+		   case 0 :
+			   color = "orange";
+				break; // optional
+		   case 1 :
+			   color = "green";
+				break; // optional		
+		}
+		List<NameValuePair> urlParametersConf = new ArrayList<NameValuePair>();
+		String tileConfValueString;
+		JSONObject tileConfValue = new JSONObject();
+		tileConfValue.put("big_value_color", color);
+		tileConfValue.put("fading_background", false);
+		tileConfValueString = tileConfValue.toString();
+		urlParametersConf.add(new BasicNameValuePair("value", tileConfValueString));
+		postConf.setEntity(new UrlEncodedFormEntity(urlParametersConf));
+		clientConf.execute(postConf);
+		postConf.abort();
+	}
+	
+	
+	public void PostActivateConf() throws Exception {
+
+		String urlConf = "http://52.35.148.5:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/tileconfig/"
+				+ spot.getApiTileID();
+		HttpClient clientConf = new DefaultHttpClient();
+		HttpPost postConf = new HttpPost(urlConf);
+		postConf.setHeader("User-Agent", USER_AGENT);
+		List<NameValuePair> urlParametersConf = new ArrayList<NameValuePair>();
+		String tileConfValueString;
+		JSONObject tileConfValue = new JSONObject();
+		tileConfValue.put("fading_background", true);
+		tileConfValueString = tileConfValue.toString();
+		urlParametersConf.add(new BasicNameValuePair("value", tileConfValueString));
+		postConf.setEntity(new UrlEncodedFormEntity(urlParametersConf));
+		clientConf.execute(postConf);
+		postConf.abort();
+
+	}
+	
+	
+
+	// HTTP POST request
+	public void PostActiveData() throws Exception {
+
+		String url1 = "http://52.35.148.5:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/push";
+		HttpClient client1 = new DefaultHttpClient();
+		HttpPost post1 = new HttpPost(url1);
+		post1.setHeader("User-Agent", USER_AGENT);
+		List<NameValuePair> urlParameters1 = new ArrayList<NameValuePair>();
+		urlParameters1.add(new BasicNameValuePair("tile", "big_value"));
+		urlParameters1.add(new BasicNameValuePair("key", spot.getApiTileID()));
+		String tileDataString;
+		JSONObject tileData = new JSONObject();
 		tileData.put("upper-right-label", "Type I Start:  ");
 		tileData.put("upper-right-value", deicing.getType1StarttTime());
 		tileData.put("lower-right-label", "Type I End:  ");
@@ -72,11 +137,11 @@ public class DashboardApi  {
 		urlParameters1.add(new BasicNameValuePair("data", tileDataString));
 		post1.setEntity(new UrlEncodedFormEntity(urlParameters1));
 		client1.execute(post1);
-		System.out.print(spot.toString() + flight.toString() + deicing.toString());
 		post1.abort();
 
 	}
 
+	/*
 	public void PostConf() throws Exception {
 
 		String urlConf = "http://52.35.148.5:7272/api/v0.1/d4c4119ab1a849b0b1b0cdd81e5739ac/tileconfig/"
@@ -137,6 +202,8 @@ public class DashboardApi  {
 		postConf.abort();
 
 	}
+	
+	*/
 
 	public void ClearData() throws Exception {
 
